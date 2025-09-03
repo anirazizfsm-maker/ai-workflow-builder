@@ -158,4 +158,14 @@
     90% { transform: translate(-2px, 2px); }
     95% { transform: translate(1px, -1px); }
   }
+  @keyframes flow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -2400; }
+  }
+  .flow-line {
+    stroke-linecap: round;
+    stroke-dasharray: 2400;
+    animation: flow 18s linear infinite;
+    filter: drop-shadow(0 0 6px oklch(0.69 0.22 26)); /* subtle red glow */
+  }
 }

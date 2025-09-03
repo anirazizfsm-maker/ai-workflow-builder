@@ -63,23 +63,60 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Gradient mesh layers */}
-      <div className="pointer-events-none absolute inset-0 -z-20">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            background:
-              "linear-gradient(90deg, #5D0E41 0%, #A0153E 33%, #FF204E 66%, #000000 100%)",
-          }}
-        />
-      </div>
-
-      {/* Topographic pattern overlay */}
+      {/* Background pattern image only (no color gradient layer) */}
       <img
         src="https://harmless-tapir-303.convex.cloud/api/storage/e9a5c497-3bbf-46f7-85fb-366d0672b582"
         alt="Topo pattern"
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-30 mix-blend-screen"
+        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-40 mix-blend-screen"
       />
+
+      {/* Animated red flowing strings overlay */}
+      <svg
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-70"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#FF204E" />
+            <stop offset="0.5" stopColor="#EA2264" />
+            <stop offset="1" stopColor="#640D5F" />
+          </linearGradient>
+        </defs>
+
+        {/* Main flowing lines */}
+        <path
+          className="flow-line"
+          d="M0,200 C250,140 420,360 700,300 S1100,220 1440,260"
+          stroke="url(#flowGrad)"
+          strokeWidth="2.5"
+          fill="none"
+        />
+        <path
+          className="flow-line"
+          d="M0,420 C260,380 420,520 720,470 S1120,420 1440,480"
+          stroke="url(#flowGrad)"
+          strokeWidth="2"
+          fill="none"
+          style={{ animationDelay: "2.5s", opacity: 0.85 }}
+        />
+        <path
+          className="flow-line"
+          d="M0,640 C220,600 420,720 740,670 S1180,600 1440,660"
+          stroke="url(#flowGrad)"
+          strokeWidth="2"
+          fill="none"
+          style={{ animationDelay: "5s", opacity: 0.7 }}
+        />
+        <path
+          className="flow-line"
+          d="M0,80 C200,60 420,180 680,140 S1060,100 1440,120"
+          stroke="url(#flowGrad)"
+          strokeWidth="1.8"
+          fill="none"
+          style={{ animationDelay: "7.5s", opacity: 0.6 }}
+        />
+      </svg>
 
       {/* Header - glass */}
       <header className="sticky top-0 z-50">
