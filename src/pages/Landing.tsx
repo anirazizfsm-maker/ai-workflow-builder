@@ -86,9 +86,24 @@ export default function Landing() {
         <div className="mx-auto flex max-w-7xl items-center justify-between p-6">
           <motion.h1
             whileHover={{ scale: 1.05 }}
-            className="cursor-pointer text-3xl font-extrabold tracking-tight text-white drop-shadow"
+            className="relative cursor-pointer select-none text-3xl font-extrabold tracking-tight text-white drop-shadow group"
           >
-            LETHIMDO
+            {/* Base logo text */}
+            <span className="relative z-10">LETHIMDO</span>
+            {/* Glitch layer 1 */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-[#EA2264]/70 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+            >
+              LETHIMDO
+            </span>
+            {/* Glitch layer 2 */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-[#F78D60]/70 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+            >
+              LETHIMDO
+            </span>
           </motion.h1>
           <nav className="hidden items-center gap-3 md:flex">
             <a
