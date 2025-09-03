@@ -15,8 +15,9 @@ import {
   Sparkles,
   MessageCircle,
   Send,
+  Loader2,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import ChipsetBackground from "@/components/ChipsetBackground";
@@ -33,6 +34,7 @@ export default function Landing() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [faqQuery, setFaqQuery] = useState("");
   const [committedQuery, setCommittedQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   // Data
   const faqResults =
@@ -61,8 +63,20 @@ export default function Landing() {
 
   const handleFAQSearch = () => {
     if (!faqQuery.trim()) return;
+    setIsSearching(true);
     setCommittedQuery(faqQuery);
   };
+
+  // Turn off searching when results update or query changes
+  // keeps UX snappy; useQuery reactivity will trigger this
+  useEffect(() => {
+    if (!committedQuery) {
+      setIsSearching(false);
+      return;
+    }
+    // whenever results refresh, stop the loading state
+    setIsSearching(false);
+  }, [committedQuery, faqResults]);
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
@@ -264,8 +278,17 @@ export default function Landing() {
                   disabled={isGenerating || !workflowPrompt.trim()}
                   className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
                 >
-                  {isGenerating ? "Generating..." : "Generate Workflow"}
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      Generate Workflow
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </>
+                  )}
                 </Button>
 
                 {workflowResult && (
@@ -367,9 +390,14 @@ export default function Landing() {
               />
               <Button
                 onClick={handleFAQSearch}
+                disabled={isSearching || !faqQuery.trim()}
                 className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-4 font-semibold text-white backdrop-blur-md hover:bg-white/20"
               >
-                <Send className="h-5 w-5" />
+                {isSearching ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Send className="h-5 w-5" />
+                )}
               </Button>
             </div>
 
