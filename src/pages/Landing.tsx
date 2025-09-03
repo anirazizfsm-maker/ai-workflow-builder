@@ -85,11 +85,13 @@ export default function Landing() {
 
           {/* Morphing wobble filter – updates every second to change paths without removing them */}
           <filter id="wobble">
-            <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="2" seed="8" result="noise">
-              <animate attributeName="baseFrequency" values="0.006;0.012;0.006" dur="1s" repeatCount="indefinite" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" seed="8" result="noise">
+              {/* Increase path frequency variation and update faster */}
+              <animate attributeName="baseFrequency" values="0.004;0.016;0.008;0.012;0.006" dur="0.9s" repeatCount="indefinite" />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G">
-              <animate attributeName="scale" values="6;10;6" dur="1s" repeatCount="indefinite" />
+              {/* Sync displacement intensity with frequency updates */}
+              <animate attributeName="scale" values="6;12;8;10;6" dur="0.9s" repeatCount="indefinite" />
             </feDisplacementMap>
           </filter>
         </defs>
