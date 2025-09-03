@@ -76,7 +76,12 @@ export default function Plans() {
                         For individuals getting started.
                       </p>
                     </div>
-                    <Input type="radio" name="plan" defaultChecked className="h-4 w-4" />
+                    <input
+                      type="radio"
+                      name="plan"
+                      defaultChecked
+                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
+                    />
                   </div>
                 </div>
 
@@ -93,7 +98,11 @@ export default function Plans() {
                         For teams that need more power.
                       </p>
                     </div>
-                    <Input type="radio" name="plan" className="h-4 w-4" />
+                    <input
+                      type="radio"
+                      name="plan"
+                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
+                    />
                   </div>
                 </div>
 
@@ -110,7 +119,11 @@ export default function Plans() {
                         Advanced needs & dedicated support.
                       </p>
                     </div>
-                    <Input type="radio" name="plan" className="h-4 w-4" />
+                    <input
+                      type="radio"
+                      name="plan"
+                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
+                    />
                   </div>
                 </div>
               </CardContent>
@@ -206,7 +219,7 @@ export default function Plans() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">Full name</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Full name</label>
                       <Input
                         name="fullName"
                         placeholder="Jane Doe"
@@ -219,7 +232,7 @@ export default function Plans() {
                       )}
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">Company (optional)</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Company (optional)</label>
                       <Input
                         name="company"
                         placeholder="Acme Inc."
@@ -227,7 +240,7 @@ export default function Plans() {
                       />
                     </div>
                     <div className="space-y-2 md:col-span-1">
-                      <label className="text-sm text-white/80">Country</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Country</label>
                       <Select value={country} onValueChange={setCountry}>
                         <SelectTrigger className="w-full bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select country" />
@@ -247,7 +260,7 @@ export default function Plans() {
                       <input type="hidden" name="country" value={country} />
                     </div>
                     <div className="space-y-2 md:col-span-1">
-                      <label className="text-sm text-white/80">State / Province</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">State / Province</label>
                       <Input
                         name="state"
                         placeholder="CA"
@@ -260,7 +273,7 @@ export default function Plans() {
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-sm text-white/80">Address line 1</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Address line 1</label>
                       <Input
                         name="address1"
                         placeholder="123 Main St"
@@ -273,7 +286,7 @@ export default function Plans() {
                       )}
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-sm text-white/80">Address line 2 (optional)</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Address line 2 (optional)</label>
                       <Input
                         name="address2"
                         placeholder="Apt, suite, unit, building, floor, etc."
@@ -282,7 +295,7 @@ export default function Plans() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">City</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">City</label>
                       <Input
                         name="city"
                         placeholder="San Francisco"
@@ -295,7 +308,7 @@ export default function Plans() {
                       )}
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">Postal code</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Postal code</label>
                       <Input
                         name="postal"
                         placeholder="94105"
@@ -309,7 +322,7 @@ export default function Plans() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">Phone</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Phone</label>
                       <Input
                         name="phone"
                         placeholder="+1 555 123 4567"
@@ -317,7 +330,7 @@ export default function Plans() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm text-white/80">Email for receipt</label>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-white/70">Email for receipt</label>
                       <Input
                         name="email"
                         type="email"
