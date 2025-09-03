@@ -262,60 +262,66 @@ export default function Dashboard() {
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-[#00FF80] border-4 border-black shadow-[8px_8px_0px_#000000] max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-black text-black">CREATE AI WORKFLOW</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-black font-black mb-2 block">WORKFLOW TITLE</label>
-                  <Input
-                    value={newWorkflow.title}
-                    onChange={(e) => setNewWorkflow({...newWorkflow, title: e.target.value})}
-                    placeholder="Enter workflow title..."
-                    className="border-4 border-black font-bold"
-                  />
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              >
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-black text-black">CREATE AI WORKFLOW</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-black font-black mb-2 block">WORKFLOW TITLE</label>
+                    <Input
+                      value={newWorkflow.title}
+                      onChange={(e) => setNewWorkflow({...newWorkflow, title: e.target.value})}
+                      placeholder="Enter workflow title..."
+                      className="border-4 border-black font-bold"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">CATEGORY</label>
+                    <Select value={newWorkflow.category} onValueChange={(value) => setNewWorkflow({...newWorkflow, category: value})}>
+                      <SelectTrigger className="border-4 border-black font-bold">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="automation">AUTOMATION</SelectItem>
+                        <SelectItem value="email">EMAIL</SelectItem>
+                        <SelectItem value="data">DATA PROCESSING</SelectItem>
+                        <SelectItem value="social">SOCIAL MEDIA</SelectItem>
+                        <SelectItem value="reporting">REPORTING</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">DESCRIBE YOUR WORKFLOW</label>
+                    <Textarea
+                      value={newWorkflow.prompt}
+                      onChange={(e) => setNewWorkflow({...newWorkflow, prompt: e.target.value})}
+                      placeholder="Describe what you want to automate in plain English..."
+                      className="border-4 border-black font-bold min-h-[120px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">DESCRIPTION (OPTIONAL)</label>
+                    <Input
+                      value={newWorkflow.description}
+                      onChange={(e) => setNewWorkflow({...newWorkflow, description: e.target.value})}
+                      placeholder="Brief description..."
+                      className="border-4 border-black font-bold"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleCreateWorkflow}
+                    className="w-full bg-[#FF0080] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+                    disabled={!newWorkflow.prompt}
+                  >
+                    GENERATE WORKFLOW
+                  </Button>
                 </div>
-                <div>
-                  <label className="text-black font-black mb-2 block">CATEGORY</label>
-                  <Select value={newWorkflow.category} onValueChange={(value) => setNewWorkflow({...newWorkflow, category: value})}>
-                    <SelectTrigger className="border-4 border-black font-bold">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="automation">AUTOMATION</SelectItem>
-                      <SelectItem value="email">EMAIL</SelectItem>
-                      <SelectItem value="data">DATA PROCESSING</SelectItem>
-                      <SelectItem value="social">SOCIAL MEDIA</SelectItem>
-                      <SelectItem value="reporting">REPORTING</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-black font-black mb-2 block">DESCRIBE YOUR WORKFLOW</label>
-                  <Textarea
-                    value={newWorkflow.prompt}
-                    onChange={(e) => setNewWorkflow({...newWorkflow, prompt: e.target.value})}
-                    placeholder="Describe what you want to automate in plain English..."
-                    className="border-4 border-black font-bold min-h-[120px]"
-                  />
-                </div>
-                <div>
-                  <label className="text-black font-black mb-2 block">DESCRIPTION (OPTIONAL)</label>
-                  <Input
-                    value={newWorkflow.description}
-                    onChange={(e) => setNewWorkflow({...newWorkflow, description: e.target.value})}
-                    placeholder="Brief description..."
-                    className="border-4 border-black font-bold"
-                  />
-                </div>
-                <Button 
-                  onClick={handleCreateWorkflow}
-                  className="w-full bg-[#FF0080] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
-                  disabled={!newWorkflow.prompt}
-                >
-                  GENERATE WORKFLOW
-                </Button>
-              </div>
+              </motion.div>
             </DialogContent>
           </Dialog>
         </div>
@@ -480,102 +486,108 @@ export default function Dashboard() {
 
             <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
               <DialogContent className="max-w-2xl rounded-2xl border border-white/15 bg-white/10 backdrop-blur-2xl shadow-xl">
-                <DialogHeader>
-                  <DialogTitle className="text-xl font-extrabold tracking-tight text-[#0D1164]">
-                    {editingFaqId ? "EDIT FAQ" : "ADD FAQ"}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
-                      QUESTION
-                    </label>
-                    <TextInput
-                      value={faqForm.question}
-                      onChange={(e) =>
-                        setFaqForm({ ...faqForm, question: e.target.value })
-                      }
-                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
-                      placeholder="Enter question..."
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
-                      ANSWER
-                    </label>
-                    <Textarea
-                      value={faqForm.answer}
-                      onChange={(e) =>
-                        setFaqForm({ ...faqForm, answer: e.target.value })
-                      }
-                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium min-h-[120px] placeholder:text-neutral-500"
-                      placeholder="Enter answer..."
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
-                      CATEGORY
-                    </label>
-                    <Select
-                      value={faqForm.category}
-                      onValueChange={(value) =>
-                        setFaqForm({ ...faqForm, category: value })
-                      }
-                    >
-                      <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="backdrop-blur-xl bg-white/40 border border-white/20">
-                        <SelectItem value="General">GENERAL</SelectItem>
-                        <SelectItem value="Workflows">WORKFLOWS</SelectItem>
-                        <SelectItem value="Pricing">PRICING</SelectItem>
-                        <SelectItem value="Security">SECURITY</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
-                      TAGS (comma separated)
-                    </label>
-                    <TextInput
-                      value={faqForm.tags}
-                      onChange={(e) =>
-                        setFaqForm({ ...faqForm, tags: e.target.value })
-                      }
-                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
-                      placeholder="e.g. automation, ai, email"
-                    />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-semibold text-[#1f2937]">
-                      ACTIVE
-                    </label>
+                <motion.div
+                  initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 280, damping: 22 }}
+                >
+                  <DialogHeader>
+                    <DialogTitle className="text-xl font-extrabold tracking-tight text-[#0D1164]">
+                      {editingFaqId ? "EDIT FAQ" : "ADD FAQ"}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                        QUESTION
+                      </label>
+                      <TextInput
+                        value={faqForm.question}
+                        onChange={(e) =>
+                          setFaqForm({ ...faqForm, question: e.target.value })
+                        }
+                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
+                        placeholder="Enter question..."
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                        ANSWER
+                      </label>
+                      <Textarea
+                        value={faqForm.answer}
+                        onChange={(e) =>
+                          setFaqForm({ ...faqForm, answer: e.target.value })
+                        }
+                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium min-h-[120px] placeholder:text-neutral-500"
+                        placeholder="Enter answer..."
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                        CATEGORY
+                      </label>
+                      <Select
+                        value={faqForm.category}
+                        onValueChange={(value) =>
+                          setFaqForm({ ...faqForm, category: value })
+                        }
+                      >
+                        <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="backdrop-blur-xl bg-white/40 border border-white/20">
+                          <SelectItem value="General">GENERAL</SelectItem>
+                          <SelectItem value="Workflows">WORKFLOWS</SelectItem>
+                          <SelectItem value="Pricing">PRICING</SelectItem>
+                          <SelectItem value="Security">SECURITY</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                        TAGS (comma separated)
+                      </label>
+                      <TextInput
+                        value={faqForm.tags}
+                        onChange={(e) =>
+                          setFaqForm({ ...faqForm, tags: e.target.value })
+                        }
+                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
+                        placeholder="e.g. automation, ai, email"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <label className="text-sm font-semibold text-[#1f2937]">
+                        ACTIVE
+                      </label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className={`rounded-xl border border-white/20 font-semibold backdrop-blur-md ${
+                          faqForm.isActive
+                            ? "bg-[#00ff80]/20 text-emerald-900"
+                            : "bg-white/10 text-neutral-700"
+                        }`}
+                        onClick={() =>
+                          setFaqForm({ ...faqForm, isActive: !faqForm.isActive })
+                        }
+                      >
+                        {faqForm.isActive ? "YES" : "NO"}
+                      </Button>
+                    </div>
+
                     <Button
-                      type="button"
-                      variant="outline"
-                      className={`rounded-xl border border-white/20 font-semibold backdrop-blur-md ${
-                        faqForm.isActive
-                          ? "bg-[#00ff80]/20 text-emerald-900"
-                          : "bg-white/10 text-neutral-700"
-                      }`}
-                      onClick={() =>
-                        setFaqForm({ ...faqForm, isActive: !faqForm.isActive })
+                      onClick={handleSaveFaq}
+                      className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold py-3 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
+                      disabled={
+                        !faqForm.question.trim() || !faqForm.answer.trim()
                       }
                     >
-                      {faqForm.isActive ? "YES" : "NO"}
+                      {editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
                     </Button>
                   </div>
-
-                  <Button
-                    onClick={handleSaveFaq}
-                    className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold py-3 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
-                    disabled={
-                      !faqForm.question.trim() || !faqForm.answer.trim()
-                    }
-                  >
-                    {editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
-                  </Button>
-                </div>
+                </motion.div>
               </DialogContent>
             </Dialog>
           </div>
