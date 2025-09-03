@@ -408,7 +408,7 @@ export default function Dashboard() {
               <h2 className="text-2xl font-black text-black">FAQ MANAGEMENT</h2>
               <Button
                 onClick={openCreateFaq}
-                className="bg-[#FF0080] text-black border-4 border-black font-black shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+                className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold px-4 py-2 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
               >
                 <PlusCircle className="mr-2 h-5 w-5" />
                 ADD FAQ
@@ -417,17 +417,24 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {faqs?.map((faq) => (
-                <Card key={faq._id} className="bg-white border-4 border-black shadow-[6px_6px_0px_#000000]">
+                <Card
+                  key={faq._id}
+                  className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl"
+                >
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
-                      <CardTitle className="text-black font-black text-lg">{faq.question}</CardTitle>
+                      <CardTitle className="text-[#0D1164] font-extrabold text-lg tracking-tight">
+                        {faq.question}
+                      </CardTitle>
                       <div className="flex items-center gap-2">
-                        <Badge className="bg-[#0080FF] text-black font-black border-2 border-black">
+                        <Badge className="rounded-full border border-white/20 bg-white/15 text-[#0D1164] font-semibold backdrop-blur-sm">
                           {faq.category}
                         </Badge>
                         <Badge
-                          className={`font-black border-2 border-black ${
-                            faq.isActive ? "bg-[#00FF80] text-black" : "bg-gray-300 text-black"
+                          className={`rounded-full border border-white/20 font-semibold backdrop-blur-sm ${
+                            faq.isActive
+                              ? "bg-[#00ff80]/20 text-emerald-900"
+                              : "bg-white/10 text-neutral-700"
                           }`}
                         >
                           {faq.isActive ? "ACTIVE" : "INACTIVE"}
@@ -436,10 +443,15 @@ export default function Dashboard() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-black font-bold text-sm mb-3">{faq.answer}</p>
+                    <p className="text-neutral-800 font-medium text-sm mb-3">
+                      {faq.answer}
+                    </p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {(faq.tags || []).map((t: string, i: number) => (
-                        <Badge key={i} className="bg-black text-white font-black border-2 border-black">
+                        <Badge
+                          key={i}
+                          className="rounded-full bg-[#640D5F]/20 text-[#640D5F] border border-white/20 backdrop-blur-sm font-semibold"
+                        >
                           {t}
                         </Badge>
                       ))}
@@ -448,15 +460,15 @@ export default function Dashboard() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-2 border-black font-black hover:bg-[#0080FF]"
+                        className="rounded-xl border border-white/20 text-[#1f2937] bg-white/10 hover:bg-white/20 backdrop-blur-md font-semibold"
                         onClick={() => openEditFaq(faq)}
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
                         size="sm"
-                        className="bg-red-500 text-black border-2 border-black font-black hover:bg-red-600"
                         onClick={() => handleDeleteFaq(faq._id)}
+                        className="rounded-xl bg-[#EA2264] text-white border border-white/20 hover:bg-[#d01d58] backdrop-blur-md font-semibold"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -467,41 +479,53 @@ export default function Dashboard() {
             </div>
 
             <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
-              <DialogContent className="bg-[#00FF80] border-4 border-black shadow-[8px_8px_0px_#000000] max-w-2xl">
+              <DialogContent className="max-w-2xl rounded-2xl border border-white/15 bg-white/10 backdrop-blur-2xl shadow-xl">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-black text-black">
+                  <DialogTitle className="text-xl font-extrabold tracking-tight text-[#0D1164]">
                     {editingFaqId ? "EDIT FAQ" : "ADD FAQ"}
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-black font-black mb-2 block">QUESTION</label>
+                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                      QUESTION
+                    </label>
                     <TextInput
                       value={faqForm.question}
-                      onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
-                      className="border-4 border-black font-bold"
+                      onChange={(e) =>
+                        setFaqForm({ ...faqForm, question: e.target.value })
+                      }
+                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
                       placeholder="Enter question..."
                     />
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">ANSWER</label>
+                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                      ANSWER
+                    </label>
                     <Textarea
                       value={faqForm.answer}
-                      onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
-                      className="border-4 border-black font-bold min-h-[120px]"
+                      onChange={(e) =>
+                        setFaqForm({ ...faqForm, answer: e.target.value })
+                      }
+                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium min-h-[120px] placeholder:text-neutral-500"
                       placeholder="Enter answer..."
                     />
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">CATEGORY</label>
+                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                      CATEGORY
+                    </label>
                     <Select
                       value={faqForm.category}
-                      onValueChange={(value) => setFaqForm({ ...faqForm, category: value })}
+                      onValueChange={(value) =>
+                        setFaqForm({ ...faqForm, category: value })
+                      }
                     >
-                      <SelectTrigger className="border-4 border-black font-bold">
+                      <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="backdrop-blur-xl bg-white/40 border border-white/20">
                         <SelectItem value="General">GENERAL</SelectItem>
                         <SelectItem value="Workflows">WORKFLOWS</SelectItem>
                         <SelectItem value="Pricing">PRICING</SelectItem>
@@ -510,23 +534,33 @@ export default function Dashboard() {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">TAGS (comma separated)</label>
+                    <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
+                      TAGS (comma separated)
+                    </label>
                     <TextInput
                       value={faqForm.tags}
-                      onChange={(e) => setFaqForm({ ...faqForm, tags: e.target.value })}
-                      className="border-4 border-black font-bold"
+                      onChange={(e) =>
+                        setFaqForm({ ...faqForm, tags: e.target.value })
+                      }
+                      className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
                       placeholder="e.g. automation, ai, email"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <label className="text-black font-black">ACTIVE</label>
+                  <div className="flex items-center gap-3">
+                    <label className="text-sm font-semibold text-[#1f2937]">
+                      ACTIVE
+                    </label>
                     <Button
                       type="button"
                       variant="outline"
-                      className={`border-2 border-black font-black ${
-                        faqForm.isActive ? "bg-[#00FF80]" : "bg-gray-200"
+                      className={`rounded-xl border border-white/20 font-semibold backdrop-blur-md ${
+                        faqForm.isActive
+                          ? "bg-[#00ff80]/20 text-emerald-900"
+                          : "bg-white/10 text-neutral-700"
                       }`}
-                      onClick={() => setFaqForm({ ...faqForm, isActive: !faqForm.isActive })}
+                      onClick={() =>
+                        setFaqForm({ ...faqForm, isActive: !faqForm.isActive })
+                      }
                     >
                       {faqForm.isActive ? "YES" : "NO"}
                     </Button>
@@ -534,8 +568,10 @@ export default function Dashboard() {
 
                   <Button
                     onClick={handleSaveFaq}
-                    className="w-full bg-[#FF0080] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
-                    disabled={!faqForm.question.trim() || !faqForm.answer.trim()}
+                    className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold py-3 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
+                    disabled={
+                      !faqForm.question.trim() || !faqForm.answer.trim()
+                    }
                   >
                     {editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
                   </Button>
