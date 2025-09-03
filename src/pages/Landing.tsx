@@ -20,6 +20,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import ChipsetBackground from "@/components/ChipsetBackground";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -116,6 +118,46 @@ export default function Landing() {
               {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
           </nav>
+
+          {/* Mobile menu */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="rounded-xl border border-white/20 bg-white/5 text-white backdrop-blur-md hover:bg-white/10"
+                >
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="bg-black/70 border-white/10 backdrop-blur-xl">
+                <SheetHeader>
+                  <SheetTitle className="text-white">Menu</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 flex flex-col gap-3">
+                  <a
+                    href="#workflows"
+                    className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+                  >
+                    Workflows
+                  </a>
+                  <a
+                    href="#faq"
+                    className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+                  >
+                    FAQ
+                  </a>
+                  <Button
+                    onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                    className="mt-2 rounded-xl border border-white/15 bg-white/10 px-5 py-3 font-bold text-white backdrop-blur-md transition hover:bg-white/20"
+                  >
+                    {isAuthenticated ? "Go to Dashboard" : "Get Started"}
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </header>
 
