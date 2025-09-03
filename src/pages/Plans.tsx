@@ -13,9 +13,12 @@ import {
 import { useNavigate } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function Plans() {
   const navigate = useNavigate();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [country, setCountry] = useState("us");
 
   return (
     <div className="relative min-h-screen dark">
@@ -153,21 +156,79 @@ export default function Plans() {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
+                    const form = e.currentTarget;
+                    const fd = new FormData(form);
+
+                    const fullName = (fd.get("fullName") as string)?.trim() || "";
+                    const address1 = (fd.get("address1") as string)?.trim() || "";
+                    const city = (fd.get("city") as string)?.trim() || "";
+                    const state = (fd.get("state") as string)?.trim() || "";
+                    const postal = (fd.get("postal") as string)?.trim() || "";
+                    const email = (fd.get("email") as string)?.trim() || "";
+
+                    const nextErrors: Record<string, string> = {};
+
+                    if (!fullName) nextErrors.fullName = "Full name is required.";
+                    if (!address1) nextErrors.address1 = "Address line 1 is required.";
+                    if (!city) nextErrors.city = "City is required.";
+
+                    // Country-specific state/ZIP checks
+                    if (country === "us" || country === "ca") {
+                      if (!state) nextErrors.state = "State/Province is required.";
+                    }
+
+                    if (!postal) {
+                      nextErrors.postal = "Postal code is required.";
+                    } else if (country === "us") {
+                      const usZip = /^\d{5}(-\d{4})?$/;
+                      if (!usZip.test(postal)) nextErrors.postal = "Enter a valid US ZIP (e.g., 94105 or 94105-1234).";
+                    } else if (country === "ca") {
+                      const caPost = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+                      if (!caPost.test(postal)) nextErrors.postal = "Enter a valid Canadian postal code (e.g., A1A 1A1).";
+                    } else if (postal.length < 3) {
+                      nextErrors.postal = "Postal code looks too short.";
+                    }
+
+                    if (!email) {
+                      nextErrors.email = "Email is required.";
+                    } else {
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                      if (!emailRegex.test(email)) nextErrors.email = "Enter a valid email address.";
+                    }
+
+                    setErrors(nextErrors);
+                    if (Object.keys(nextErrors).length === 0) {
+                      // Valid; you can proceed with submission logic here.
+                      // For now, just keep the form as-is without navigation.
+                    }
                   }}
                   className="space-y-6"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">Full name</label>
-                      <Input placeholder="Jane Doe" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" required />
+                      <Input
+                        name="fullName"
+                        placeholder="Jane Doe"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        required
+                        aria-invalid={!!errors.fullName}
+                      />
+                      {errors.fullName && (
+                        <p className="text-xs text-red-400 mt-1">{errors.fullName}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">Company (optional)</label>
-                      <Input placeholder="Acme Inc." className="bg-white/5 border-white/20 text-white placeholder:text-white/50" />
+                      <Input
+                        name="company"
+                        placeholder="Acme Inc."
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                      />
                     </div>
                     <div className="space-y-2 md:col-span-1">
                       <label className="text-sm text-white/80">Country</label>
-                      <Select defaultValue="us">
+                      <Select value={country} onValueChange={setCountry}>
                         <SelectTrigger className="w-full bg-white/5 border-white/20 text-white">
                           <SelectValue placeholder="Select country" />
                         </SelectTrigger>
@@ -182,37 +243,92 @@ export default function Plans() {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
+                      {/* Hidden input to submit country since Radix Select isn't a native element */}
+                      <input type="hidden" name="country" value={country} />
                     </div>
                     <div className="space-y-2 md:col-span-1">
                       <label className="text-sm text-white/80">State / Province</label>
-                      <Input placeholder="CA" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" />
+                      <Input
+                        name="state"
+                        placeholder="CA"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        aria-invalid={!!errors.state}
+                      />
+                      {errors.state && (
+                        <p className="text-xs text-red-400 mt-1">{errors.state}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2 md:col-span-2">
                       <label className="text-sm text-white/80">Address line 1</label>
-                      <Input placeholder="123 Main St" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" required />
+                      <Input
+                        name="address1"
+                        placeholder="123 Main St"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        required
+                        aria-invalid={!!errors.address1}
+                      />
+                      {errors.address1 && (
+                        <p className="text-xs text-red-400 mt-1">{errors.address1}</p>
+                      )}
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <label className="text-sm text-white/80">Address line 2 (optional)</label>
-                      <Input placeholder="Apt, suite, unit, building, floor, etc." className="bg-white/5 border-white/20 text-white placeholder:text-white/50" />
+                      <Input
+                        name="address2"
+                        placeholder="Apt, suite, unit, building, floor, etc."
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                      />
                     </div>
 
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">City</label>
-                      <Input placeholder="San Francisco" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" required />
+                      <Input
+                        name="city"
+                        placeholder="San Francisco"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        required
+                        aria-invalid={!!errors.city}
+                      />
+                      {errors.city && (
+                        <p className="text-xs text-red-400 mt-1">{errors.city}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">Postal code</label>
-                      <Input placeholder="94105" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" required />
+                      <Input
+                        name="postal"
+                        placeholder="94105"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        required
+                        aria-invalid={!!errors.postal}
+                      />
+                      {errors.postal && (
+                        <p className="text-xs text-red-400 mt-1">{errors.postal}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">Phone</label>
-                      <Input placeholder="+1 555 123 4567" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" />
+                      <Input
+                        name="phone"
+                        placeholder="+1 555 123 4567"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm text-white/80">Email for receipt</label>
-                      <Input type="email" placeholder="jane@example.com" className="bg-white/5 border-white/20 text-white placeholder:text-white/50" required />
+                      <Input
+                        name="email"
+                        type="email"
+                        placeholder="jane@example.com"
+                        className="bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                        required
+                        aria-invalid={!!errors.email}
+                      />
+                      {errors.email && (
+                        <p className="text-xs text-red-400 mt-1">{errors.email}</p>
+                      )}
                     </div>
                   </div>
 
