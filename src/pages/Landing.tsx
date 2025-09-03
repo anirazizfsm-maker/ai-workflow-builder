@@ -17,7 +17,7 @@ import {
   Send,
   Loader2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import ChipsetBackground from "@/components/ChipsetBackground";
@@ -30,11 +30,26 @@ export default function Landing() {
 
   // State
   const [workflowPrompt, setWorkflowPrompt] = useState("");
+  const faqInputRef = useRef<HTMLInputElement | null>(null);
   const [workflowResult, setWorkflowResult] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [faqQuery, setFaqQuery] = useState("");
   const [committedQuery, setCommittedQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+
+  // Keyboard shortcut: '/' focuses FAQ input (like many apps)
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select" || (e.ctrlKey || e.metaKey || e.altKey)) return;
+      if (e.key === "/") {
+        e.preventDefault();
+        faqInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   // Data
   const faqResults =
@@ -207,7 +222,7 @@ export default function Landing() {
                     behavior: "smooth",
                   })
                 }
-                className="w-full sm:w-auto rounded-xl border-white/20 bg-white/5 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:bg-white/10"
+                className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:bg-white/10"
               >
                 See How it Works
               </Button>
@@ -269,13 +284,23 @@ export default function Landing() {
               <CardContent className="space-y-4">
                 <Textarea
                   value={workflowPrompt}
-                  onChange={(e) => setWorkflowPrompt(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value.slice(0, 500);
+                    setWorkflowPrompt(next);
+                  }}
                   placeholder="Example: Send a welcome email when someone signs up..."
                   className="min-h-[120px] resize-none rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
                 />
+                {/* Prompt character counter */}
+                <div className="flex items-center justify-end text-xs text-white/70">
+                  <span className={workflowPrompt.length > 450 ? "text-amber-300" : "text-white/60"}>
+                    {workflowPrompt.length}/500
+                  </span>
+                </div>
                 <Button
                   onClick={handleGenerateWorkflow}
                   disabled={isGenerating || !workflowPrompt.trim()}
+                  aria-busy={isGenerating}
                   className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
                 >
                   {isGenerating ? (
@@ -382,6 +407,7 @@ export default function Landing() {
           <div className="rounded-2xl border border-white/15 bg-white/5 p-5 md:p-6 backdrop-blur-xl">
             <div className="flex flex-col gap-2 sm:flex-row">
               <Input
+                ref={faqInputRef}
                 value={faqQuery}
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="What is Lethimdo? How do I create workflows?"
@@ -391,6 +417,7 @@ export default function Landing() {
               <Button
                 onClick={handleFAQSearch}
                 disabled={isSearching || !faqQuery.trim()}
+                aria-busy={isSearching}
                 className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-4 font-semibold text-white backdrop-blur-md hover:bg-white/20"
               >
                 {isSearching ? (
@@ -401,7 +428,22 @@ export default function Landing() {
               </Button>
             </div>
 
-            {faqResults.length > 0 && (
+            {isSearching && (
+              <div className="mt-6 space-y-3">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="animate-pulse rounded-2xl border border-white/10 bg-white/5 p-4"
+                  >
+                    <div className="h-4 w-1/3 bg-white/20 rounded mb-2" />
+                    <div className="h-3 w-2/3 bg-white/10 rounded mb-1.5" />
+                    <div className="h-3 w-1/2 bg-white/10 rounded" />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!isSearching && faqResults.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -425,7 +467,7 @@ export default function Landing() {
               </motion.div>
             )}
 
-            {faqQuery && faqResults.length === 0 && (
+            {!isSearching && faqQuery && faqResults.length === 0 && (
               <div className="py-8 text-center text-white/80">
                 No results found. Try a different question!
               </div>
