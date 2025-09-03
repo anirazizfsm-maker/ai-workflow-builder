@@ -66,13 +66,13 @@ export default function Landing() {
       {/* Gradient mesh layers */}
       <div className="pointer-events-none absolute inset-0 -z-20">
         <div className="absolute -top-32 -left-24 size-[60vmax] rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(closest-side, #FF204E, transparent 60%)" }} />
+          style={{ background: "radial-gradient(closest-side, #EA2264, transparent 60%)" }} />
         <div className="absolute top-1/3 -right-24 size-[55vmax] rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(closest-side, #A0153E, transparent 60%)" }} />
+          style={{ background: "radial-gradient(closest-side, #F78D60, transparent 60%)" }} />
         <div className="absolute bottom-[-10%] left-1/4 size-[50vmax] rounded-full blur-3xl opacity-25"
-          style={{ background: "radial-gradient(closest-side, #5D0E41, transparent 60%)" }} />
+          style={{ background: "radial-gradient(closest-side, #640D5F, transparent 60%)" }} />
         <div className="absolute bottom-1/3 right-1/3 size-[45vmax] rounded-full blur-3xl opacity-25"
-          style={{ background: "radial-gradient(closest-side, #00224D, transparent 60%)" }} />
+          style={{ background: "radial-gradient(closest-side, #0D1164, transparent 60%)" }} />
       </div>
 
       {/* Topographic pattern overlay */}
@@ -106,7 +106,7 @@ export default function Landing() {
             </a>
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl bg-gradient-to-r from-[#FF204E] via-[#A0153E] to-[#00224D] px-5 py-2 font-semibold text-white shadow-lg shadow-[#FF204E]/20 hover:from-[#FF204E] hover:to-[#5D0E41]"
+              className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] px-5 py-2 font-semibold text-white shadow-lg shadow-[#EA2264]/20 hover:from-[#EA2264] hover:to-[#640D5F]"
             >
               {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
@@ -127,14 +127,14 @@ export default function Landing() {
               Build AI Workflows Instantly
             </h1>
             <p className="mx-auto mb-8 max-w-2xl text-lg font-medium text-white/80">
-              Describe your automation in plain English. We’ll turn it into a working workflow in seconds.
+              Describe your automation in plain English. We'll turn it into a working workflow in seconds.
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
               <Button
                 onClick={() =>
                   navigate(isAuthenticated ? "/dashboard" : "/auth")
                 }
-                className="rounded-xl bg-gradient-to-r from-[#FF204E] via-[#A0153E] to-[#5D0E41] px-8 py-4 text-lg font-bold text-white shadow-lg shadow-[#FF204E]/25 transition hover:scale-[1.02]"
+                className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#640D5F] px-8 py-4 text-lg font-bold text-white shadow-lg shadow-[#EA2264]/25 transition hover:scale-[1.02]"
               >
                 <Rocket className="mr-2 h-5 w-5" />
                 Start Building
@@ -215,7 +215,7 @@ export default function Landing() {
                 <Button
                   onClick={handleGenerateWorkflow}
                   disabled={isGenerating || !workflowPrompt.trim()}
-                  className="w-full rounded-xl bg-gradient-to-r from-[#FF204E] via-[#A0153E] to-[#00224D] py-3 font-bold text-white shadow-lg shadow-[#FF204E]/20 disabled:opacity-60"
+                  className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] py-3 font-bold text-white shadow-lg shadow-[#EA2264]/20 disabled:opacity-60"
                 >
                   {isGenerating ? "Generating..." : "Generate Workflow"}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -320,7 +320,7 @@ export default function Landing() {
               />
               <Button
                 onClick={handleFAQSearch}
-                className="rounded-xl bg-gradient-to-r from-[#FF204E] to-[#5D0E41] px-4 font-semibold text-white shadow-lg shadow-[#FF204E]/20"
+                className="rounded-xl bg-gradient-to-r from-[#EA2264] to-[#640D5F] px-4 font-semibold text-white shadow-lg shadow-[#EA2264]/20"
               >
                 <Send className="h-5 w-5" />
               </Button>
