@@ -85,17 +85,17 @@ export default function Landing() {
           >
             {/* Base logo text */}
             <span className="relative z-10">LETHIMDO</span>
-            {/* Glitch layer 1 */}
+            {/* Glitch layer 1 - replace colored text with neutral */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-[#EA2264]/70 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
             >
               LETHIMDO
             </span>
-            {/* Glitch layer 2 */}
+            {/* Glitch layer 2 - replace colored text with neutral */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-[#F78D60]/70 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
             >
               LETHIMDO
             </span>
@@ -115,7 +115,7 @@ export default function Landing() {
             </a>
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] px-5 py-2 font-semibold text-white shadow-lg shadow-[#EA2264]/20 hover:from-[#EA2264] hover:to-[#640D5F]"
+              className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md transition hover:bg-white/20 hover:shadow-lg hover:shadow-white/20"
             >
               {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
@@ -143,7 +143,7 @@ export default function Landing() {
                 onClick={() =>
                   navigate(isAuthenticated ? "/dashboard" : "/auth")
                 }
-                className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#640D5F] px-8 py-4 text-lg font-bold text-white shadow-lg shadow-[#EA2264]/25 transition hover:scale-[1.02]"
+                className="rounded-xl border border-white/15 bg-white/10 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25"
               >
                 <Rocket className="mr-2 h-5 w-5" />
                 Start Building
@@ -224,7 +224,7 @@ export default function Landing() {
                 <Button
                   onClick={handleGenerateWorkflow}
                   disabled={isGenerating || !workflowPrompt.trim()}
-                  className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] py-3 font-bold text-white shadow-lg shadow-[#EA2264]/20 disabled:opacity-60"
+                  className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
                 >
                   {isGenerating ? "Generating..." : "Generate Workflow"}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -329,7 +329,7 @@ export default function Landing() {
               />
               <Button
                 onClick={handleFAQSearch}
-                className="rounded-xl bg-gradient-to-r from-[#EA2264] to-[#640D5F] px-4 font-semibold text-white shadow-lg shadow-[#EA2264]/20"
+                className="rounded-xl border border-white/15 bg-white/10 px-4 font-semibold text-white backdrop-blur-md hover:bg-white/20"
               >
                 <Send className="h-5 w-5" />
               </Button>
