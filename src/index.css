@@ -168,4 +168,12 @@
     animation: flow 18s linear infinite;
     filter: drop-shadow(0 0 6px oklch(0.69 0.22 26)); /* subtle red glow */
   }
+  /* Fast-flowing variant for vein effect */
+  .flow-line-fast {
+    stroke-linecap: round;
+    stroke-dasharray: 1800;
+    animation: flow 6s linear infinite; /* faster flow */
+    filter: drop-shadow(0 0 8px oklch(0.69 0.22 26));
+    opacity: 0.9;
+  }
 }

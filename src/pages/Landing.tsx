@@ -70,9 +70,9 @@ export default function Landing() {
         className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-40 mix-blend-screen"
       />
 
-      {/* Animated red flowing strings overlay */}
+      {/* Animated red flowing strings overlay - chaotic, fast veins with continuous morphing */}
       <svg
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-70"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-80"
         viewBox="0 0 1440 900"
         preserveAspectRatio="none"
       >
@@ -82,40 +82,51 @@ export default function Landing() {
             <stop offset="0.5" stopColor="#EA2264" />
             <stop offset="1" stopColor="#640D5F" />
           </linearGradient>
+
+          {/* Morphing wobble filter – updates every second to change paths without removing them */}
+          <filter id="wobble">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="2" seed="8" result="noise">
+              <animate attributeName="baseFrequency" values="0.006;0.012;0.006" dur="1s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G">
+              <animate attributeName="scale" values="6;10;6" dur="1s" repeatCount="indefinite" />
+            </feDisplacementMap>
+          </filter>
         </defs>
 
-        {/* Main flowing lines */}
-        <path
-          className="flow-line"
-          d="M0,200 C250,140 420,360 700,300 S1100,220 1440,260"
-          stroke="url(#flowGrad)"
-          strokeWidth="2.5"
-          fill="none"
-        />
-        <path
-          className="flow-line"
-          d="M0,420 C260,380 420,520 720,470 S1120,420 1440,480"
-          stroke="url(#flowGrad)"
-          strokeWidth="2"
-          fill="none"
-          style={{ animationDelay: "2.5s", opacity: 0.85 }}
-        />
-        <path
-          className="flow-line"
-          d="M0,640 C220,600 420,720 740,670 S1180,600 1440,660"
-          stroke="url(#flowGrad)"
-          strokeWidth="2"
-          fill="none"
-          style={{ animationDelay: "5s", opacity: 0.7 }}
-        />
-        <path
-          className="flow-line"
-          d="M0,80 C200,60 420,180 680,140 S1060,100 1440,120"
-          stroke="url(#flowGrad)"
-          strokeWidth="1.8"
-          fill="none"
-          style={{ animationDelay: "7.5s", opacity: 0.6 }}
-        />
+        <g filter="url(#wobble)">
+          {/* Horizontal clusters */}
+          <path className="flow-line-fast" d="M0,90 C280,60 520,120 820,80 S1180,40 1440,70" stroke="url(#flowGrad)" strokeWidth="2.2" fill="none" />
+          <path className="flow-line-fast" d="M0,140 C260,120 520,180 820,150 S1180,120 1440,130" stroke="url(#flowGrad)" strokeWidth="1.8" fill="none" style={{ opacity: 0.75 }} />
+          <path className="flow-line-fast" d="M0,190 C240,160 520,240 820,200 S1180,160 1440,190" stroke="url(#flowGrad)" strokeWidth="1.6" fill="none" style={{ opacity: 0.6 }} />
+
+          <path className="flow-line-fast" d="M0,280 C300,240 560,320 880,290 S1220,260 1440,300" stroke="url(#flowGrad)" strokeWidth="2.3" fill="none" />
+          <path className="flow-line-fast" d="M0,330 C260,300 540,360 860,340 S1200,300 1440,330" stroke="url(#flowGrad)" strokeWidth="1.8" fill="none" style={{ opacity: 0.8 }} />
+
+          <path className="flow-line-fast" d="M0,420 C280,380 560,460 900,420 S1220,380 1440,410" stroke="url(#flowGrad)" strokeWidth="2.4" fill="none" />
+          <path className="flow-line-fast" d="M0,470 C280,430 560,510 900,470 S1220,430 1440,460" stroke="url(#flowGrad)" strokeWidth="1.7" fill="none" style={{ opacity: 0.7 }} />
+
+          <path className="flow-line-fast" d="M0,560 C320,520 620,590 960,560 S1280,520 1440,550" stroke="url(#flowGrad)" strokeWidth="2.1" fill="none" />
+          <path className="flow-line-fast" d="M0,610 C320,570 620,640 960,600 S1280,560 1440,600" stroke="url(#flowGrad)" strokeWidth="1.7" fill="none" style={{ opacity: 0.75 }} />
+          <path className="flow-line-fast" d="M0,660 C320,620 620,680 960,640 S1280,600 1440,650" stroke="url(#flowGrad)" strokeWidth="1.6" fill="none" style={{ opacity: 0.6 }} />
+
+          {/* Diagonal/vein-like paths */}
+          <path className="flow-line-fast" d="M-40,100 C220,220 480,60 740,180 S1140,300 1480,220" stroke="url(#flowGrad)" strokeWidth="2.2" fill="none" />
+          <path className="flow-line-fast" d="M-40,260 C200,360 520,200 780,300 S1120,420 1480,360" stroke="url(#flowGrad)" strokeWidth="1.9" fill="none" style={{ opacity: 0.85 }} />
+          <path className="flow-line-fast" d="M-40,420 C240,540 520,360 820,480 S1120,600 1480,520" stroke="url(#flowGrad)" strokeWidth="2.0" fill="none" />
+          <path className="flow-line-fast" d="M-40,580 C220,700 520,520 820,640 S1140,760 1480,700" stroke="url(#flowGrad)" strokeWidth="1.8" fill="none" style={{ opacity: 0.8 }} />
+
+          {/* Reverse diagonals */}
+          <path className="flow-line-fast" d="M-40,180 C280,120 540,260 820,200 S1160,140 1480,160" stroke="url(#flowGrad)" strokeWidth="1.8" fill="none" style={{ opacity: 0.7 }} />
+          <path className="flow-line-fast" d="M-40,340 C300,280 580,420 880,360 S1180,300 1480,320" stroke="url(#flowGrad)" strokeWidth="2.2" fill="none" />
+          <path className="flow-line-fast" d="M-40,500 C280,440 560,580 860,520 S1180,460 1480,480" stroke="url(#flowGrad)" strokeWidth="1.8" fill="none" style={{ opacity: 0.75 }} />
+          <path className="flow-line-fast" d="M-40,740 C280,660 560,800 860,720 S1180,640 1480,700" stroke="url(#flowGrad)" strokeWidth="2.0" fill="none" />
+
+          {/* Dense micro-veins */}
+          <path className="flow-line-fast" d="M0,760 C200,740 420,780 660,760 S980,720 1440,740" stroke="url(#flowGrad)" strokeWidth="1.2" fill="none" style={{ opacity: 0.6 }} />
+          <path className="flow-line-fast" d="M0,800 C220,790 420,820 700,800 S1060,770 1440,790" stroke="url(#flowGrad)" strokeWidth="1.2" fill="none" style={{ opacity: 0.55 }} />
+          <path className="flow-line-fast" d="M0,840 C240,840 460,860 740,840 S1100,810 1440,830" stroke="url(#flowGrad)" strokeWidth="1.1" fill="none" style={{ opacity: 0.5 }} />
+        </g>
       </svg>
 
       {/* Header - glass */}
