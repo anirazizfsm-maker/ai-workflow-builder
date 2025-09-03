@@ -30,7 +30,7 @@ export default function Plans() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6">
           <button
             onClick={() => navigate("/")}
-            className="text-white font-extrabold tracking-tight text-xl md:text-2xl"
+            className="text-white font-extrabold tracking-tight text-xl md:text-2xl hover:opacity-90 transition"
           >
             LETHIMDO
           </button>
@@ -42,7 +42,7 @@ export default function Plans() {
             >
               Back
             </Button>
-            <Button className="bg-white/10 text-white border border-white/15 hover:bg-white/20">
+            <Button className="bg-white/10 text-white border border-white/15 hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_60%,transparent)]">
               Continue
             </Button>
           </div>
@@ -63,8 +63,16 @@ export default function Plans() {
                 <CardTitle className="text-white">Choose a plan</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-                  <div className="flex items-start justify-between">
+                {/* Plan: Starter */}
+                <label className="group block rounded-xl border border-white/15 bg-white/5 p-4 hover:bg-white/10 hover:border-white/25 transition">
+                  <input
+                    type="radio"
+                    name="plan"
+                    defaultChecked
+                    value="starter"
+                    className="peer sr-only"
+                  />
+                  <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold">Starter</h4>
@@ -76,17 +84,24 @@ export default function Plans() {
                         For individuals getting started.
                       </p>
                     </div>
-                    <input
-                      type="radio"
-                      name="plan"
-                      defaultChecked
-                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
-                    />
+                    <div className="relative mt-1">
+                      <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
+                        <span className="size-2 rounded-full bg-transparent peer-checked:bg-[oklch(0.79_0.18_210)] transition" />
+                      </div>
+                      <span className="pointer-events-none absolute -inset-2 rounded-full opacity-0 peer-checked:opacity-100 peer-checked:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)] transition" />
+                    </div>
                   </div>
-                </div>
+                </label>
 
-                <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-                  <div className="flex items-start justify-between">
+                {/* Plan: Pro */}
+                <label className="group block rounded-xl border border-white/15 bg-white/5 p-4 hover:bg-white/10 hover:border-white/25 transition">
+                  <input
+                    type="radio"
+                    name="plan"
+                    value="pro"
+                    className="peer sr-only"
+                  />
+                  <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold">Pro</h4>
@@ -98,16 +113,24 @@ export default function Plans() {
                         For teams that need more power.
                       </p>
                     </div>
-                    <input
-                      type="radio"
-                      name="plan"
-                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
-                    />
+                    <div className="relative mt-1">
+                      <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
+                        <span className="size-2 rounded-full bg-transparent peer-checked:bg-[oklch(0.79_0.18_210)] transition" />
+                      </div>
+                      <span className="pointer-events-none absolute -inset-2 rounded-full opacity-0 peer-checked:opacity-100 peer-checked:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)] transition" />
+                    </div>
                   </div>
-                </div>
+                </label>
 
-                <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-                  <div className="flex items-start justify-between">
+                {/* Plan: Enterprise */}
+                <label className="group block rounded-xl border border-white/15 bg-white/5 p-4 hover:bg-white/10 hover:border-white/25 transition">
+                  <input
+                    type="radio"
+                    name="plan"
+                    value="enterprise"
+                    className="peer sr-only"
+                  />
+                  <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold">Enterprise</h4>
@@ -119,13 +142,14 @@ export default function Plans() {
                         Advanced needs & dedicated support.
                       </p>
                     </div>
-                    <input
-                      type="radio"
-                      name="plan"
-                      className="h-4 w-4 rounded-full border-white/30 text-white/90 accent-[oklch(0.79_0.18_210)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.79_0.18_210)]"
-                    />
+                    <div className="relative mt-1">
+                      <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
+                        <span className="size-2 rounded-full bg-transparent peer-checked:bg-[oklch(0.79_0.18_210)] transition" />
+                      </div>
+                      <span className="pointer-events-none absolute -inset-2 rounded-full opacity-0 peer-checked:opacity-100 peer-checked:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)] transition" />
+                    </div>
                   </div>
-                </div>
+                </label>
               </CardContent>
             </Card>
 
