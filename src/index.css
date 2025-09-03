@@ -165,14 +165,20 @@
   .flow-line {
     stroke-linecap: round;
     stroke-dasharray: 2400;
-    animation: flow 18s linear infinite;
-    filter: drop-shadow(0 0 6px oklch(0.69 0.22 26)); /* subtle red glow */
+    animation: flow 12s linear infinite;
+    filter: drop-shadow(0 0 6px oklch(0.69 0.22 26));
   }
-  /* Fast-flowing variant for vein effect */
+  .flow-line-mid {
+    stroke-linecap: round;
+    stroke-dasharray: 2000;
+    animation: flow 7.5s linear infinite;
+    filter: drop-shadow(0 0 7px oklch(0.69 0.22 26));
+    opacity: 0.85;
+  }
   .flow-line-fast {
     stroke-linecap: round;
     stroke-dasharray: 1800;
-    animation: flow 6s linear infinite; /* faster flow */
+    animation: flow 4.5s linear infinite;
     filter: drop-shadow(0 0 8px oklch(0.69 0.22 26));
     opacity: 0.9;
   }
