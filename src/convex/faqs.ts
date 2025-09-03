@@ -30,9 +30,10 @@ export const searchFAQs = query({
 export const getAllFAQs = query({
   args: {},
   handler: async (ctx) => {
+    // Use index instead of filter to avoid scans
     return await ctx.db
       .query("faqs")
-      .filter((q) => q.eq(q.field("isActive"), true))
+      .withIndex("by_isActive", (q) => q.eq("isActive", true))
       .collect();
   },
 });
@@ -52,5 +53,39 @@ export const createFAQ = mutation({
       tags: args.tags,
       isActive: true,
     });
+  },
+});
+
+export const updateFAQ = mutation({
+  args: {
+    id: v.id("faqs"),
+    question: v.optional(v.string()),
+    answer: v.optional(v.string()),
+    category: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    isActive: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...patch } = args;
+    const existing = await ctx.db.get(id);
+    if (!existing) {
+      throw new Error("FAQ not found");
+    }
+    await ctx.db.patch(id, patch);
+    return { success: true };
+  },
+});
+
+export const deleteFAQ = mutation({
+  args: {
+    id: v.id("faqs"),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db.get(args.id);
+    if (!existing) {
+      throw new Error("FAQ not found");
+    }
+    await ctx.db.delete(args.id);
+    return { success: true };
   },
 });

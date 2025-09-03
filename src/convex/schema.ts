@@ -54,6 +54,7 @@ const schema = defineSchema(
       tags: v.array(v.string()),
       isActive: v.boolean(),
     }).index("by_category", ["category"])
+      .index("by_isActive", ["isActive"])
       .searchIndex("search_content", {
         searchField: "question",
         filterFields: ["category", "isActive"]

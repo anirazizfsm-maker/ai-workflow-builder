@@ -3,7 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation, useAction } from "convex/react";
 import { motion } from "framer-motion";
 import { Plus, Play, Pause, Trash2, Settings, Zap, BarChart3 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Input as TextInput } from "@/components/ui/input";
+import { Pencil, PlusCircle } from "lucide-react";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
@@ -25,11 +27,28 @@ export default function Dashboard() {
   const deleteWorkflow = useMutation(api.workflows.deleteWorkflow);
   const generateWorkflowJSON = useAction(api.workflowActions.generateWorkflowJSON);
 
+  const faqs = useQuery(api.faqs.getAllFAQs);
+  const createFAQ = useMutation(api.faqs.createFAQ);
+  const updateFAQ = useMutation(api.faqs.updateFAQ);
+  const removeFAQ = useMutation(api.faqs.deleteFAQ);
+
+  const isAdmin = user?.role === "admin";
+
   const [newWorkflow, setNewWorkflow] = useState({
     title: "",
     description: "",
     prompt: "",
     category: "automation",
+  });
+
+  const [isFaqDialogOpen, setIsFaqDialogOpen] = useState(false);
+  const [editingFaqId, setEditingFaqId] = useState<string | null>(null);
+  const [faqForm, setFaqForm] = useState({
+    question: "",
+    answer: "",
+    category: "General",
+    tags: "" as string, // comma separated in UI
+    isActive: true,
   });
 
   if (isLoading) {
@@ -84,6 +103,66 @@ export default function Dashboard() {
       toast("Workflow deleted successfully!");
     } catch (error) {
       toast("Failed to delete workflow.");
+    }
+  };
+
+  const openCreateFaq = () => {
+    setEditingFaqId(null);
+    setFaqForm({ question: "", answer: "", category: "General", tags: "", isActive: true });
+    setIsFaqDialogOpen(true);
+  };
+
+  const openEditFaq = (faq: any) => {
+    setEditingFaqId(faq._id);
+    setFaqForm({
+      question: faq.question,
+      answer: faq.answer,
+      category: faq.category,
+      tags: (faq.tags || []).join(", "),
+      isActive: faq.isActive,
+    });
+    setIsFaqDialogOpen(true);
+  };
+
+  const handleSaveFaq = async () => {
+    try {
+      const tagsArray = faqForm.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+
+      if (editingFaqId) {
+        await updateFAQ({
+          id: editingFaqId as any,
+          question: faqForm.question,
+          answer: faqForm.answer,
+          category: faqForm.category,
+          tags: tagsArray,
+          isActive: faqForm.isActive,
+        });
+        toast("FAQ updated");
+      } else {
+        await createFAQ({
+          question: faqForm.question,
+          answer: faqForm.answer,
+          category: faqForm.category,
+          tags: tagsArray,
+        });
+        toast("FAQ created");
+      }
+
+      setIsFaqDialogOpen(false);
+    } catch (e) {
+      toast("Failed to save FAQ");
+    }
+  };
+
+  const handleDeleteFaq = async (id: string) => {
+    try {
+      await removeFAQ({ id: id as any });
+      toast("FAQ deleted");
+    } catch {
+      toast("Failed to delete FAQ");
     }
   };
 
@@ -320,6 +399,150 @@ export default function Dashboard() {
               </Button>
             </div>
           </motion.div>
+        )}
+
+        {/* Admin: FAQ Management */}
+        {isAdmin && (
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-black text-black">FAQ MANAGEMENT</h2>
+              <Button
+                onClick={openCreateFaq}
+                className="bg-[#FF0080] text-black border-4 border-black font-black shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+              >
+                <PlusCircle className="mr-2 h-5 w-5" />
+                ADD FAQ
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {faqs?.map((faq) => (
+                <Card key={faq._id} className="bg-white border-4 border-black shadow-[6px_6px_0px_#000000]">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start">
+                      <CardTitle className="text-black font-black text-lg">{faq.question}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <Badge className="bg-[#0080FF] text-black font-black border-2 border-black">
+                          {faq.category}
+                        </Badge>
+                        <Badge
+                          className={`font-black border-2 border-black ${
+                            faq.isActive ? "bg-[#00FF80] text-black" : "bg-gray-300 text-black"
+                          }`}
+                        >
+                          {faq.isActive ? "ACTIVE" : "INACTIVE"}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-black font-bold text-sm mb-3">{faq.answer}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {(faq.tags || []).map((t: string, i: number) => (
+                        <Badge key={i} className="bg-black text-white font-black border-2 border-black">
+                          {t}
+                        </Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-2 border-black font-black hover:bg-[#0080FF]"
+                        onClick={() => openEditFaq(faq)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-red-500 text-black border-2 border-black font-black hover:bg-red-600"
+                        onClick={() => handleDeleteFaq(faq._id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <Dialog open={isFaqDialogOpen} onOpenChange={setIsFaqDialogOpen}>
+              <DialogContent className="bg-[#00FF80] border-4 border-black shadow-[8px_8px_0px_#000000] max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-black text-black">
+                    {editingFaqId ? "EDIT FAQ" : "ADD FAQ"}
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-black font-black mb-2 block">QUESTION</label>
+                    <TextInput
+                      value={faqForm.question}
+                      onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
+                      className="border-4 border-black font-bold"
+                      placeholder="Enter question..."
+                    />
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">ANSWER</label>
+                    <Textarea
+                      value={faqForm.answer}
+                      onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
+                      className="border-4 border-black font-bold min-h-[120px]"
+                      placeholder="Enter answer..."
+                    />
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">CATEGORY</label>
+                    <Select
+                      value={faqForm.category}
+                      onValueChange={(value) => setFaqForm({ ...faqForm, category: value })}
+                    >
+                      <SelectTrigger className="border-4 border-black font-bold">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="General">GENERAL</SelectItem>
+                        <SelectItem value="Workflows">WORKFLOWS</SelectItem>
+                        <SelectItem value="Pricing">PRICING</SelectItem>
+                        <SelectItem value="Security">SECURITY</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-black font-black mb-2 block">TAGS (comma separated)</label>
+                    <TextInput
+                      value={faqForm.tags}
+                      onChange={(e) => setFaqForm({ ...faqForm, tags: e.target.value })}
+                      className="border-4 border-black font-bold"
+                      placeholder="e.g. automation, ai, email"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <label className="text-black font-black">ACTIVE</label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={`border-2 border-black font-black ${
+                        faqForm.isActive ? "bg-[#00FF80]" : "bg-gray-200"
+                      }`}
+                      onClick={() => setFaqForm({ ...faqForm, isActive: !faqForm.isActive })}
+                    >
+                      {faqForm.isActive ? "YES" : "NO"}
+                    </Button>
+                  </div>
+
+                  <Button
+                    onClick={handleSaveFaq}
+                    className="w-full bg-[#FF0080] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+                    disabled={!faqForm.question.trim() || !faqForm.answer.trim()}
+                  >
+                    {editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         )}
       </div>
     </div>
