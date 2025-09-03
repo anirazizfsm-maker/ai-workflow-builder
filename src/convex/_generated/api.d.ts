@@ -15,8 +15,12 @@ import type {
 } from "convex/server";
 import type * as auth_emailOtp from "../auth/emailOtp.js";
 import type * as auth from "../auth.js";
+import type * as faqs from "../faqs.js";
 import type * as http from "../http.js";
+import type * as testData from "../testData.js";
 import type * as users from "../users.js";
+import type * as workflowActions from "../workflowActions.js";
+import type * as workflows from "../workflows.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,8 +33,12 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   "auth/emailOtp": typeof auth_emailOtp;
   auth: typeof auth;
+  faqs: typeof faqs;
   http: typeof http;
+  testData: typeof testData;
   users: typeof users;
+  workflowActions: typeof workflowActions;
+  workflows: typeof workflows;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
