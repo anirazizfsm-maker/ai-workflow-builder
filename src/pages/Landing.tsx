@@ -58,10 +58,10 @@ export default function Landing() {
             LETHIMDO
           </motion.h1>
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#workflows" className="text-black font-black hover:text-[#0080FF] transition-colors">
+            <a href="#workflows" className="text-black font-black hover:text-[#0080FF] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#00FF80]">
               WORKFLOWS
             </a>
-            <a href="#faq" className="text-black font-black hover:text-[#0080FF] transition-colors">
+            <a href="#faq" className="text-black font-black hover:text-[#0080FF] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#00FF80]">
               FAQ
             </a>
             <Button 
@@ -197,7 +197,7 @@ export default function Landing() {
                     >
                       <h4 className="font-black text-black mb-2">GENERATED WORKFLOW:</h4>
                       <p className="font-bold text-black mb-2">{workflowResult.title}</p>
-                      <pre className="text-xs bg-black text-[#00FF80] p-2 rounded overflow-x-auto font-mono">
+                      <pre className="text-xs bg-black text-[#00FF80] p-2 overflow-x-auto font-mono border-4 border-black shadow-[4px_4px_0px_#000000]">
                         {JSON.stringify(workflowResult.workflowJSON, null, 2)}
                       </pre>
                     </motion.div>
@@ -247,7 +247,7 @@ export default function Landing() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className={`${workflow.color} border-4 border-black shadow-[4px_4px_0px_#000000] hover:shadow-[8px_8px_0px_#000000] transition-all cursor-pointer`}>
+                  <Card className={`${workflow.color} border-4 border-black shadow-[4px_4px_0px_#000000] hover:shadow-[8px_8px_0px_#000000] transition-all cursor-pointer transform hover:-translate-y-1`}>
                     <CardHeader className="pb-2">
                       <div className="flex justify-between items-start">
                         <CardTitle className="text-black font-black text-lg">{workflow.title}</CardTitle>
@@ -321,7 +321,7 @@ export default function Landing() {
                   >
                     <h4 className="font-black text-black text-lg">SEARCH RESULTS:</h4>
                     {faqResults.map((faq, index) => (
-                      <div key={index} className="p-4 bg-[#00FF80] border-4 border-black shadow-[4px_4px_0px_#000000]">
+                      <div key={index} className="p-4 bg-[#00FF80] border-4 border-black shadow-[4px_4px_0px_#000000] transform transition-transform hover:-translate-y-1">
                         <h5 className="font-black text-black mb-2">{faq.question}</h5>
                         <p className="font-bold text-black text-sm">{faq.answer}</p>
                         <Badge className="bg-[#FF0080] text-black font-black border-2 border-black mt-2">
