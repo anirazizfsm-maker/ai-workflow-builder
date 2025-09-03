@@ -63,14 +63,14 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Enhanced background with refined styling */}
+      {/* Enhanced background with sharp 4K image */}
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/3332d583-6771-4e05-a493-ce481e95a3f6"
-        alt="Monochrome wavy lines"
-        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-80 grayscale mix-blend-normal"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/97b2145e-daa9-4fc7-b309-ed4aa8c99762"
+        alt="High resolution monochrome wavy lines"
+        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
       />
 
-      {/* Subtle vertical gradient overlay for light-to-shadow depth */}
+      {/* Subtle vertical gradient overlay for depth */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white/10 via-transparent to-black/70 mix-blend-multiply"
