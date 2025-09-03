@@ -69,16 +69,16 @@ export default function Landing() {
           className="absolute inset-0 opacity-40"
           style={{
             background:
-              "linear-gradient(90deg, #0D1164 0%, #640D5F 33%, #EA2264 66%, #F78D60 100%)",
+              "linear-gradient(90deg, #5D0E41 0%, #A0153E 33%, #FF204E 66%, #000000 100%)",
           }}
         />
       </div>
 
       {/* Topographic pattern overlay */}
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/aeb34c0b-6e4f-44b2-a961-c7371aa04f69"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/e9a5c497-3bbf-46f7-85fb-366d0672b582"
         alt="Topo pattern"
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-20 mix-blend-screen"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-30 mix-blend-screen"
       />
 
       {/* Header - glass */}
