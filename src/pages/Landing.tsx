@@ -65,7 +65,7 @@ export default function Landing() {
     <div className="relative min-h-screen overflow-hidden">
       {/* Background pattern image updated to monochrome wavy-lines reference */}
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/c65001b7-fbf3-4022-9f3d-969e0329b97a"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/b8b1ca9e-d27a-4202-b094-6f15ef9b4d2f"
         alt="Monochrome wavy lines"
         className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-80 grayscale mix-blend-normal"
       />
