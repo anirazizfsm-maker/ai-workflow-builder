@@ -227,6 +227,43 @@ export default function Landing() {
                 See How it Works
               </Button>
             </div>
+
+            {/* Global search (hero) → reuses FAQ search */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!faqQuery.trim()) return;
+                handleFAQSearch();
+                document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="mt-4 flex flex-col gap-2 sm:flex-row"
+            >
+              <Input
+                value={faqQuery}
+                onChange={(e) => setFaqQuery(e.target.value)}
+                placeholder="Search FAQs, e.g. pricing, workflows, onboarding…"
+                className="flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+              />
+              <Button
+                type="submit"
+                disabled={isSearching || !faqQuery.trim()}
+                aria-busy={isSearching}
+                aria-label="Search FAQs"
+                title="Search FAQs"
+                className="group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
+                           hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
+                           focus-visible:ring-ring/60 focus-visible:ring-[3px]
+                           disabled:opacity-60
+                           sm:p-0 sm:grid sm:place-items-center
+                           hover:scale-[1.03] active:scale-95"
+              >
+                {isSearching ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Send className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                )}
+              </Button>
+            </form>
           </motion.div>
 
           {/* Feature cards - glass */}
@@ -481,6 +518,110 @@ export default function Landing() {
             )}
           </div>
         </div>
+      </section>
+
+      {/* Value Props section */}
+      <section className="px-4 py-12 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+              Why LETHIMDO
+            </h2>
+            <p className="mt-2 text-white/80 max-w-2xl mx-auto">
+              Launch automations faster, collaborate better, and stay in control.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="h-5 w-5" />
+                <h3 className="font-bold text-lg">From Idea to Live in Minutes</h3>
+              </div>
+              <p className="text-white/75 text-sm">
+                Turn a plain-English prompt into a structured, working workflow—
+                no glue code, no setup tax.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="h-5 w-5" />
+                <h3 className="font-bold text-lg">Built with AI Assistance</h3>
+              </div>
+              <p className="text-white/75 text-sm">
+                Smart defaults and suggestions help you configure steps, parameters,
+                and triggers with confidence.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Bot className="h-5 w-5" />
+                <h3 className="font-bold text-lg">Scale Without the Drag</h3>
+              </div>
+              <p className="text-white/75 text-sm">
+                Designed for reliability and speed, so your team ships workflows and
+                iterates without friction.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA banner */}
+      <section className="px-4 pb-8 md:pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-7xl rounded-2xl border border-white/15 bg-white/5 p-6 md:p-8 backdrop-blur-xl text-white text-center"
+        >
+          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+            Build your first workflow today
+          </h3>
+          <p className="mt-2 text-white/80 max-w-2xl mx-auto">
+            Get started free. No credit card required.
+          </p>
+          <div className="mt-5 flex items-center justify-center gap-3">
+            <Button
+              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+              className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25"
+            >
+              <Rocket className="mr-2 h-5 w-5" />
+              Start free
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                document.getElementById("workflows")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:bg-white/10"
+            >
+              See it in action
+            </Button>
+          </div>
+        </motion.div>
       </section>
 
       {/* Footer */}
