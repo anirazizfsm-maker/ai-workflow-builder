@@ -1,5 +1,6 @@
 /* FONT IMPORTS GO HERE */
-
+/* Add modern fonts for the neon theme */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap");
 
 /* DO NOT CHANGE */
 @import "tailwindcss";
@@ -130,16 +131,18 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    /* Switch to Plus Jakarta Sans for a sleek neon aesthetic */
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
   .font-sans {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  .font-mono {
+    /* Use JetBrains Mono for any code/mono text */
+    font-family: 'JetBrains Mono', Menlo, "Courier New", monospace;
   }
   .font-serif {
     font-family: Georgia, Georgia, serif;
-  }
-  .font-mono {
-    font-family: Menlo, "Courier New", monospace;
   }
 }
 
