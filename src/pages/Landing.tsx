@@ -63,14 +63,14 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background pattern image only (no color gradient layer) */}
+      {/* Background pattern image updated to monochrome wavy-lines reference */}
       <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/e9a5c497-3bbf-46f7-85fb-366d0672b582"
-        alt="Topo pattern"
-        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-40 mix-blend-screen"
+        src="https://harmless-tapir-303.convex.cloud/api/storage/b48d2bb7-1f57-4025-b44f-6f7f7525ac16"
+        alt="Monochrome wavy lines"
+        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover opacity-80 grayscale mix-blend-normal"
       />
 
-      {/* REPLACED: Removed animated red strings SVG and added a subtle vertical light-to-shadow gradient overlay */}
+      {/* Subtle vertical gradient overlay for light-to-shadow depth */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white/10 via-transparent to-black/70 mix-blend-multiply"
