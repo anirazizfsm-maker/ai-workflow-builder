@@ -65,14 +65,13 @@ export default function Landing() {
     <div className="relative min-h-screen overflow-hidden">
       {/* Gradient mesh layers */}
       <div className="pointer-events-none absolute inset-0 -z-20">
-        <div className="absolute -top-32 -left-24 size-[60vmax] rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(closest-side, #EA2264, transparent 60%)" }} />
-        <div className="absolute top-1/3 -right-24 size-[55vmax] rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(closest-side, #F78D60, transparent 60%)" }} />
-        <div className="absolute bottom-[-10%] left-1/4 size-[50vmax] rounded-full blur-3xl opacity-25"
-          style={{ background: "radial-gradient(closest-side, #640D5F, transparent 60%)" }} />
-        <div className="absolute bottom-1/3 right-1/3 size-[45vmax] rounded-full blur-3xl opacity-25"
-          style={{ background: "radial-gradient(closest-side, #0D1164, transparent 60%)" }} />
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            background:
+              "linear-gradient(90deg, #0D1164 0%, #640D5F 33%, #EA2264 66%, #F78D60 100%)",
+          }}
+        />
       </div>
 
       {/* Topographic pattern overlay */}
