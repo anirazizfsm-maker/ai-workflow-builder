@@ -85,13 +85,55 @@ export default function Landing() {
 
           {/* Morphing wobble filter – updates every second to change paths without removing them */}
           <filter id="wobble">
-            <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" seed="8" result="noise">
-              {/* Increase path frequency variation and update faster */}
-              <animate attributeName="baseFrequency" values="0.004;0.016;0.008;0.012;0.006" dur="0.9s" repeatCount="indefinite" />
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.01"
+              numOctaves="3"
+              seed="8"
+              result="noise"
+            >
+              {/* Smoothly morph paths exactly once per second */}
+              <animate
+                attributeName="baseFrequency"
+                values="0.006;0.012;0.009;0.015;0.007;0.011;0.006"
+                dur="1s"
+                repeatCount="indefinite"
+                keyTimes="0;0.16;0.33;0.5;0.66;0.83;1"
+                calcMode="spline"
+                keySplines="
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1
+                "
+              />
             </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G">
-              {/* Sync displacement intensity with frequency updates */}
-              <animate attributeName="scale" values="6;12;8;10;6" dur="0.9s" repeatCount="indefinite" />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="9"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            >
+              {/* Sync intensity to frequency with eased transitions */}
+              <animate
+                attributeName="scale"
+                values="7;13;9;12;8;10;7"
+                dur="1s"
+                repeatCount="indefinite"
+                keyTimes="0;0.16;0.33;0.5;0.66;0.83;1"
+                calcMode="spline"
+                keySplines="
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1;
+                  0.4 0 0.2 1
+                "
+              />
             </feDisplacementMap>
           </filter>
         </defs>
