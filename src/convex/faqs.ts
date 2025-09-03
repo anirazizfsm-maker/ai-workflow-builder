@@ -3,14 +3,19 @@ import { mutation, query } from "./_generated/server";
 
 export const searchFAQs = query({
   args: {
-    searchTerm: v.string(),
+    searchTerm: v.optional(v.string()),
     category: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Return no results if no search term provided
+    if (!args.searchTerm || args.searchTerm.trim() === "") {
+      return [];
+    }
+
     let results = await ctx.db
       .query("faqs")
       .withSearchIndex("search_content", (q) => {
-        let search = q.search("question", args.searchTerm);
+        let search = q.search("question", args.searchTerm as string);
         if (args.category) {
           search = search.eq("category", args.category);
         }
