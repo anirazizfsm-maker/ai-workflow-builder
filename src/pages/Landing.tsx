@@ -19,6 +19,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import ChipsetBackground from "@/components/ChipsetBackground";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -62,18 +63,13 @@ export default function Landing() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Enhanced background with sharp 4K image */}
-      <img
-        src="https://harmless-tapir-303.convex.cloud/api/storage/97b2145e-daa9-4fc7-b309-ed4aa8c99762"
-        alt="High resolution monochrome wavy lines"
-        className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
-      />
-
+    <div className="relative min-h-screen overflow-hidden dark">
+      {/* Animated Neon Chipset Background (replaces static image) */}
+      <ChipsetBackground />
       {/* Subtle vertical gradient overlay for depth */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white/10 via-transparent to-black/70 mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-transparent to-black/80"
       />
 
       {/* Header - glass */}
