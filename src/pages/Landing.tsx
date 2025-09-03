@@ -418,12 +418,19 @@ export default function Landing() {
                 onClick={handleFAQSearch}
                 disabled={isSearching || !faqQuery.trim()}
                 aria-busy={isSearching}
-                className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-4 font-semibold text-white backdrop-blur-md hover:bg-white/20"
+                aria-label="Search FAQs"
+                title="Search FAQs"
+                className="group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
+                           hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
+                           focus-visible:ring-ring/60 focus-visible:ring-[3px]
+                           disabled:opacity-60
+                           sm:p-0 sm:grid sm:place-items-center
+                           hover:scale-[1.03] active:scale-95"
               >
                 {isSearching ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <Send className="h-5 w-5" />
+                  <Send className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />
                 )}
               </Button>
             </div>
