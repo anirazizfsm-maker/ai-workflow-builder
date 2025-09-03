@@ -47,9 +47,9 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-[#E17888]">
+    <div className="min-h-screen bg-[#4D181C]">
       {/* Neo Brutalist Header */}
-      <header className="bg-[#AE3B8B] border-b-4 border-black p-6 sticky top-0 z-50">
+      <header className="bg-[#144058] border-b-4 border-black p-6 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <motion.h1 
             className="text-4xl font-black text-black cursor-pointer"
@@ -58,15 +58,15 @@ export default function Landing() {
             LETHIMDO
           </motion.h1>
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#workflows" className="text-black font-black hover:text-[#1C5789] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#E17888]">
+            <a href="#workflows" className="text-black font-black hover:text-[#E58D2E] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#4D181C]">
               WORKFLOWS
             </a>
-            <a href="#faq" className="text-black font-black hover:text-[#1C5789] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#E17888]">
+            <a href="#faq" className="text-black font-black hover:text-[#E58D2E] transition-colors border-4 border-black px-3 py-2 bg-white shadow-[4px_4px_0px_#000000] hover:bg-[#4D181C]">
               FAQ
             </a>
             <Button 
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="bg-black text-[#AE3B8B] border-4 border-black font-black hover:bg-[#1C5789] hover:text-black shadow-[4px_4px_0px_#000000]"
+              className="bg-black text-[#E58D2E] border-4 border-black font-black hover:bg-[#144058] hover:text-black shadow-[4px_4px_0px_#000000]"
             >
               {isAuthenticated ? "DASHBOARD" : "GET STARTED"}
             </Button>
@@ -86,7 +86,7 @@ export default function Landing() {
             <h1 className="text-6xl md:text-8xl font-black text-black mb-6 leading-tight">
               BUILD AI
               <br />
-              <span className="bg-[#FF0080] px-4 py-2 inline-block transform -rotate-2 shadow-[8px_8px_0px_#000000]">
+              <span className="bg-[#E58D2E] px-4 py-2 inline-block transform -rotate-2 shadow-[8px_8px_0px_#000000]">
                 WORKFLOWS
               </span>
               <br />
@@ -99,7 +99,7 @@ export default function Landing() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                className="bg-[#1C5789] text-black border-4 border-black font-black text-xl px-8 py-4 shadow-[8px_8px_0px_#000000] hover:bg-[#AE3B8B] transform hover:scale-105 transition-all"
+                className="bg-[#E58D2E] text-black border-4 border-black font-black text-xl px-8 py-4 shadow-[8px_8px_0px_#000000] hover:bg-[#144058] transform hover:scale-105 transition-all"
               >
                 <Rocket className="mr-2 h-6 w-6" />
                 START BUILDING
@@ -107,7 +107,7 @@ export default function Landing() {
               <Button 
                 variant="outline"
                 onClick={() => document.getElementById('workflows')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-4 border-black font-black text-xl px-8 py-4 shadow-[8px_8px_0px_#000000] hover:bg-black hover:text-[#E17888]"
+                className="border-4 border-black font-black text-xl px-8 py-4 shadow-[8px_8px_0px_#000000] hover:bg-black hover:text-[#DD671E]"
               >
                 SEE HOW IT WORKS
               </Button>
@@ -143,7 +143,7 @@ export default function Landing() {
       </section>
 
       {/* AI Workflow Builder Section */}
-      <section id="workflows" className="py-20 px-6 bg-[#AE3B8B]">
+      <section id="workflows" className="py-20 px-6 bg-[#DD671E]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -166,7 +166,7 @@ export default function Landing() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <Card className="bg-[#E17888] border-4 border-black shadow-[8px_8px_0px_#000000] h-full">
+              <Card className="bg-[#E58D2E] border-4 border-black shadow-[8px_8px_0px_#000000] h-full">
                 <CardHeader>
                   <CardTitle className="text-2xl font-black text-black flex items-center gap-2">
                     <Bot className="h-8 w-8" />
@@ -178,12 +178,12 @@ export default function Landing() {
                     value={workflowPrompt}
                     onChange={(e) => setWorkflowPrompt(e.target.value)}
                     placeholder="Example: Send a welcome email when someone signs up on my website..."
-                    className="border-4 border-black font-bold min-h-[120px] resize-none"
+                    className="border-4 border-black font-bold min-h[120px] resize-none"
                   />
                   <Button 
                     onClick={handleGenerateWorkflow}
                     disabled={isGenerating || !workflowPrompt.trim()}
-                    className="w-full bg-[#1C5789] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#AE3B8B] disabled:opacity-50"
+                    className="w-full bg-[#144058] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#DD671E] disabled:opacity-50"
                   >
                     {isGenerating ? "GENERATING..." : "GENERATE WORKFLOW"}
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -220,13 +220,13 @@ export default function Landing() {
                   title: "WELCOME EMAIL AUTOMATION",
                   desc: "Automatically send personalized welcome emails to new subscribers",
                   category: "EMAIL",
-                  color: "bg-[#1C5789]"
+                  color: "bg-[#144058]"
                 },
                 {
                   title: "DAILY SALES REPORT",
                   desc: "Generate and send daily sales reports to your team automatically",
                   category: "REPORTING",
-                  color: "bg-[#E17888]"
+                  color: "bg-[#4D181C]"
                 },
                 {
                   title: "LEAD FOLLOW-UP SEQUENCE",
@@ -238,7 +238,7 @@ export default function Landing() {
                   title: "SOCIAL MEDIA POSTING",
                   desc: "Schedule and post content across multiple social platforms",
                   category: "SOCIAL",
-                  color: "bg-[#AE3B8B]"
+                  color: "bg-[#DD671E]"
                 }
               ].map((workflow, index) => (
                 <motion.div
@@ -268,7 +268,7 @@ export default function Landing() {
       </section>
 
       {/* FAQ Chatbot Section */}
-      <section id="faq" className="py-20 px-6 bg-[#1C5789]">
+      <section id="faq" className="py-20 px-6 bg-[#144058]">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -307,7 +307,7 @@ export default function Landing() {
                   />
                   <Button 
                     onClick={handleFAQSearch}
-                    className="bg-[#AE3B8B] text-black border-4 border-black font-black shadow-[4px_4px_0px_#000000] hover:bg-[#E17888]"
+                    className="bg-[#E58D2E] text-black border-4 border-black font-black shadow-[4px_4px_0px_#000000] hover:bg-[#DD671E]"
                   >
                     <Send className="h-5 w-5" />
                   </Button>
@@ -321,10 +321,10 @@ export default function Landing() {
                   >
                     <h4 className="font-black text-black text-lg">SEARCH RESULTS:</h4>
                     {faqResults.map((faq, index) => (
-                      <div key={index} className="p-4 bg-[#E17888] border-4 border-black shadow-[4px_4px_0px_#000000] transform transition-transform hover:-translate-y-1">
+                      <div key={index} className="p-4 bg-[#DD671E] border-4 border-black shadow-[4px_4px_0px_#000000] transform transition-transform hover:-translate-y-1">
                         <h5 className="font-black text-black mb-2">{faq.question}</h5>
                         <p className="font-bold text-black text-sm">{faq.answer}</p>
-                        <Badge className="bg-[#AE3B8B] text-black font-black border-2 border-black mt-2">
+                        <Badge className="bg-[#E58D2E] text-black font-black border-2 border-black mt-2">
                           {faq.category}
                         </Badge>
                       </div>
@@ -344,14 +344,14 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-[#341514]">
+      <section className="py-20 px-6 bg-[#4D181C]">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl font-black text-[#E17888] mb-6">
+            <h2 className="text-5xl font-black text-[#E58D2E] mb-6">
               READY TO AUTOMATE?
             </h2>
             <p className="text-xl font-bold text-white mb-8">
@@ -359,7 +359,7 @@ export default function Landing() {
             </p>
             <Button 
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="bg-[#AE3B8B] text-black border-4 border-white font-black text-2xl px-12 py-6 shadow-[8px_8px_0px_#1C5789] hover:bg-[#1C5789] transform hover:scale-105 transition-all"
+              className="bg-[#E58D2E] text-black border-4 border-white font-black text-2xl px-12 py-6 shadow-[8px_8px_0px_#144058] hover:bg-[#144058] transform hover:scale-105 transition-all"
             >
               <Rocket className="mr-3 h-8 w-8" />
               {isAuthenticated ? "GO TO DASHBOARD" : "START FREE TODAY"}
@@ -369,7 +369,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#AE3B8B] border-t-4 border-black py-8 px-6">
+      <footer className="bg-[#144058] border-t-4 border-black py-8 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-black font-black text-lg">
             POWERED BY{" "}
@@ -377,7 +377,7 @@ export default function Landing() {
               href="https://vly.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-[#0080FF] transition-colors"
+              className="underline hover:text-[#E58D2E] transition-colors"
             >
               VLY.AI
             </a>
