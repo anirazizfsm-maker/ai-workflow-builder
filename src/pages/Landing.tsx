@@ -105,7 +105,7 @@ export default function Landing() {
 
       {/* Header - glass */}
       <header className="sticky top-0 z-50">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
           <motion.h1
             whileHover={{ scale: 1.05 }}
             className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow group"
@@ -154,7 +154,8 @@ export default function Landing() {
               <SheetTrigger asChild>
                 <Button
                   variant="outline"
-                  className="rounded-xl border border-white/20 bg-white/5 text-white backdrop-blur-md hover:bg-white/10"
+                  size="icon"
+                  className="size-11 rounded-xl border border-white/20 bg-white/5 text-white backdrop-blur-md hover:bg-white/10"
                 >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
@@ -210,6 +211,7 @@ export default function Landing() {
                 onClick={() =>
                   navigate(isAuthenticated ? "/dashboard" : "/auth")
                 }
+                size="lg"
                 className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25"
               >
                 <Rocket className="mr-2 h-5 w-5" />
@@ -217,6 +219,7 @@ export default function Landing() {
               </Button>
               <Button
                 variant="outline"
+                size="lg"
                 onClick={() =>
                   document.getElementById("workflows")?.scrollIntoView({
                     behavior: "smooth",
@@ -236,13 +239,13 @@ export default function Landing() {
                 handleFAQSearch();
                 document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="mt-4 flex flex-col gap-2 sm:flex-row"
+              className="mt-4 flex flex-col gap-3 sm:flex-row"
             >
               <Input
                 value={faqQuery}
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="Search FAQs, e.g. pricing, workflows, onboarding…"
-                className="flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+                className="h-12 flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
               />
               <Button
                 type="submit"
@@ -250,7 +253,7 @@ export default function Landing() {
                 aria-busy={isSearching}
                 aria-label="Search FAQs"
                 title="Search FAQs"
-                className="group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
+                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
                            hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
                            focus-visible:ring-ring/60 focus-visible:ring-[3px]
                            disabled:opacity-60
@@ -442,13 +445,13 @@ export default function Landing() {
           </motion.div>
 
           <div className="rounded-2xl border border-white/15 bg-white/5 p-5 md:p-6 backdrop-blur-xl">
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Input
                 ref={faqInputRef}
                 value={faqQuery}
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="What is Lethimdo? How do I create workflows?"
-                className="flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+                className="h-12 flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
                 onKeyPress={(e) => e.key === "Enter" && handleFAQSearch()}
               />
               <Button
@@ -457,7 +460,7 @@ export default function Landing() {
                 aria-busy={isSearching}
                 aria-label="Search FAQs"
                 title="Search FAQs"
-                className="group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
+                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
                            hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
                            focus-visible:ring-ring/60 focus-visible:ring-[3px]
                            disabled:opacity-60
