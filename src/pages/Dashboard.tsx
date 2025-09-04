@@ -17,6 +17,7 @@ import { Input as TextInput } from "@/components/ui/input";
 import { Pencil, PlusCircle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { FAQ } from "@/types/faq";
+import ChipsetBackground from "@/components/ChipsetBackground";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
@@ -180,86 +181,94 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#00FF80]">
-      {/* Neo Brutalist Header */}
-      <header className="bg-[#FF0080] border-b-4 border-black p-6">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <motion.h1 
-            className="text-4xl font-black text-black cursor-pointer"
-            onClick={() => navigate("/")}
+    <div className="relative min-h-screen overflow-hidden dark">
+      <ChipsetBackground />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-transparent to-black/80"
+      />
+
+      <header className="sticky top-0 z-50">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
+          <motion.h1
             whileHover={{ scale: 1.05 }}
+            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow group"
+            onClick={() => navigate("/")}
           >
-            LETHIMDO
+            <span className="relative z-10">LETHIMDO</span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+            >
+              LETHIMDO
+            </span>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+            >
+              LETHIMDO
+            </span>
           </motion.h1>
-          <div className="flex items-center gap-4">
-            <div className="text-black font-bold">
+
+          <div className="flex items-center gap-3">
+            <div className="text-white/90 font-semibold hidden md:block">
               Welcome, {user?.name || user?.email || "User"}!
             </div>
-            <Button 
+            <Button
               onClick={() => signOut()}
-              className="bg-black text-[#FF0080] border-4 border-black font-black hover:bg-[#0080FF] hover:text-black"
+              className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md transition hover:bg-white/20 hover:shadow-lg hover:shadow-white/20"
             >
-              SIGN OUT
+              Sign Out
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="mx-auto max-w-7xl p-4 md:p-6 text-white">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <Card className="bg-[#0080FF] border-4 border-black shadow-[8px_8px_0px_#000000]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
               <CardHeader className="pb-2">
-                <CardTitle className="text-black font-black flex items-center gap-2">
+                <CardTitle className="text-white font-extrabold flex items-center gap-2">
                   <Zap className="h-6 w-6" />
-                  TOTAL WORKFLOWS
+                  Total Workflows
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-black text-black">{workflows?.length || 0}</div>
+                <div className="text-4xl font-extrabold text-white">
+                  {workflows?.length || 0}
+                </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card className="bg-[#FF0080] border-4 border-black shadow-[8px_8px_0px_#000000]">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
               <CardHeader className="pb-2">
-                <CardTitle className="text-black font-black flex items-center gap-2">
+                <CardTitle className="text-white font-extrabold flex items-center gap-2">
                   <Play className="h-6 w-6" />
-                  ACTIVE
+                  Active
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-black text-black">
+                <div className="text-4xl font-extrabold text-white">
                   {workflows?.filter(w => w.status === "active").length || 0}
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card className="bg-[#00FF80] border-4 border-black shadow-[8px_8px_0px_#000000]">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
               <CardHeader className="pb-2">
-                <CardTitle className="text-black font-black flex items-center gap-2">
+                <CardTitle className="text-white font-extrabold flex items-center gap-2">
                   <BarChart3 className="h-6 w-6" />
-                  EXECUTIONS
+                  Executions
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-black text-black">247</div>
+                <div className="text-4xl font-extrabold text-white">247</div>
               </CardContent>
             </Card>
           </motion.div>
@@ -269,69 +278,72 @@ export default function Dashboard() {
         <div className="mb-8">
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-[#FF0080] text-black border-4 border-black font-black text-xl px-8 py-4 shadow-[8px_8px_0px_#000000] hover:bg-[#0080FF]">
+              <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25">
                 <Plus className="mr-2 h-6 w-6" />
-                CREATE NEW WORKFLOW
+                Create New Workflow
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[#00FF80] border-4 border-black shadow-[8px_8px_0px_#000000] max-w-2xl">
+            <DialogContent className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-2xl max-w-2xl text-white">
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
               >
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-black text-black">CREATE AI WORKFLOW</DialogTitle>
+                  <DialogTitle className="text-2xl font-extrabold">Create AI Workflow</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-black font-black mb-2 block">WORKFLOW TITLE</label>
+                    <label className="font-semibold mb-2 block">Workflow Title</label>
                     <Input
                       value={newWorkflow.title}
-                      onChange={(e) => setNewWorkflow({...newWorkflow, title: e.target.value})}
+                      onChange={(e) => setNewWorkflow({ ...newWorkflow, title: e.target.value })}
                       placeholder="Enter workflow title..."
-                      className="border-4 border-black font-bold"
+                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50"
                     />
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">CATEGORY</label>
-                    <Select value={newWorkflow.category} onValueChange={(value) => setNewWorkflow({...newWorkflow, category: value})}>
-                      <SelectTrigger className="border-4 border-black font-bold">
+                    <label className="font-semibold mb-2 block">Category</label>
+                    <Select
+                      value={newWorkflow.category}
+                      onValueChange={(value) => setNewWorkflow({ ...newWorkflow, category: value })}
+                    >
+                      <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 text-white">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="automation">AUTOMATION</SelectItem>
-                        <SelectItem value="email">EMAIL</SelectItem>
-                        <SelectItem value="data">DATA PROCESSING</SelectItem>
-                        <SelectItem value="social">SOCIAL MEDIA</SelectItem>
-                        <SelectItem value="reporting">REPORTING</SelectItem>
+                      <SelectContent className="backdrop-blur-xl bg-black/60 border border-white/20 text-white">
+                        <SelectItem value="automation">Automation</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="data">Data Processing</SelectItem>
+                        <SelectItem value="social">Social Media</SelectItem>
+                        <SelectItem value="reporting">Reporting</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">DESCRIBE YOUR WORKFLOW</label>
+                    <label className="font-semibold mb-2 block">Describe your workflow</label>
                     <Textarea
                       value={newWorkflow.prompt}
-                      onChange={(e) => setNewWorkflow({...newWorkflow, prompt: e.target.value})}
-                      placeholder="Describe what you want to automate in plain English..."
-                      className="border-4 border-black font-bold min-h-[120px]"
+                      onChange={(e) => setNewWorkflow({ ...newWorkflow, prompt: e.target.value })}
+                      placeholder="Describe what you want to automate..."
+                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50 min-h-[120px]"
                     />
                   </div>
                   <div>
-                    <label className="text-black font-black mb-2 block">DESCRIPTION (OPTIONAL)</label>
+                    <label className="font-semibold mb-2 block">Description (optional)</label>
                     <Input
                       value={newWorkflow.description}
-                      onChange={(e) => setNewWorkflow({...newWorkflow, description: e.target.value})}
+                      onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
                       placeholder="Brief description..."
-                      className="border-4 border-black font-bold"
+                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50"
                     />
                   </div>
-                  <Button 
+                  <Button
                     onClick={handleCreateWorkflow}
-                    className="w-full bg-[#FF0080] text-black border-4 border-black font-black text-lg py-3 shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+                    className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
                     disabled={!newWorkflow.prompt}
                   >
-                    GENERATE WORKFLOW
+                    Generate Workflow
                   </Button>
                 </div>
               </motion.div>
@@ -340,7 +352,7 @@ export default function Dashboard() {
         </div>
 
         {/* Workflows Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {workflows?.map((workflow, index) => (
             <motion.div
               key={workflow._id}
@@ -348,22 +360,26 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="bg-white border-4 border-black shadow-[8px_8px_0px_#000000] hover:shadow-[12px_12px_0px_#000000] transition-all">
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl hover:bg-white/10 transition">
                 <CardHeader>
                   <div className="flex justify-between items-start">
-                    <CardTitle className="text-black font-black text-lg">{workflow.title}</CardTitle>
-                    <Badge 
-                      className={`font-black border-2 border-black ${
-                        workflow.status === "active" ? "bg-[#00FF80] text-black" :
-                        workflow.status === "paused" ? "bg-[#FF0080] text-black" :
-                        "bg-gray-300 text-black"
+                    <CardTitle className="text-white font-extrabold text-lg">
+                      {workflow.title}
+                    </CardTitle>
+                    <Badge
+                      className={`rounded-full border border-white/20 ${
+                        workflow.status === "active"
+                          ? "bg-emerald-400/20 text-emerald-200"
+                          : workflow.status === "paused"
+                          ? "bg-amber-400/20 text-amber-200"
+                          : "bg-white/10 text-white/80"
                       }`}
                     >
                       {workflow.status.toUpperCase()}
                     </Badge>
                   </div>
-                  <p className="text-black font-bold text-sm">{workflow.description}</p>
-                  <Badge className="bg-[#0080FF] text-black font-black border-2 border-black w-fit">
+                  <p className="text-white/80 font-medium text-sm">{workflow.description}</p>
+                  <Badge className="rounded-full border border-white/20 bg-white/10 text-white w-fit">
                     {workflow.category.toUpperCase()}
                   </Badge>
                 </CardHeader>
@@ -372,10 +388,10 @@ export default function Dashboard() {
                     <Button
                       size="sm"
                       onClick={() => handleStatusToggle(workflow._id, workflow.status)}
-                      className={`border-2 border-black font-black ${
-                        workflow.status === "active" 
-                          ? "bg-[#FF0080] text-black hover:bg-red-500" 
-                          : "bg-[#00FF80] text-black hover:bg-green-400"
+                      className={`rounded-xl border border-white/20 font-semibold text-white ${
+                        workflow.status === "active"
+                          ? "bg-white/10 hover:bg-white/20"
+                          : "bg-emerald-500/20 hover:bg-emerald-500/30"
                       }`}
                     >
                       {workflow.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
@@ -383,14 +399,14 @@ export default function Dashboard() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-2 border-black font-black hover:bg-[#0080FF]"
+                      className="rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20"
                     >
                       <Settings className="h-4 w-4" />
                     </Button>
                     <Button
                       size="sm"
                       onClick={() => handleDeleteWorkflow(workflow._id)}
-                      className="bg-red-500 text-black border-2 border-black font-black hover:bg-red-600"
+                      className="rounded-xl bg-rose-500/20 text-rose-100 border border-white/20 hover:bg-rose-500/30"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -401,20 +417,19 @@ export default function Dashboard() {
           ))}
         </div>
 
+        {/* Empty State */}
         {workflows?.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-16"
-          >
-            <div className="bg-white border-4 border-black shadow-[8px_8px_0px_#000000] p-8 max-w-md mx-auto">
-              <h3 className="text-2xl font-black text-black mb-4">NO WORKFLOWS YET</h3>
-              <p className="text-black font-bold mb-6">Create your first AI-powered workflow to get started!</p>
-              <Button 
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+            <div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl p-8 max-w-md mx-auto">
+              <h3 className="text-2xl font-extrabold text-white mb-4">No workflows yet</h3>
+              <p className="text-white/80 mb-6">
+                Create your first AI-powered workflow to get started!
+              </p>
+              <Button
                 onClick={() => setIsCreateDialogOpen(true)}
-                className="bg-[#FF0080] text-black border-4 border-black font-black shadow-[4px_4px_0px_#000000] hover:bg-[#0080FF]"
+                className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
               >
-                CREATE WORKFLOW
+                Create Workflow
               </Button>
             </div>
           </motion.div>
@@ -422,15 +437,17 @@ export default function Dashboard() {
 
         {/* Admin: FAQ Management */}
         {isAdmin && (
-          <div className="mb-10">
+          <div className="mb-10 mt-10">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-black text-black">FAQ MANAGEMENT</h2>
+              <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                FAQ Management
+              </h2>
               <Button
                 onClick={openCreateFaq}
-                className="rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold px-4 py-2 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
+                className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
               >
                 <PlusCircle className="mr-2 h-5 w-5" />
-                ADD FAQ
+                Add FAQ
               </Button>
             </div>
 
