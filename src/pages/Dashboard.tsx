@@ -15,6 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Input as TextInput } from "@/components/ui/input";
 import { Pencil, PlusCircle } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import type { FAQ } from "@/types/faq";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
@@ -50,6 +52,11 @@ export default function Dashboard() {
     tags: "" as string, // comma separated in UI
     isActive: true,
   });
+
+  // Loading and UI state for FAQs
+  const isFaqsLoading = faqs === undefined;
+  const [isSavingFaq, setIsSavingFaq] = useState(false);
+  const [deletingFaqId, setDeletingFaqId] = useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -126,6 +133,7 @@ export default function Dashboard() {
 
   const handleSaveFaq = async () => {
     try {
+      setIsSavingFaq(true);
       const tagsArray = faqForm.tags
         .split(",")
         .map((t) => t.trim())
@@ -152,17 +160,22 @@ export default function Dashboard() {
       }
 
       setIsFaqDialogOpen(false);
-    } catch (e) {
-      toast("Failed to save FAQ");
+    } catch (e: any) {
+      toast(e?.message || "Failed to save FAQ. Check your connection and try again.");
+    } finally {
+      setIsSavingFaq(false);
     }
   };
 
   const handleDeleteFaq = async (id: string) => {
     try {
+      setDeletingFaqId(id);
       await removeFAQ({ id: id as any });
       toast("FAQ deleted");
-    } catch {
-      toast("Failed to delete FAQ");
+    } catch (e: any) {
+      toast(e?.message || "Failed to delete FAQ.");
+    } finally {
+      setDeletingFaqId(null);
     }
   };
 
@@ -421,8 +434,20 @@ export default function Dashboard() {
               </Button>
             </div>
 
+            {isFaqsLoading && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                {[0,1,2,3].map((i) => (
+                  <div key={i} className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl p-4 animate-pulse">
+                    <div className="h-4 w-2/3 bg-white/20 rounded mb-2" />
+                    <div className="h-3 w-1/2 bg-white/10 rounded mb-1.5" />
+                    <div className="h-3 w-1/3 bg-white/10 rounded" />
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {faqs?.map((faq: any) => (
+              {faqs?.map((faq: FAQ) => (
                 <Card
                   key={faq._id}
                   className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl"
@@ -471,13 +496,35 @@ export default function Dashboard() {
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handleDeleteFaq(faq._id)}
-                        className="rounded-xl bg-[#EA2264] text-white border border-white/20 hover:bg-[#d01d58] backdrop-blur-md font-semibold"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            className="rounded-xl bg-[#EA2264] text-white border border-white/20 hover:bg-[#d01d58] backdrop-blur-md font-semibold"
+                            disabled={deletingFaqId === (faq._id as unknown as string)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="text-[#0D1164]">Delete FAQ?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently remove the FAQ.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteFaq(faq._id as unknown as string)}
+                              className="bg-[#EA2264] hover:bg-[#d01d58]"
+                            >
+                              Confirm Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </CardContent>
                 </Card>
@@ -581,10 +628,10 @@ export default function Dashboard() {
                       onClick={handleSaveFaq}
                       className="w-full rounded-xl bg-gradient-to-r from-[#EA2264] via-[#F78D60] to-[#0D1164] text-white font-bold py-3 shadow-lg shadow-[#EA2264]/25 hover:from-[#EA2264] hover:to-[#640D5F] border border-white/20 backdrop-blur-md"
                       disabled={
-                        !faqForm.question.trim() || !faqForm.answer.trim()
+                        isSavingFaq || !faqForm.question.trim() || !faqForm.answer.trim()
                       }
                     >
-                      {editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
+                      {isSavingFaq ? "Saving..." : editingFaqId ? "SAVE CHANGES" : "CREATE FAQ"}
                     </Button>
                   </div>
                 </motion.div>

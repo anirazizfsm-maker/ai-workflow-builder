@@ -25,7 +25,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Menu } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
- 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import type { FAQ } from "@/types/faq";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -55,6 +56,18 @@ export default function Landing() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  // Debounced search-as-you-type
+  useEffect(() => {
+    if (!faqQuery.trim()) {
+      setCommittedQuery("");
+      setIsSearching(false);
+      return;
+    }
+    setIsSearching(true);
+    const t = setTimeout(() => setCommittedQuery(faqQuery), 350);
+    return () => clearTimeout(t);
+  }, [faqQuery]);
 
   // Data
   const faqResults =
@@ -637,18 +650,21 @@ export default function Landing() {
                 <h4 className="text-sm font-bold text-white/80">
                   Search Results
                 </h4>
-                {faqResults.map((faq, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl border border-white/15 bg-white/5 p-4 md:p-4 text-white backdrop-blur-md"
-                  >
-                    <h5 className="mb-1 font-semibold">{faq.question}</h5>
-                    <p className="text-sm text-white/80">{faq.answer}</p>
-                    <Badge className="mt-2 border border-white/20 bg-white/10 text-white">
-                      {faq.category}
-                    </Badge>
-                  </div>
-                ))}
+                <Accordion type="multiple" className="w-full">
+                  {faqResults.map((faq: FAQ) => (
+                    <AccordionItem key={faq._id as unknown as string} value={String(faq._id)}>
+                      <AccordionTrigger className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white backdrop-blur-md hover:bg-white/10">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="rounded-b-2xl border-x border-b border-white/15 bg-white/5 p-4 text-white/90 backdrop-blur-md">
+                        <p className="text-sm">{faq.answer}</p>
+                        <Badge className="mt-3 border border-white/20 bg-white/10 text-white">
+                          {faq.category}
+                        </Badge>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </motion.div>
             )}
 
