@@ -2,6 +2,9 @@
 /* Add modern fonts for the neon theme */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap");
 
+/* Load required fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
 /* DO NOT CHANGE */
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -143,6 +146,24 @@
   }
   .font-serif {
     font-family: Georgia, Georgia, serif;
+  }
+
+  body {
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 400;
+  }
+
+  h1, h2, h3 {
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  button,
+  [role="button"] {
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 }
 
