@@ -77,13 +77,35 @@ export const createFAQ = mutation({
   },
   handler: async (ctx, args) => {
     await ensureAdmin(ctx);
-    if (!args.question.trim() || !args.answer.trim()) {
+
+    // Stronger validation
+    const question = args.question.trim();
+    const answer = args.answer.trim();
+    const category = args.category.trim();
+
+    if (!question || !answer) {
       throw new Error("Question and answer are required");
     }
+    if (question.length > 300) {
+      throw new Error("Question is too long (max 300 characters)");
+    }
+    if (answer.length > 5000) {
+      throw new Error("Answer is too long (max 5000 characters)");
+    }
+    if (category.length > 50) {
+      throw new Error("Category is too long (max 50 characters)");
+    }
+    if (args.tags.length > 20) {
+      throw new Error("Too many tags (max 20)");
+    }
+    for (const t of args.tags) {
+      if (t.length > 40) throw new Error("Tag too long (max 40 characters)");
+    }
+
     return await ctx.db.insert("faqs", {
-      question: args.question,
-      answer: args.answer,
-      category: args.category,
+      question,
+      answer,
+      category,
       tags: args.tags,
       isActive: true,
     });
@@ -101,10 +123,35 @@ export const updateFAQ = mutation({
   },
   handler: async (ctx, args) => {
     await ensureAdmin(ctx);
+
+    // Stronger validation
+    const question = args.question.trim();
+    const answer = args.answer.trim();
+    const category = args.category.trim();
+
+    if (!question || !answer) {
+      throw new Error("Question and answer are required");
+    }
+    if (question.length > 300) {
+      throw new Error("Question is too long (max 300 characters)");
+    }
+    if (answer.length > 5000) {
+      throw new Error("Answer is too long (max 5000 characters)");
+    }
+    if (category.length > 50) {
+      throw new Error("Category is too long (max 50 characters)");
+    }
+    if (args.tags.length > 20) {
+      throw new Error("Too many tags (max 20)");
+    }
+    for (const t of args.tags) {
+      if (t.length > 40) throw new Error("Tag too long (max 40 characters)");
+    }
+
     await ctx.db.patch(args.id, {
-      question: args.question,
-      answer: args.answer,
-      category: args.category,
+      question,
+      answer,
+      category,
       tags: args.tags,
       isActive: args.isActive,
     });
