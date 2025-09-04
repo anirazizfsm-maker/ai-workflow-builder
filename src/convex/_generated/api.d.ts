@@ -13,14 +13,21 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as admin from "../admin.js";
+import type * as aiBuilder from "../aiBuilder.js";
 import type * as auth_emailOtp from "../auth/emailOtp.js";
 import type * as auth from "../auth.js";
+import type * as billing from "../billing.js";
+import type * as chat from "../chat.js";
+import type * as chatHttp from "../chatHttp.js";
+import type * as executionBroker from "../executionBroker.js";
 import type * as faqs from "../faqs.js";
 import type * as http from "../http.js";
 import type * as testData from "../testData.js";
 import type * as users from "../users.js";
 import type * as workflowActions from "../workflowActions.js";
 import type * as workflows from "../workflows.js";
+import type * as workflowsHttp from "../workflowsHttp.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -31,14 +38,21 @@ import type * as workflows from "../workflows.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
+  aiBuilder: typeof aiBuilder;
   "auth/emailOtp": typeof auth_emailOtp;
   auth: typeof auth;
+  billing: typeof billing;
+  chat: typeof chat;
+  chatHttp: typeof chatHttp;
+  executionBroker: typeof executionBroker;
   faqs: typeof faqs;
   http: typeof http;
   testData: typeof testData;
   users: typeof users;
   workflowActions: typeof workflowActions;
   workflows: typeof workflows;
+  workflowsHttp: typeof workflowsHttp;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

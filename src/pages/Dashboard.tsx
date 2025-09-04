@@ -422,7 +422,7 @@ export default function Dashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {faqs?.map((faq) => (
+              {faqs?.map((faq: any) => (
                 <Card
                   key={faq._id}
                   className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl"

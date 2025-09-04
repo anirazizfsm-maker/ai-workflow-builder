@@ -32,6 +32,12 @@ const schema = defineSchema(
       role: v.optional(roleValidator), // role of the user. do not remove
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
+    // Organizations table
+    orgs: defineTable({
+      name: v.string(),
+      slug: v.string(),
+    }).index("by_slug", ["slug"]),
+
     // Workflows table
     workflows: defineTable({
       userId: v.id("users"),
@@ -42,9 +48,64 @@ const schema = defineSchema(
       status: v.union(v.literal("draft"), v.literal("active"), v.literal("paused")),
       category: v.string(),
       isPublic: v.optional(v.boolean()),
+      // New fields for backend features
+      orgId: v.optional(v.string()),
+      templateId: v.optional(v.string()),
+      params: v.optional(v.record(v.string(), v.string())),
+      n8nWorkflowId: v.optional(v.string()),
     }).index("by_user", ["userId"])
       .index("by_status", ["status"])
-      .index("by_category", ["category"]),
+      .index("by_category", ["category"])
+      .index("by_org", ["orgId"])
+      .index("by_template", ["templateId"]),
+
+    // AI Templates for workflow builder
+    aiTemplates: defineTable({
+      templateId: v.string(),
+      name: v.string(),
+      description: v.string(),
+      params: v.record(v.string(), v.string()),
+      steps: v.array(v.string()),
+      tags: v.array(v.string()),
+      isActive: v.boolean(),
+    }).index("by_template_id", ["templateId"])
+      .index("by_active", ["isActive"])
+      .searchIndex("search_name", {
+        searchField: "name",
+        filterFields: ["isActive"]
+      }),
+
+    // Invoices for billing
+    invoices: defineTable({
+      orgId: v.string(),
+      number: v.string(),
+      amountCents: v.number(),
+      currency: v.string(),
+      status: v.union(v.literal("draft"), v.literal("paid"), v.literal("void")),
+      pdfFileId: v.optional(v.id("_storage")),
+      pdfUrl: v.optional(v.string()),
+    }).index("by_org", ["orgId"])
+      .index("by_status", ["status"])
+      .index("by_number", ["number"]),
+
+    // Chat logs for FAQ chatbot
+    chats: defineTable({
+      orgId: v.string(),
+      userId: v.optional(v.id("users")),
+      message: v.string(),
+      response: v.optional(v.string()),
+      citations: v.optional(v.array(v.string())),
+      confidence: v.optional(v.number()),
+    }).index("by_org", ["orgId"])
+      .index("by_user", ["userId"]),
+
+    // Credentials (placeholder storage for demo)
+    credentials: defineTable({
+      orgId: v.string(),
+      key: v.string(),
+      value: v.string(), // encrypted placeholder in real implementation
+    }).index("by_org", ["orgId"])
+      .index("by_key", ["key"]),
 
     // FAQ entries for the chatbot
     faqs: defineTable({

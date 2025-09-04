@@ -60,7 +60,7 @@ export default function Landing() {
   const faqResults =
     useQuery(
       api.faqs.searchFAQs,
-      committedQuery ? { searchTerm: committedQuery } : "skip",
+      committedQuery ? { query: committedQuery } : "skip",
     ) ?? [];
 
   const generateWorkflowJSON = useAction(
