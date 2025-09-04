@@ -23,6 +23,9 @@ import { toast } from "sonner";
 import ChipsetBackground from "@/components/ChipsetBackground";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+ 
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -36,6 +39,8 @@ export default function Landing() {
   const [faqQuery, setFaqQuery] = useState("");
   const [committedQuery, setCommittedQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false); // Floating chatbot / AI builder modal
+  const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
 
   // Keyboard shortcut: '/' focuses FAQ input (like many apps)
   useEffect(() => {
@@ -102,6 +107,75 @@ export default function Landing() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-transparent to-black/80"
       />
+
+      {/* Global AI Assistant / Builder Modal */}
+      <Dialog open={aiOpen} onOpenChange={setAiOpen}>
+        <DialogContent className="bg-black/70 border-white/10 backdrop-blur-2xl text-white">
+          <DialogHeader>
+            <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Textarea
+              value={workflowPrompt}
+              onChange={(e) => {
+                const next = e.target.value.slice(0, 500);
+                setWorkflowPrompt(next);
+              }}
+              placeholder="Ask a question or describe a workflow. Example: 'When a user signs up, send a welcome email and notify Slack'."
+              className="min-h-[120px] resize-none rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+            />
+            <div className="flex items-center justify-between text-xs text-white/70">
+              <span className={workflowPrompt.length > 450 ? "text-amber-300" : "text-white/60"}>
+                {workflowPrompt.length}/500
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    setFaqQuery(workflowPrompt);
+                    setCommittedQuery(workflowPrompt);
+                    setAiOpen(false);
+                    // Scroll to FAQ for results
+                    setTimeout(() => {
+                      document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                    }, 50);
+                  }}
+                  variant="outline"
+                  className="rounded-xl border-white/20 bg-white/5 hover:bg-white/10"
+                >
+                  Search FAQs
+                </Button>
+                <Button
+                  onClick={handleGenerateWorkflow}
+                  disabled={isGenerating || !workflowPrompt.trim()}
+                  aria-busy={isGenerating}
+                  className="rounded-xl border border-white/15 bg-white/10 hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      Generate
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+            {workflowResult && (
+              <div className="mt-1 rounded-xl border border-white/15 bg-black/40 p-3 text-white backdrop-blur-sm">
+                <h4 className="mb-1 text-xs font-bold tracking-tight">Generated workflow</h4>
+                <p className="mb-2 text-xs">{workflowResult.title}</p>
+                <pre className="max-h-40 overflow-auto rounded-lg bg-black/60 p-3 text-[11px] text-[#C8F6FF]">
+                  {JSON.stringify(workflowResult.workflowJSON, null, 2)}
+                </pre>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Header - glass */}
       <header className="sticky top-0 z-50">
@@ -192,7 +266,21 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="px-4 py-12 sm:py-20 md:py-24">
+      <section className="relative px-4 py-12 sm:py-20 md:py-24">
+        {/* Slow animated gradient behind hero (20s loop) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 opacity-30"
+        >
+          <div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+               style={{
+                 background:
+                   "conic-gradient(from 0deg, color-mix(in oklab, var(--ring) 80%, transparent), transparent 25%, color-mix(in oklab, var(--accent) 70%, transparent), transparent 50%, color-mix(in oklab, white 25%, transparent), transparent 75%, color-mix(in oklab, var(--ring) 80%, transparent))"
+               }}
+          />
+          <div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite]" />
+        </div>
+
         <div className="mx-auto max-w-7xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -375,54 +463,104 @@ export default function Landing() {
             </Card>
           </motion.div>
 
-          {/* Popular workflows */}
+          {/* Right column: Popular workflows with previews and AI Builder shortcut */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             className="space-y-4"
           >
-            <h3 className="mb-4 text-2xl md:text-3xl font-extrabold tracking-tight text-white">
-              Popular Workflows
-            </h3>
-            {[
-              {
-                title: "Welcome Email Automation",
-                desc: "Automatically send personalized welcome emails.",
-                tag: "Email",
-              },
-              {
-                title: "Daily Sales Report",
-                desc: "Generate and send a daily KPI summary.",
-                tag: "Reporting",
-              },
-              {
-                title: "Lead Follow-up Sequence",
-                desc: "Automated outreach for new leads.",
-                tag: "Marketing",
-              },
-              {
-                title: "Social Media Posting",
-                desc: "Schedule cross-platform posts.",
-                tag: "Social",
-              },
-            ].map((w, i) => (
-              <motion.div
-                key={w.title}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="cursor-pointer rounded-2xl border border-white/15 bg-white/5 p-4 md:p-5 text-white backdrop-blur-md transition hover:bg-white/10"
+            <div className="flex items-center justify-between">
+              <h3 className="mb-4 text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                Popular Workflows
+              </h3>
+              <Button
+                onClick={() => setAiOpen(true)}
+                variant="outline"
+                className="rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:shadow-[0_0_14px_color-mix(in_oklab,var(--ring)_55%,transparent)] transition"
               >
-                <div className="mb-1 flex items-start justify-between">
-                  <h4 className="text-lg font-bold">{w.title}</h4>
-                  <Badge className="rounded-full border border-white/20 bg-white/10 text-white">
-                    {w.tag}
-                  </Badge>
-                </div>
-                <p className="text-white/75">{w.desc}</p>
-              </motion.div>
-            ))}
+                <Sparkles className="mr-2 h-4 w-4" />
+                Describe Your Workflow
+              </Button>
+            </div>
+
+            <TooltipProvider>
+              {[
+                {
+                  title: "Welcome Email Automation",
+                  desc: "Automatically send personalized welcome emails.",
+                  tag: "Email",
+                  steps: ["Webhook Trigger", "Fetch user", "Send Email"],
+                },
+                {
+                  title: "Daily Sales Report",
+                  desc: "Generate and send a daily KPI summary.",
+                  tag: "Reporting",
+                  steps: ["Cron 9:00", "Query Sales", "Email Report"],
+                },
+                {
+                  title: "Lead Follow-up Sequence",
+                  desc: "Automated outreach for new leads.",
+                  tag: "Marketing",
+                  steps: ["New Lead", "Wait 1d", "Send Follow-up"],
+                },
+                {
+                  title: "Social Media Posting",
+                  desc: "Schedule cross-platform posts.",
+                  tag: "Social",
+                  steps: ["Schedule", "Prepare Post", "Publish"],
+                },
+              ].map((w, i) => {
+                const isSelected = selectedWorkflow === i;
+                return (
+                  <Tooltip key={w.title}>
+                    <TooltipTrigger asChild>
+                      <motion.div
+                        onClick={() =>
+                          setSelectedWorkflow((prev) => (prev === i ? null : i))
+                        }
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className={`cursor-pointer rounded-2xl border border-white/15 bg-white/5 p-4 md:p-5 text-white backdrop-blur-md transition
+                          hover:bg-white/10 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
+                          ${isSelected ? "ring-2 ring-[color:var(--ring)] shadow-[0_0_22px_color-mix(in_oklab,var(--ring)_65%,transparent)]" : ""}`}
+                      >
+                        <div className="mb-1 flex items-start justify-between">
+                          <h4 className="text-lg font-bold">{w.title}</h4>
+                          <Badge className="rounded-full border border-white/20 bg-white/10 text-white">
+                            {w.tag}
+                          </Badge>
+                        </div>
+                        <p className="text-white/75">{w.desc}</p>
+                        {isSelected && (
+                          <div className="mt-3 text-xs text-white/75 grid grid-cols-3 gap-2">
+                            {w.steps.map((s, idx) => (
+                              <div
+                                key={idx}
+                                className="rounded-md border border-white/15 bg-black/30 px-2 py-1 text-center"
+                              >
+                                {s}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </motion.div>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-black/80 border-white/15 text-white backdrop-blur-xl">
+                      <div className="text-xs">
+                        <div className="font-semibold mb-1">Steps Preview</div>
+                        <ol className="list-decimal list-inside space-y-0.5 text-white/80">
+                          {w.steps.map((s) => (
+                            <li key={s}>{s}</li>
+                          ))}
+                        </ol>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </TooltipProvider>
           </motion.div>
         </div>
       </section>
@@ -520,6 +658,33 @@ export default function Landing() {
               </div>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* Demo Section - short muted autoplay video */}
+      <section className="px-4 py-10 md:py-14">
+        <div className="mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="rounded-2xl border border-white/15 bg-white/5 p-3 md:p-4 backdrop-blur-xl"
+          >
+            <div className="overflow-hidden rounded-xl border border-white/10">
+              <video
+                src="https://cdn.coverr.co/videos/coverr-working-on-laptop-typing-typing-5175/1080p.mp4"
+                className="w-full h-[220px] md:h-[360px] object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster="/logo_bg.png"
+              />
+            </div>
+            <p className="mt-3 text-center text-white/80 text-sm">
+              See workflows in action: trigger → AI step → email/report delivery.
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -627,6 +792,27 @@ export default function Landing() {
         </motion.div>
       </section>
 
+      {/* Trust badges row above footer */}
+      <section className="px-4 pb-6 md:pb-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { label: "GDPR Ready", icon: "✔" },
+              { label: "Secure Payments", icon: "✔" },
+              { label: "AI Powered", icon: "✔" },
+            ].map((b) => (
+              <div
+                key={b.label}
+                className="rounded-xl border border-white/10 bg-white/5 p-3 text-center text-white/80 backdrop-blur-xl"
+              >
+                <span className="mr-2">{b.icon}</span>
+                {b.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="px-4 pb-8 md:pb-10">
         <div className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 text-center text-white backdrop-blur-xl">
@@ -641,8 +827,28 @@ export default function Landing() {
               vly.ai
             </a>
           </p>
+          <p className="mt-2 text-white/80 text-sm">
+            Need help?{" "}
+            <a href="mailto:support@lethimdo.com" className="underline hover:text-white">
+              support@lethimdo.com
+            </a>{" "}
+            | Live Chat
+          </p>
         </div>
       </footer>
+
+      {/* Floating Chatbot Button (bottom-right) */}
+      <div className="fixed bottom-5 right-5 z-[60]">
+        <Button
+          onClick={() => setAiOpen(true)}
+          size="icon"
+          className="size-12 rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-xl hover:bg-white/20 hover:shadow-[0_0_22px_color-mix(in_oklab,var(--ring)_60%,transparent)] transition"
+          aria-label="Open Assistant"
+          title="Ask AI / FAQ"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </Button>
+      </div>
     </div>
   );
 }

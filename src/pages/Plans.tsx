@@ -83,6 +83,10 @@ export default function Plans() {
                       <p className="text-white/70 text-sm mt-1">
                         For individuals getting started.
                       </p>
+                      <ul className="mt-2 text-xs text-white/70 space-y-1">
+                        <li>✅ Auto invoice sent to your email</li>
+                        <li>✅ Cancel anytime</li>
+                      </ul>
                     </div>
                     <div className="relative mt-1">
                       <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
@@ -93,8 +97,14 @@ export default function Plans() {
                   </div>
                 </label>
 
-                {/* Plan: Pro */}
-                <label className="group block rounded-xl border border-white/15 bg-white/5 p-4 hover:bg-white/10 hover:border-white/25 transition">
+                {/* Plan: Pro (Most Popular) */}
+                <label className="group relative block rounded-xl border border-white/15 bg-white/5 p-4 hover:bg-white/10 hover:border-white/25 transition">
+                  {/* Most Popular badge */}
+                  <div className="absolute -top-3 right-3">
+                    <Badge className="rounded-full border-white/20 bg-white/10 text-white shadow-[0_0_14px_color-mix(in_oklab,var(--ring)_55%,transparent)]">
+                      Most Popular
+                    </Badge>
+                  </div>
                   <input
                     type="radio"
                     name="plan"
@@ -112,6 +122,10 @@ export default function Plans() {
                       <p className="text-white/70 text-sm mt-1">
                         For teams that need more power.
                       </p>
+                      <ul className="mt-2 text-xs text-white/70 space-y-1">
+                        <li>✅ Auto invoice sent to your email</li>
+                        <li>✅ Cancel anytime</li>
+                      </ul>
                     </div>
                     <div className="relative mt-1">
                       <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
@@ -141,6 +155,10 @@ export default function Plans() {
                       <p className="text-white/70 text-sm mt-1">
                         Advanced needs & dedicated support.
                       </p>
+                      <ul className="mt-2 text-xs text-white/70 space-y-1">
+                        <li>✅ Auto invoice sent to your email</li>
+                        <li>✅ Cancel anytime</li>
+                      </ul>
                     </div>
                     <div className="relative mt-1">
                       <div className="size-5 rounded-full border border-white/30 bg-transparent grid place-items-center transition">
