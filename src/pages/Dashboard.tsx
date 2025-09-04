@@ -59,6 +59,55 @@ export default function Dashboard() {
   const [isSavingFaq, setIsSavingFaq] = useState(false);
   const [deletingFaqId, setDeletingFaqId] = useState<string | null>(null);
 
+  const [workflowErrors, setWorkflowErrors] = useState<{ title?: string; prompt?: string; category?: string; description?: string }>({});
+  const [faqErrors, setFaqErrors] = useState<{ question?: string; answer?: string; category?: string; tags?: string }>({});
+
+  const validateWorkflow = (w: typeof newWorkflow) => {
+    const errs: typeof workflowErrors = {};
+    const title = (w.title || "").trim();
+    const prompt = (w.prompt || "").trim();
+    const description = (w.description || "").trim();
+    const category = (w.category || "").trim();
+
+    if (!title) errs.title = "Title is required";
+    else if (title.length < 3) errs.title = "Title must be at least 3 characters";
+    else if (title.length > 80) errs.title = "Title must be at most 80 characters";
+
+    if (!prompt) errs.prompt = "Description of your workflow is required";
+    else if (prompt.length < 10) errs.prompt = "Please provide at least 10 characters";
+    else if (prompt.length > 1000) errs.prompt = "Please keep under 1000 characters";
+
+    if (!category) errs.category = "Category is required";
+
+    if (description && description.length > 200) errs.description = "Description must be at most 200 characters";
+
+    return errs;
+  };
+
+  const validateFaq = (f: typeof faqForm) => {
+    const errs: typeof faqErrors = {};
+    const question = (f.question || "").trim();
+    const answer = (f.answer || "").trim();
+    const category = (f.category || "").trim();
+    const tagsArray = (f.tags || "")
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    if (!question) errs.question = "Question is required";
+    else if (question.length > 300) errs.question = "Max 300 characters";
+
+    if (!answer) errs.answer = "Answer is required";
+    else if (answer.length > 5000) errs.answer = "Max 5000 characters";
+
+    if (!category) errs.category = "Category is required";
+
+    if (tagsArray.length > 20) errs.tags = "Too many tags (max 20)";
+    else if (tagsArray.some((t) => t.length > 40)) errs.tags = "Each tag must be ≤ 40 characters";
+
+    return errs;
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#FF0080] flex items-center justify-center">
@@ -73,6 +122,14 @@ export default function Dashboard() {
   }
 
   const handleCreateWorkflow = async () => {
+    const errs = validateWorkflow(newWorkflow);
+    setWorkflowErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      const first = Object.values(errs)[0];
+      if (first) toast(first);
+      return;
+    }
+
     try {
       // Generate workflow JSON using AI
       const result = await generateWorkflowJSON({ prompt: newWorkflow.prompt });
@@ -89,6 +146,7 @@ export default function Dashboard() {
         toast("Workflow created successfully! 🚀");
         setIsCreateDialogOpen(false);
         setNewWorkflow({ title: "", description: "", prompt: "", category: "automation" });
+        setWorkflowErrors({});
       }
     } catch (error) {
       toast("Failed to create workflow. Please try again.");
@@ -117,6 +175,7 @@ export default function Dashboard() {
   const openCreateFaq = () => {
     setEditingFaqId(null);
     setFaqForm({ question: "", answer: "", category: "General", tags: "", isActive: true });
+    setFaqErrors({});
     setIsFaqDialogOpen(true);
   };
 
@@ -129,10 +188,19 @@ export default function Dashboard() {
       tags: (faq.tags || []).join(", "),
       isActive: faq.isActive,
     });
+    setFaqErrors({});
     setIsFaqDialogOpen(true);
   };
 
   const handleSaveFaq = async () => {
+    const errs = validateFaq(faqForm);
+    setFaqErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      const first = Object.values(errs)[0];
+      if (first) toast(first);
+      return;
+    }
+
     try {
       setIsSavingFaq(true);
       const tagsArray = faqForm.tags
@@ -143,18 +211,18 @@ export default function Dashboard() {
       if (editingFaqId) {
         await updateFAQ({
           id: editingFaqId as any,
-          question: faqForm.question,
-          answer: faqForm.answer,
-          category: faqForm.category,
+          question: faqForm.question.trim(),
+          answer: faqForm.answer.trim(),
+          category: faqForm.category.trim(),
           tags: tagsArray,
           isActive: faqForm.isActive,
         });
         toast("FAQ updated");
       } else {
         await createFAQ({
-          question: faqForm.question,
-          answer: faqForm.answer,
-          category: faqForm.category,
+          question: faqForm.question.trim(),
+          answer: faqForm.answer.trim(),
+          category: faqForm.category.trim(),
           tags: tagsArray,
         });
         toast("FAQ created");
@@ -297,18 +365,29 @@ export default function Dashboard() {
                     <label className="font-semibold mb-2 block">Workflow Title</label>
                     <Input
                       value={newWorkflow.title}
-                      onChange={(e) => setNewWorkflow({ ...newWorkflow, title: e.target.value })}
+                      onChange={(e) => {
+                        setNewWorkflow({ ...newWorkflow, title: e.target.value });
+                        if (workflowErrors.title) setWorkflowErrors((p) => ({ ...p, title: undefined }));
+                      }}
+                      aria-invalid={!!workflowErrors.title}
+                      aria-describedby={workflowErrors.title ? "wf-title-error" : undefined}
                       placeholder="Enter workflow title..."
-                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50"
+                      className={`rounded-xl border ${workflowErrors.title ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
                     />
+                    {workflowErrors.title && (
+                      <p id="wf-title-error" className="mt-1 text-sm text-red-300">{workflowErrors.title}</p>
+                    )}
                   </div>
                   <div>
                     <label className="font-semibold mb-2 block">Category</label>
                     <Select
                       value={newWorkflow.category}
-                      onValueChange={(value) => setNewWorkflow({ ...newWorkflow, category: value })}
+                      onValueChange={(value) => {
+                        setNewWorkflow({ ...newWorkflow, category: value });
+                        if (workflowErrors.category) setWorkflowErrors((p) => ({ ...p, category: undefined }));
+                      }}
                     >
-                      <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 text-white">
+                      <SelectTrigger className={`rounded-xl border ${workflowErrors.category ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white`}>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="backdrop-blur-xl bg-black/60 border border-white/20 text-white">
@@ -319,24 +398,43 @@ export default function Dashboard() {
                         <SelectItem value="reporting">Reporting</SelectItem>
                       </SelectContent>
                     </Select>
+                    {workflowErrors.category && (
+                      <p className="mt-1 text-sm text-red-300">{workflowErrors.category}</p>
+                    )}
                   </div>
                   <div>
                     <label className="font-semibold mb-2 block">Describe your workflow</label>
                     <Textarea
                       value={newWorkflow.prompt}
-                      onChange={(e) => setNewWorkflow({ ...newWorkflow, prompt: e.target.value })}
+                      onChange={(e) => {
+                        setNewWorkflow({ ...newWorkflow, prompt: e.target.value });
+                        if (workflowErrors.prompt) setWorkflowErrors((p) => ({ ...p, prompt: undefined }));
+                      }}
+                      aria-invalid={!!workflowErrors.prompt}
+                      aria-describedby={workflowErrors.prompt ? "wf-prompt-error" : undefined}
                       placeholder="Describe what you want to automate..."
-                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50 min-h-[120px]"
+                      className={`rounded-xl border ${workflowErrors.prompt ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50 min-h-[120px]`}
                     />
+                    {workflowErrors.prompt && (
+                      <p id="wf-prompt-error" className="mt-1 text-sm text-red-300">{workflowErrors.prompt}</p>
+                    )}
                   </div>
                   <div>
                     <label className="font-semibold mb-2 block">Description (optional)</label>
                     <Input
                       value={newWorkflow.description}
-                      onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
+                      onChange={(e) => {
+                        setNewWorkflow({ ...newWorkflow, description: e.target.value });
+                        if (workflowErrors.description) setWorkflowErrors((p) => ({ ...p, description: undefined }));
+                      }}
+                      aria-invalid={!!workflowErrors.description}
+                      aria-describedby={workflowErrors.description ? "wf-desc-error" : undefined}
                       placeholder="Brief description..."
-                      className="rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50"
+                      className={`rounded-xl border ${workflowErrors.description ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
                     />
+                    {workflowErrors.description && (
+                      <p id="wf-desc-error" className="mt-1 text-sm text-red-300">{workflowErrors.description}</p>
+                    )}
                   </div>
                   <Button
                     onClick={handleCreateWorkflow}
@@ -567,12 +665,18 @@ export default function Dashboard() {
                       </label>
                       <TextInput
                         value={faqForm.question}
-                        onChange={(e) =>
-                          setFaqForm({ ...faqForm, question: e.target.value })
-                        }
-                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
+                        onChange={(e) => {
+                          setFaqForm({ ...faqForm, question: e.target.value });
+                          if (faqErrors.question) setFaqErrors((p) => ({ ...p, question: undefined }));
+                        }}
+                        aria-invalid={!!faqErrors.question}
+                        aria-describedby={faqErrors.question ? "faq-question-error" : undefined}
+                        className={`rounded-xl border ${faqErrors.question ? "border-red-500/70" : "border-white/20"} bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500`}
                         placeholder="Enter question..."
                       />
+                      {faqErrors.question && (
+                        <p id="faq-question-error" className="mt-1 text-sm text-red-600">{faqErrors.question}</p>
+                      )}
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
@@ -580,12 +684,18 @@ export default function Dashboard() {
                       </label>
                       <Textarea
                         value={faqForm.answer}
-                        onChange={(e) =>
-                          setFaqForm({ ...faqForm, answer: e.target.value })
-                        }
-                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium min-h-[120px] placeholder:text-neutral-500"
+                        onChange={(e) => {
+                          setFaqForm({ ...faqForm, answer: e.target.value });
+                          if (faqErrors.answer) setFaqErrors((p) => ({ ...p, answer: undefined }));
+                        }}
+                        aria-invalid={!!faqErrors.answer}
+                        aria-describedby={faqErrors.answer ? "faq-answer-error" : undefined}
+                        className={`rounded-xl border ${faqErrors.answer ? "border-red-500/70" : "border-white/20"} bg-white/10 backdrop-blur-md font-medium min-h-[120px] placeholder:text-neutral-500`}
                         placeholder="Enter answer..."
                       />
+                      {faqErrors.answer && (
+                        <p id="faq-answer-error" className="mt-1 text-sm text-red-600">{faqErrors.answer}</p>
+                      )}
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
@@ -593,11 +703,12 @@ export default function Dashboard() {
                       </label>
                       <Select
                         value={faqForm.category}
-                        onValueChange={(value) =>
-                          setFaqForm({ ...faqForm, category: value })
-                        }
+                        onValueChange={(value) => {
+                          setFaqForm({ ...faqForm, category: value });
+                          if (faqErrors.category) setFaqErrors((p) => ({ ...p, category: undefined }));
+                        }}
                       >
-                        <SelectTrigger className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium">
+                        <SelectTrigger className={`rounded-xl border ${faqErrors.category ? "border-red-500/70" : "border-white/20"} bg-white/10 backdrop-blur-md font-medium`}>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="backdrop-blur-xl bg-white/40 border border-white/20">
@@ -607,6 +718,9 @@ export default function Dashboard() {
                           <SelectItem value="Security">SECURITY</SelectItem>
                         </SelectContent>
                       </Select>
+                      {faqErrors.category && (
+                        <p className="mt-1 text-sm text-red-600">{faqErrors.category}</p>
+                      )}
                     </div>
                     <div>
                       <label className="text-sm font-semibold text-[#1f2937] mb-2 block">
@@ -614,12 +728,18 @@ export default function Dashboard() {
                       </label>
                       <TextInput
                         value={faqForm.tags}
-                        onChange={(e) =>
-                          setFaqForm({ ...faqForm, tags: e.target.value })
-                        }
-                        className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500"
+                        onChange={(e) => {
+                          setFaqForm({ ...faqForm, tags: e.target.value });
+                          if (faqErrors.tags) setFaqErrors((p) => ({ ...p, tags: undefined }));
+                        }}
+                        aria-invalid={!!faqErrors.tags}
+                        aria-describedby={faqErrors.tags ? "faq-tags-error" : undefined}
+                        className={`rounded-xl border ${faqErrors.tags ? "border-red-500/70" : "border-white/20"} bg-white/10 backdrop-blur-md font-medium placeholder:text-neutral-500`}
                         placeholder="e.g. automation, ai, email"
                       />
+                      {faqErrors.tags && (
+                        <p id="faq-tags-error" className="mt-1 text-sm text-red-600">{faqErrors.tags}</p>
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       <label className="text-sm font-semibold text-[#1f2937]">
