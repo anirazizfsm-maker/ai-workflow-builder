@@ -83,6 +83,10 @@
   --sidebar-accent-foreground: oklch(0 0 0);
   --sidebar-border: oklch(0 0 0);
   --sidebar-ring: oklch(0 0 0);
+
+  /* Neumorphism shadows (light) */
+  --neo-shadow: 8px 8px 16px rgba(0,0,0,0.18), -8px -8px 16px rgba(255,255,255,0.65);
+  --neo-shadow-strong: 10px 10px 24px rgba(0,0,0,0.22), -10px -10px 24px rgba(255,255,255,0.7);
 }
 
 .dark {
@@ -125,6 +129,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.79 0.18 210);
+
+  /* Neumorphism shadows (dark) */
+  --neo-shadow: 8px 8px 16px rgba(0,0,0,0.45), -8px -8px 16px rgba(255,255,255,0.04);
+  --neo-shadow-strong: 12px 12px 28px rgba(0,0,0,0.55), -12px -12px 28px rgba(255,255,255,0.05);
 }
 
 @layer base {
@@ -134,34 +142,30 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Switch to Plus Jakarta Sans for a sleek neon aesthetic */
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 400;
   }
   .font-sans {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
   .font-mono {
-    /* Use JetBrains Mono for any code/mono text */
     font-family: 'JetBrains Mono', Menlo, "Courier New", monospace;
   }
   .font-serif {
     font-family: Georgia, Georgia, serif;
   }
 
-  body {
-    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-weight: 400;
-  }
-
+  /* Headings use the same unified font */
   h1, h2, h3 {
-    font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: 0;
   }
 
+  /* Buttons also use the unified font */
   button,
   [role="button"] {
-    font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     font-weight: 600;
     text-transform: uppercase;
   }
