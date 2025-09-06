@@ -237,6 +237,12 @@ export default function Landing() {
               FAQ
             </a>
             <Button
+              onClick={() => navigate("/pricing")}
+              className="rounded-xl px-5 py-2 font-semibold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
+            >
+              Plans
+            </Button>
+            <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
               className="rounded-xl px-5 py-2 font-semibold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
             >
@@ -276,6 +282,15 @@ export default function Landing() {
                   >
                     FAQ
                   </a>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/pricing");
+                    }}
+                    className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 font-semibold text-foreground transition hover:bg-white/15 shadow-sm text-left"
+                  >
+                    Plans
+                  </button>
                   <Button
                     onClick={() => {
                       setMenuOpen(false);
