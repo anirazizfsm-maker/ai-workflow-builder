@@ -20,9 +20,14 @@ export const create = httpAction(async (ctx, request) => {
       );
     }
 
-    // Get template details
-    const template = await ctx.runQuery(api.aiBuilder.getActiveTemplates);
-    const selectedTemplate = template.find((t: any) => t.templateId === template_id);
+    // Get template details and select by slug to match stored templates
+    const templates = await ctx.runQuery(api.aiBuilder.getActiveTemplates);
+    const selectedTemplate = (templates as any[]).find(
+      (t) =>
+        t.slug === template_id ||
+        t.templateId === template_id ||
+        String(t._id) === String(template_id)
+    );
 
     if (!selectedTemplate) {
       return new Response(
@@ -40,17 +45,23 @@ export const create = httpAction(async (ctx, request) => {
       category: "AI Generated",
     });
 
-    // Import to n8n (simulated)
+    // Import to n8n (simulated) - pass a normalized template object
     const n8nResult = await ctx.runAction(internal.executionBroker.importN8n, {
       orgId: org_id,
-      workflowId: workflowId,
-      template: selectedTemplate,
-      params: params || {},
+      workflowId: workflowId as any,
+      template: {
+        templateId: template_id,
+        name: selectedTemplate.name,
+        description: selectedTemplate.description,
+        params: {}, // aiTemplates do not store params; provide empty object
+        steps: [],  // aiTemplates do not store steps; provide empty list
+      },
+      params: (params as Record<string, string>) || {},
     });
 
-    // Update workflow with n8n ID
+    // Keep status as draft
     await ctx.runMutation(api.workflows.updateWorkflowStatus, {
-      workflowId,
+      workflowId: workflowId as any,
       status: "draft",
     });
 

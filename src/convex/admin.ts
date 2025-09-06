@@ -9,13 +9,7 @@ export const listWorkflowsByStatus = query({
     status: v.optional(v.union(v.literal("draft"), v.literal("active"), v.literal("paused"))),
   },
   handler: async (ctx, args) => {
-    if (args.orgId) {
-      const orgId = args.orgId;
-      return await ctx.db
-        .query("workflows")
-        .withIndex("by_org", (q) => q.eq("orgId", orgId))
-        .take(100);
-    }
+    // Removed orgId filtering since workflows do not have orgId or a by_org index
     if (args.status) {
       const status = args.status;
       return await ctx.db
@@ -52,12 +46,12 @@ export const listChats = query({
     if (args.orgId) {
       const orgId = args.orgId;
       return await ctx.db
-        .query("chats")
+        .query("chatLogs")
         .withIndex("by_org", (q) => q.eq("orgId", orgId))
         .take(100);
     }
 
-    return await ctx.db.query("chats").take(100);
+    return await ctx.db.query("chatLogs").take(100);
   },
 });
 

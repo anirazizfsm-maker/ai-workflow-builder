@@ -11,9 +11,8 @@ export const parse = action({
     text: v.string(),
   },
   handler: async (ctx, args) => {
-    // Get available templates
+    // Load templates
     const templates: any[] = await ctx.runQuery(api.aiBuilder.getActiveTemplates);
-    
     if (templates.length === 0) {
       return {
         template_id: null,
@@ -24,35 +23,29 @@ export const parse = action({
       };
     }
 
-    // Simple keyword matching for demo (in production, use LLM)
+    // Keyword matching across safe fields (no reliance on non-existent tags/params)
     const text = args.text.toLowerCase();
     let bestMatch: any = null;
     let bestScore = 0;
 
-    for (const template of templates) {
+    for (const t of templates) {
+      const terms: string[] = [
+        t.name?.toLowerCase?.() ?? "",
+        t.description?.toLowerCase?.() ?? "",
+        t.category?.toLowerCase?.() ?? "",
+        t.slug?.toLowerCase?.() ?? "",
+        t.templateId?.toLowerCase?.() ?? "", // include templateId in matching
+      ].filter(Boolean);
+
       let score = 0;
-      
-      // Check template name and tags for matches
-      const searchTerms = [
-        template.name.toLowerCase(),
-        ...template.tags.map((tag: string) => tag.toLowerCase()),
-        template.description.toLowerCase()
-      ];
-
-      for (const term of searchTerms) {
-        if (text.includes(term)) {
-          score += 1;
-        }
+      for (const term of terms) {
+        if (term && text.includes(term)) score += 1;
       }
-
-      // Boost score for exact matches
-      if (text.includes(template.name.toLowerCase())) {
-        score += 2;
-      }
+      if (t.slug && text.includes(String(t.slug).toLowerCase())) score += 1;
 
       if (score > bestScore) {
         bestScore = score;
-        bestMatch = template;
+        bestMatch = t;
       }
     }
 
@@ -66,30 +59,36 @@ export const parse = action({
       };
     }
 
-    // Extract parameters from text (simple regex patterns for demo)
+    // Extract simple parameters
     const extractedParams: Record<string, string> = {};
-    
-    // Extract email addresses
     const emailMatch = text.match(/[\w.-]+@[\w.-]+\.\w+/);
-    if (emailMatch && bestMatch.params.email) {
-      extractedParams.email = emailMatch[0];
+    if (emailMatch) extractedParams.email = emailMatch[0];
+
+    const nameMatch = text.match(/(?:to|for|from)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i);
+    if (nameMatch) extractedParams.name = nameMatch[1];
+
+    // Derive preview steps from jsonSchema.actions if present
+    let previewSteps: string[] = [];
+    try {
+      const parsed = JSON.parse(bestMatch.jsonSchema ?? "{}");
+      if (Array.isArray(parsed?.actions)) {
+        previewSteps = parsed.actions.map((a: any) => String(a));
+      }
+    } catch {
+      // ignore JSON parse errors
     }
 
-    // Extract names (simple pattern)
-    const nameMatch = text.match(/(?:to|for|from)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/);
-    if (nameMatch && bestMatch.params.name) {
-      extractedParams.name = nameMatch[1];
-    }
-
-    // Calculate confidence based on matches and extracted params
-    const confidence = Math.min(0.9, (bestScore * 0.2) + (Object.keys(extractedParams).length * 0.1));
+    const confidence = Math.min(
+      0.9,
+      bestScore * 0.2 + Object.keys(extractedParams).length * 0.1
+    );
 
     return {
-      template_id: bestMatch.templateId,
+      template_id: bestMatch.slug || bestMatch.templateId || String(bestMatch._id), // fallback for assets lacking slug
       confidence,
       reason: `Matched template "${bestMatch.name}" based on keywords`,
       params: extractedParams,
-      preview_steps: bestMatch.steps,
+      preview_steps: previewSteps,
     };
   },
 });
@@ -97,10 +96,7 @@ export const parse = action({
 export const getActiveTemplates = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
-      .query("aiTemplates")
-      .withIndex("by_active", (q) => q.eq("isActive", true))
-      .collect();
+    return await ctx.db.query("aiTemplates").collect();
   },
 });
 

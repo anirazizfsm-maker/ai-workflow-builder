@@ -1,142 +1,119 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
-import { Infer, v } from "convex/values";
+import { v } from "convex/values";
 
-// default user roles. can add / remove based on the project as needed
-export const ROLES = {
-  ADMIN: "admin",
-  USER: "user",
-  MEMBER: "member",
-} as const;
+export default defineSchema({
+  users: defineTable({
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    role: v.optional(v.union(v.literal("admin"), v.literal("user"))),
+    isAnonymous: v.optional(v.boolean()),
+  }).index("by_email", ["email"]),
 
-export const roleValidator = v.union(
-  v.literal(ROLES.ADMIN),
-  v.literal(ROLES.USER),
-  v.literal(ROLES.MEMBER),
-);
-export type Role = Infer<typeof roleValidator>;
+  faqs: defineTable({
+    question: v.string(),
+    answer: v.string(),
+    category: v.string(),
+    tags: v.array(v.string()),
+    isActive: v.boolean(),
+  }).index("by_category", ["category"])
+    .index("by_active", ["isActive"])
+    .searchIndex("search_question", {
+      searchField: "question",
+      filterFields: ["category", "isActive"],
+    }),
 
-const schema = defineSchema(
-  {
-    // default auth tables using convex auth.
-    ...authTables, // do not remove or modify
+  workflows: defineTable({
+    userId: v.id("users"),
+    title: v.string(),
+    description: v.string(),
+    prompt: v.string(),
+    jsonConfig: v.string(),
+    category: v.string(),
+    status: v.union(
+      v.literal("draft"),
+      v.literal("active"),
+      v.literal("paused"),
+      v.literal("failed")
+    ),
+  }).index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_user_and_status", ["userId", "status"])
+    .index("by_category", ["category"]),
 
-    // the users table is the default users table that is brought in by the authTables
-    users: defineTable({
-      name: v.optional(v.string()), // name of the user. do not remove
-      image: v.optional(v.string()), // image of the user. do not remove
-      email: v.optional(v.string()), // email of the user. do not remove
-      emailVerificationTime: v.optional(v.number()), // email verification time. do not remove
-      isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
+  workflowRuns: defineTable({
+    workflowId: v.id("workflows"),
+    orgId: v.string(),
+    status: v.union(v.literal("success"), v.literal("failed"), v.literal("running")),
+    category: v.string(),
+    durationSec: v.number(),
+    costCents: v.optional(v.number()),
+    error: v.optional(v.string()),
+  }).index("by_workflow", ["workflowId"])
+    .index("by_org", ["orgId"])
+    .index("by_org_and_status", ["orgId", "status"])
+    .index("by_category", ["category"])
+    .index("by_workflow_and_status", ["workflowId", "status"]),
 
-      role: v.optional(roleValidator), // role of the user. do not remove
-    }).index("email", ["email"]), // index for the email. do not remove or modify
+  notifications: defineTable({
+    orgId: v.string(),
+    kind: v.union(
+      v.literal("workflow_failed"),
+      v.literal("usage_threshold"),
+      v.literal("suggestion"),
+      v.literal("system")
+    ),
+    message: v.string(),
+    severity: v.union(v.literal("info"), v.literal("warning"), v.literal("error")),
+    readAt: v.optional(v.number()),
+  }).index("by_org", ["orgId"])
+    .index("by_org_and_read", ["orgId", "readAt"]),
 
-    // Organizations table
-    orgs: defineTable({
-      name: v.string(),
-      slug: v.string(),
-    }).index("by_slug", ["slug"]),
+  settings: defineTable({
+    orgId: v.string(),
+    hourlyRate: v.number(),
+    planPriceCents: v.number(),
+    planName: v.string(),
+  }).index("by_org", ["orgId"]),
 
-    // Workflows table
-    workflows: defineTable({
-      userId: v.id("users"),
-      title: v.string(),
-      description: v.string(),
-      prompt: v.string(),
-      jsonConfig: v.string(),
-      status: v.union(v.literal("draft"), v.literal("active"), v.literal("paused")),
-      category: v.string(),
-      isPublic: v.optional(v.boolean()),
-      // New fields for backend features
-      orgId: v.optional(v.string()),
-      templateId: v.optional(v.string()),
-      params: v.optional(v.record(v.string(), v.string())),
-      n8nWorkflowId: v.optional(v.string()),
-    }).index("by_user", ["userId"])
-      .index("by_status", ["status"])
-      .index("by_category", ["category"])
-      .index("by_org", ["orgId"])
-      .index("by_template", ["templateId"]),
+  aiTemplates: defineTable({
+    slug: v.optional(v.string()),
+    templateId: v.optional(v.string()),
+    name: v.string(),
+    description: v.string(),
+    category: v.optional(v.string()),
+    jsonSchema: v.optional(v.string()),
+    minPlan: v.optional(v.string()),
+    isActive: v.optional(v.boolean()),
+    tags: v.optional(v.array(v.string())),
+    steps: v.optional(v.array(v.string())),
+    params: v.optional(v.record(v.string(), v.string())),
+  }).index("by_slug", ["slug"])
+    .index("by_category", ["category"]),
 
-    // AI Templates for workflow builder
-    aiTemplates: defineTable({
-      templateId: v.string(),
-      name: v.string(),
-      description: v.string(),
-      params: v.record(v.string(), v.string()),
-      steps: v.array(v.string()),
-      tags: v.array(v.string()),
-      isActive: v.boolean(),
-    }).index("by_template_id", ["templateId"])
-      .index("by_active", ["isActive"])
-      .searchIndex("search_name", {
-        searchField: "name",
-        filterFields: ["isActive"]
-      }),
+  organizations: defineTable({
+    slug: v.string(),
+    name: v.string(),
+    ownerId: v.optional(v.id("users")),
+  }).index("by_slug", ["slug"])
+    .index("by_owner", ["ownerId"]),
 
-    // Invoices for billing
-    invoices: defineTable({
-      orgId: v.string(),
-      number: v.string(),
-      amountCents: v.number(),
-      currency: v.string(),
-      status: v.union(v.literal("draft"), v.literal("paid"), v.literal("void")),
-      pdfFileId: v.optional(v.id("_storage")),
-      pdfUrl: v.optional(v.string()),
-    }).index("by_org", ["orgId"])
-      .index("by_status", ["status"])
-      .index("by_number", ["number"]),
+  invoices: defineTable({
+    orgId: v.string(),
+    number: v.string(),
+    amountCents: v.number(),
+    currency: v.string(),
+    status: v.union(v.literal("pending"), v.literal("paid"), v.literal("failed")),
+    pdfFileId: v.optional(v.id("_storage")),
+    pdfUrl: v.optional(v.string()),
+  }).index("by_org", ["orgId"])
+    .index("by_number", ["number"])
+    .index("by_status", ["status"]),
 
-    // Chat logs for FAQ chatbot
-    chats: defineTable({
-      orgId: v.string(),
-      userId: v.optional(v.id("users")),
-      message: v.string(),
-      response: v.optional(v.string()),
-      citations: v.optional(v.array(v.string())),
-      confidence: v.optional(v.number()),
-    }).index("by_org", ["orgId"])
-      .index("by_user", ["userId"]),
-
-    // Credentials (placeholder storage for demo)
-    credentials: defineTable({
-      orgId: v.string(),
-      key: v.string(),
-      value: v.string(), // encrypted placeholder in real implementation
-    }).index("by_org", ["orgId"])
-      .index("by_key", ["key"]),
-
-    // FAQ entries for the chatbot
-    faqs: defineTable({
-      question: v.string(),
-      answer: v.string(),
-      category: v.string(),
-      tags: v.array(v.string()),
-      isActive: v.boolean(),
-    }).index("by_category", ["category"])
-      .index("by_isActive", ["isActive"])
-      .searchIndex("search_content", {
-        searchField: "question",
-        filterFields: ["category", "isActive"]
-      }),
-
-    // Workflow executions/runs
-    workflowRuns: defineTable({
-      workflowId: v.id("workflows"),
-      userId: v.id("users"),
-      status: v.union(v.literal("running"), v.literal("completed"), v.literal("failed")),
-      startTime: v.number(),
-      endTime: v.optional(v.number()),
-      logs: v.array(v.string()),
-      result: v.optional(v.string()),
-    }).index("by_workflow", ["workflowId"])
-      .index("by_user", ["userId"])
-      .index("by_status", ["status"]),
-  },
-  {
-    schemaValidation: false,
-  },
-);
-
-export default schema;
+  chatLogs: defineTable({
+    orgId: v.string(),
+    message: v.string(),
+    response: v.string(),
+    citations: v.array(v.string()),
+    confidence: v.number(),
+  }).index("by_org", ["orgId"]),
+});

@@ -226,6 +226,111 @@ http.route({
   }),
 });
 
+// Reports export endpoint
+http.route({
+  path: "/v1/reports/export",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+      const { org_id, type = "monthly" } = body;
+
+      if (!org_id) {
+        return new Response(
+          JSON.stringify({ error: "org_id is required" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // Generate report content
+      const now = Date.now();
+      const monthStart = now - 30 * 24 * 60 * 60 * 1000;
+      
+      const runs = await ctx.runQuery(api.workflows.runsPerDay, {
+        orgId: org_id,
+        days: 30,
+      });
+      
+      const totalRuns = runs.reduce((sum, day) => sum + day.count, 0);
+      const avgRunsPerDay = Math.round(totalRuns / 30 * 100) / 100;
+      
+      const settings = await ctx.runQuery(api.workflows.getSettings, {
+        orgId: org_id,
+      });
+      
+      const savings = await ctx.runQuery(api.workflows.perWorkflowSavings, {
+        orgId: org_id,
+        month: monthStart,
+      });
+      
+      const totalHoursSaved = savings.reduce((sum, s) => sum + s.hours, 0);
+      const totalDollarsSaved = savings.reduce((sum, s) => sum + s.dollars, 0);
+      const roi = Math.round((totalDollarsSaved / (settings.planPriceCents / 100)) * 100) / 100;
+
+      const reportContent = `
+LETHIMDO MONTHLY REPORT
+=======================
+Organization: ${org_id}
+Report Period: ${new Date(monthStart).toLocaleDateString()} - ${new Date(now).toLocaleDateString()}
+Generated: ${new Date().toISOString()}
+
+EXECUTIVE SUMMARY
+-----------------
+This month you automated ${totalRuns} workflows, saving ${Math.round(totalHoursSaved)} hours worth $${Math.round(totalDollarsSaved)}.
+Your return on investment is ${roi}x your subscription cost.
+
+WORKFLOW STATISTICS
+-------------------
+Total Workflows Executed: ${totalRuns}
+Average Workflows Per Day: ${avgRunsPerDay}
+Total Time Saved: ${Math.round(totalHoursSaved)} hours
+Total Money Saved: $${Math.round(totalDollarsSaved)}
+
+TOP PERFORMING WORKFLOWS
+------------------------
+${savings.slice(0, 5).map((s, i) => 
+  `${i + 1}. ${s.title}: ${Math.round(s.hours)}h saved ($${Math.round(s.dollars)})`
+).join('\n')}
+
+RECOMMENDATIONS
+---------------
+- Continue leveraging your top-performing workflows
+- Consider expanding automation to new areas
+- Monitor failed workflows for optimization opportunities
+
+SUBSCRIPTION DETAILS
+--------------------
+Plan: ${settings.planName}
+Monthly Cost: $${settings.planPriceCents / 100}
+ROI: ${roi}x return on investment
+
+Thank you for using LETHIMDO!
+For questions, contact support@lethimdo.com
+      `;
+
+      // Store as file
+      const blob = new Blob([reportContent], { type: "text/plain" });
+      const fileId = await ctx.storage.store(blob);
+      const fileUrl = await ctx.storage.getUrl(fileId);
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          reportUrl: fileUrl,
+          filename: `lethimdo-report-${org_id}-${new Date().toISOString().split('T')[0]}.txt`,
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+      );
+    } catch (error) {
+      console.error("Report export error:", error);
+      return new Response(
+        JSON.stringify({ error: "Report generation failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+  }),
+});
+
 export default http;
 
 /*

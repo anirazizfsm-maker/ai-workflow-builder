@@ -1,157 +1,168 @@
-import { mutation } from "./_generated/server";
+import { internalMutation } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { v } from "convex/values";
 
-export const seedFAQs = mutation({
+export const seedFAQs = internalMutation({
   args: {},
   handler: async (ctx) => {
     const faqs = [
       {
-        question: "What is Lethimdo?",
-        answer: "Lethimdo is an AI-powered workflow automation platform that helps you build and deploy automation workflows using natural language descriptions.",
+        question: "How do I create my first workflow?",
+        answer: "Click 'Create New Workflow' on your dashboard, describe what you want to automate, and our AI will generate the workflow for you.",
         category: "General",
-        tags: ["platform", "automation", "AI"],
+        tags: ["getting-started", "workflows"],
         isActive: true,
       },
       {
-        question: "How do I create a workflow?",
-        answer: "Simply describe what you want to automate in plain English, and our AI will generate the workflow JSON for you. You can then customize and deploy it.",
-        category: "Workflows",
-        tags: ["create", "workflow", "AI"],
+        question: "What integrations are supported?",
+        answer: "We support 100+ integrations including Gmail, Slack, Notion, Airtable, and many more. Check our integrations page for the full list.",
+        category: "Integrations",
+        tags: ["integrations", "apps"],
         isActive: true,
       },
       {
-        question: "What types of workflows can I create?",
-        answer: "You can create email automation, data processing, report generation, lead follow-ups, social media posting, and many other types of workflows.",
-        category: "Workflows",
-        tags: ["types", "automation", "examples"],
-        isActive: true,
-      },
-      {
-        question: "Is there a free plan?",
-        answer: "Yes! We offer a free plan with up to 5 workflows and 100 executions per month. Perfect for getting started.",
+        question: "How much does it cost?",
+        answer: "We offer a free tier with 10 workflows per month. Pro plans start at $49/month for unlimited workflows and premium features.",
         category: "Pricing",
-        tags: ["free", "plan", "pricing"],
+        tags: ["pricing", "plans"],
         isActive: true,
       },
       {
-        question: "How secure is my data?",
-        answer: "We use enterprise-grade security with end-to-end encryption. Your data is never shared with third parties and is stored securely in the cloud.",
+        question: "Is my data secure?",
+        answer: "Yes, we use enterprise-grade encryption and never store your sensitive data. All connections are secured with OAuth 2.0.",
         category: "Security",
-        tags: ["security", "data", "privacy"],
+        tags: ["security", "privacy"],
+        isActive: true,
+      },
+      {
+        question: "Can I cancel anytime?",
+        answer: "Absolutely! You can cancel your subscription at any time from your billing settings. No long-term contracts.",
+        category: "Billing",
+        tags: ["billing", "cancellation"],
         isActive: true,
       },
     ];
 
+    let count = 0;
     for (const faq of faqs) {
       await ctx.db.insert("faqs", faq);
+      count++;
     }
 
-    return { success: true, count: faqs.length };
+    return { success: true, count };
   },
 });
 
-export const seedAITemplates = mutation({
+export const seedAITemplates = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const templates: Array<{
-      templateId: string;
-      name: string;
-      description: string;
-      params: Record<string, string>;
-      steps: string[];
-      tags: string[];
-      isActive: boolean;
-    }> = [
+    const templates = [
       {
-        templateId: "welcome_email",
+        slug: "welcome_email",
         name: "Welcome Email Automation",
-        description: "Send personalized welcome emails to new users or customers",
-        params: {
-          email: "recipient email address",
-          name: "recipient name",
-          gmail_credential_id: "{{gmail_credential_id}}",
-        },
-        steps: [
-          "Trigger: New user signup detected",
-          "Fetch user details from database",
-          "Generate personalized welcome message",
-          "Send email via Gmail integration",
-          "Log email sent status",
-        ],
-        tags: ["email", "welcome", "automation", "onboarding"],
-        isActive: true,
+        description: "Send personalized welcome emails to new users",
+        category: "email",
+        jsonSchema: JSON.stringify({
+          trigger: "user_signup",
+          actions: ["send_email", "add_to_crm"]
+        }),
+        minPlan: "free",
       },
       {
-        templateId: "sales_report",
-        name: "Daily Sales Report",
-        description: "Generate and email daily sales reports to stakeholders",
-        params: {
-          recipients: "comma-separated email list",
-          database_credential_id: "{{database_credential_id}}",
-          gmail_credential_id: "{{gmail_credential_id}}",
-        },
-        steps: [
-          "Trigger: Daily at 9 AM",
-          "Connect to sales database",
-          "Query yesterday's sales data",
-          "Generate PDF report with charts",
-          "Email report to stakeholders",
-        ],
-        tags: ["sales", "report", "daily", "analytics"],
-        isActive: true,
+        slug: "data_sync",
+        name: "Data Synchronization",
+        description: "Sync data between multiple platforms automatically",
+        category: "data",
+        jsonSchema: JSON.stringify({
+          trigger: "schedule",
+          actions: ["fetch_data", "transform", "sync"]
+        }),
+        minPlan: "pro",
       },
       {
-        templateId: "lead_followup",
-        name: "Lead Follow-up Sequence",
-        description: "Automated follow-up emails for new leads with personalized content",
-        params: {
-          lead_email: "lead email address",
-          lead_name: "lead name",
-          company: "lead company name",
-          crm_credential_id: "{{crm_credential_id}}",
-          gmail_credential_id: "{{gmail_credential_id}}",
-        },
-        steps: [
-          "Trigger: New lead added to CRM",
-          "Wait 1 hour after initial contact",
-          "Send personalized follow-up email",
-          "Wait 3 days if no response",
-          "Send second follow-up with case study",
-          "Update lead status in CRM",
-        ],
-        tags: ["lead", "followup", "sales", "crm"],
-        isActive: true,
+        slug: "social_posting",
+        name: "Social Media Posting",
+        description: "Auto-post content across social media platforms",
+        category: "social",
+        jsonSchema: JSON.stringify({
+          trigger: "content_ready",
+          actions: ["format_post", "schedule_posts"]
+        }),
+        minPlan: "pro",
       },
     ];
 
+    let count = 0;
     for (const template of templates) {
       await ctx.db.insert("aiTemplates", template);
+      count++;
     }
 
-    return { success: true, count: templates.length };
+    return { success: true, count };
   },
 });
 
-export const seedTestOrg = mutation({
+export const seedTestOrg = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const orgId = await ctx.db.insert("orgs", {
-      name: "Demo Organization",
+    const orgId = await ctx.db.insert("organizations", {
       slug: "demo-org",
+      name: "Demo Organization",
     });
 
-    // Add some test credentials
-    await ctx.db.insert("credentials", {
+    // Add settings
+    await ctx.db.insert("settings", {
       orgId: "demo-org",
-      key: "gmail_credential_id",
-      value: "encrypted_gmail_token_placeholder",
-    });
-
-    await ctx.db.insert("credentials", {
-      orgId: "demo-org", 
-      key: "database_credential_id",
-      value: "encrypted_db_connection_placeholder",
+      hourlyRate: 25,
+      planPriceCents: 4900,
+      planName: "Pro",
     });
 
     return { success: true, orgId };
+  },
+});
+
+export const seedWorkflowRuns = internalMutation({
+  args: { orgId: v.string() },
+  handler: async (ctx, args) => {
+    // Get some workflows to create runs for
+    const workflows = await ctx.db.query("workflows").take(3);
+    
+    if (workflows.length === 0) {
+      return { success: false, message: "No workflows found to create runs for" };
+    }
+
+    const categories = ["email", "data", "automation", "social"];
+    const statuses = ["success", "failed", "success", "success"]; // Mostly successful
+    
+    let count = 0;
+    const now = Date.now();
+    
+    // Create runs for the last 30 days
+    for (let day = 0; day < 30; day++) {
+      const dayTime = now - (day * 24 * 60 * 60 * 1000);
+      const runsPerDay = Math.floor(Math.random() * 8) + 2; // 2-10 runs per day
+      
+      for (let run = 0; run < runsPerDay; run++) {
+        const workflow = workflows[Math.floor(Math.random() * workflows.length)];
+        const category = categories[Math.floor(Math.random() * categories.length)];
+        const status = statuses[Math.floor(Math.random() * statuses.length)] as "success" | "failed";
+        const durationSec = Math.floor(Math.random() * 300) + 30; // 30-330 seconds
+        
+        await ctx.runMutation(internal.workflows.logRun, {
+          workflowId: workflow._id,
+          orgId: args.orgId,
+          status,
+          category,
+          durationSec,
+          costCents: Math.floor(Math.random() * 100) + 10,
+          ...(status === "failed" && { error: "Simulated failure for testing" }),
+        });
+        
+        count++;
+      }
+    }
+
+    return { success: true, count };
   },
 });

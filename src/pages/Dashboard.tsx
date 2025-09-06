@@ -2,8 +2,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useMutation, useAction } from "convex/react";
 import { motion } from "framer-motion";
-import { Plus, Play, Pause, Trash2, Settings, Zap, BarChart3 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Plus, Play, Pause, Trash2, Settings, Zap, BarChart3, TrendingUp, Bell, BellOff, Download, DollarSign, Clock, Target, Lightbulb } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,17 +18,44 @@ import { Pencil, PlusCircle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { FAQ } from "@/types/faq";
 import ChipsetBackground from "@/components/ChipsetBackground";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from "recharts";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
   
   const workflows = useQuery(api.workflows.getUserWorkflows);
   const createWorkflow = useMutation(api.workflows.createWorkflow);
   const updateWorkflowStatus = useMutation(api.workflows.updateWorkflowStatus);
   const deleteWorkflow = useMutation(api.workflows.deleteWorkflow);
   const generateWorkflowJSON = useAction(api.workflowActions.generateWorkflowJSON);
+  const upgradeWithAI = useAction(api.workflowActions.upgradeWithAI);
+
+  // Analytics data
+  const runsPerDay = useQuery(api.workflows.runsPerDay, { orgId: "demo-org", days: 30 });
+  const distributionByCategory = useQuery(api.workflows.distributionByCategory, { 
+    orgId: "demo-org", 
+    since: Date.now() - 30 * 24 * 60 * 60 * 1000 
+  });
+  const settings = useQuery(api.workflows.getSettings, { orgId: "demo-org" });
+  const savingsOverTime = useQuery(api.workflows.savingsOverTime, {
+    orgId: "demo-org",
+    since: Date.now() - 30 * 24 * 60 * 60 * 1000,
+    hourlyRate: settings?.hourlyRate || 25,
+  });
+  const perWorkflowSavings = useQuery(api.workflows.perWorkflowSavings, {
+    orgId: "demo-org",
+    month: Date.now() - 30 * 24 * 60 * 60 * 1000,
+  });
+  // moved: useAction hook defined below as fetchBusinessSuggestions
+  const notifications = useQuery(api.workflows.getNotifications, { orgId: "demo-org" });
+
+  const updateSettings = useMutation(api.workflows.updateSettings);
+  const markNotificationRead = useMutation(api.workflows.markNotificationRead);
 
   const faqs = useQuery(api.faqs.getAllFAQs);
   const createFAQ = useMutation(api.faqs.createFAQ);
@@ -61,6 +88,19 @@ export default function Dashboard() {
 
   const [workflowErrors, setWorkflowErrors] = useState<{ title?: string; prompt?: string; category?: string; description?: string }>({});
   const [faqErrors, setFaqErrors] = useState<{ question?: string; answer?: string; category?: string; tags?: string }>({});
+  const [hourlyRateInput, setHourlyRateInput] = useState("");
+
+  // Chart configurations
+  const chartConfig = {
+    count: { label: "Workflows", color: "#8b5cf6" },
+    automation: { label: "Automation", color: "#8b5cf6" },
+    email: { label: "Email", color: "#06b6d4" },
+    data: { label: "Data", color: "#10b981" },
+    social: { label: "Social", color: "#f59e0b" },
+    reporting: { label: "Reporting", color: "#ef4444" },
+  };
+
+  const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
 
   const validateWorkflow = (w: typeof newWorkflow) => {
     const errs: typeof workflowErrors = {};
@@ -107,6 +147,29 @@ export default function Dashboard() {
 
     return errs;
   };
+
+  type Suggestion = {
+    type: "new_automation" | "bottleneck" | "profit_idea" | string;
+    message: string;
+    action: string;
+  };
+
+  const fetchBusinessSuggestions = useAction(api.workflowActions.getBusinessSuggestions);
+  const [businessSuggestions, setBusinessSuggestions] = useState<Suggestion[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchBusinessSuggestions({ orgId: "demo-org" })
+      .then((res) => {
+        if (isMounted && Array.isArray(res)) setBusinessSuggestions(res as Suggestion[]);
+      })
+      .catch(() => {
+        if (isMounted) setBusinessSuggestions([]);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchBusinessSuggestions]);
 
   if (isLoading) {
     return (
@@ -172,6 +235,57 @@ export default function Dashboard() {
     }
   };
 
+  const handleUpgradeWithAI = async (workflowId: string) => {
+    try {
+      const result = await upgradeWithAI({ workflowId: workflowId as any });
+      if (result.success) {
+        toast(`✨ ${result.message}`);
+      }
+    } catch (error) {
+      toast("Failed to upgrade workflow.");
+    }
+  };
+
+  const handleUpdateHourlyRate = async () => {
+    const rate = parseFloat(hourlyRateInput);
+    if (isNaN(rate) || rate <= 0) {
+      toast("Please enter a valid hourly rate");
+      return;
+    }
+
+    try {
+      await updateSettings({ orgId: "demo-org", hourlyRate: rate });
+      toast("Hourly rate updated successfully!");
+      setHourlyRateInput("");
+    } catch (error) {
+      toast("Failed to update hourly rate.");
+    }
+  };
+
+  const handleExportReport = async () => {
+    try {
+      const response = await fetch("/v1/reports/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ org_id: "demo-org" }),
+      });
+      
+      const result = await response.json();
+      if (result.success) {
+        window.open(result.reportUrl, '_blank');
+        toast("Report exported successfully!");
+      }
+    } catch (error) {
+      toast("Failed to export report.");
+    }
+  };
+
+  const totalSavings = perWorkflowSavings?.reduce((sum, s) => sum + s.dollars, 0) || 0;
+  const totalHours = perWorkflowSavings?.reduce((sum, s) => sum + s.hours, 0) || 0;
+  const roi = settings ? Math.round((totalSavings / (settings.planPriceCents / 100)) * 100) / 100 : 0;
+  const unreadNotifications = notifications?.filter(n => !n.readAt) || [];
+
+  // FAQ functions (keep existing)
   const openCreateFaq = () => {
     setEditingFaqId(null);
     setFaqForm({ question: "", answer: "", category: "General", tags: "", isActive: true });
@@ -293,245 +407,591 @@ export default function Dashboard() {
       </header>
 
       <div className="mx-auto max-w-7xl p-4 md:p-6 text-white">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white font-extrabold flex items-center gap-2">
-                  <Zap className="h-6 w-6" />
-                  Total Workflows
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-extrabold text-white">
-                  {workflows?.length || 0}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white/10 backdrop-blur-xl border border-white/15">
+            <TabsTrigger value="overview" className="text-white data-[state=active]:text-black">
+              <Zap className="w-4 h-4 mr-2" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="text-white data-[state=active]:text-black">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="savings" className="text-white data-[state=active]:text-black">
+              <DollarSign className="w-4 h-4 mr-2" />
+              Savings
+            </TabsTrigger>
+            <TabsTrigger value="advisor" className="text-white data-[state=active]:text-black">
+              <Lightbulb className="w-4 h-4 mr-2" />
+              AI Advisor
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="text-white data-[state=active]:text-black relative">
+              <Bell className="w-4 h-4 mr-2" />
+              Alerts
+              {unreadNotifications.length > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 text-xs bg-red-500">
+                  {unreadNotifications.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+          </TabsList>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white font-extrabold flex items-center gap-2">
-                  <Play className="h-6 w-6" />
-                  Active
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-extrabold text-white">
-                  {workflows?.filter(w => w.status === "active").length || 0}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+          <TabsContent value="overview" className="space-y-8">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                      <Zap className="h-6 w-6" />
+                      Total Workflows
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-extrabold text-white">
+                      {workflows?.length || 0}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-white font-extrabold flex items-center gap-2">
-                  <BarChart3 className="h-6 w-6" />
-                  Executions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-4xl font-extrabold text-white">247</div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+                <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                      <Play className="h-6 w-6" />
+                      Active
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-extrabold text-white">
+                      {workflows?.filter(w => w.status === "active").length || 0}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-        {/* Create Workflow Button */}
-        <div className="mb-8">
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25">
-                <Plus className="mr-2 h-6 w-6" />
-                Create New Workflow
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-2xl max-w-2xl text-white">
-              <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 260, damping: 20 }}
-              >
-                <DialogHeader>
-                  <DialogTitle className="text-2xl font-extrabold">Create AI Workflow</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <label className="font-semibold mb-2 block">Workflow Title</label>
-                    <Input
-                      value={newWorkflow.title}
-                      onChange={(e) => {
-                        setNewWorkflow({ ...newWorkflow, title: e.target.value });
-                        if (workflowErrors.title) setWorkflowErrors((p) => ({ ...p, title: undefined }));
-                      }}
-                      aria-invalid={!!workflowErrors.title}
-                      aria-describedby={workflowErrors.title ? "wf-title-error" : undefined}
-                      placeholder="Enter workflow title..."
-                      className={`rounded-xl border ${workflowErrors.title ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
-                    />
-                    {workflowErrors.title && (
-                      <p id="wf-title-error" className="mt-1 text-sm text-red-300">{workflowErrors.title}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="font-semibold mb-2 block">Category</label>
-                    <Select
-                      value={newWorkflow.category}
-                      onValueChange={(value) => {
-                        setNewWorkflow({ ...newWorkflow, category: value });
-                        if (workflowErrors.category) setWorkflowErrors((p) => ({ ...p, category: undefined }));
-                      }}
-                    >
-                      <SelectTrigger className={`rounded-xl border ${workflowErrors.category ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white`}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="backdrop-blur-xl bg-black/60 border border-white/20 text-white">
-                        <SelectItem value="automation">Automation</SelectItem>
-                        <SelectItem value="email">Email</SelectItem>
-                        <SelectItem value="data">Data Processing</SelectItem>
-                        <SelectItem value="social">Social Media</SelectItem>
-                        <SelectItem value="reporting">Reporting</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {workflowErrors.category && (
-                      <p className="mt-1 text-sm text-red-300">{workflowErrors.category}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="font-semibold mb-2 block">Describe your workflow</label>
-                    <Textarea
-                      value={newWorkflow.prompt}
-                      onChange={(e) => {
-                        setNewWorkflow({ ...newWorkflow, prompt: e.target.value });
-                        if (workflowErrors.prompt) setWorkflowErrors((p) => ({ ...p, prompt: undefined }));
-                      }}
-                      aria-invalid={!!workflowErrors.prompt}
-                      aria-describedby={workflowErrors.prompt ? "wf-prompt-error" : undefined}
-                      placeholder="Describe what you want to automate..."
-                      className={`rounded-xl border ${workflowErrors.prompt ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50 min-h-[120px]`}
-                    />
-                    {workflowErrors.prompt && (
-                      <p id="wf-prompt-error" className="mt-1 text-sm text-red-300">{workflowErrors.prompt}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="font-semibold mb-2 block">Description (optional)</label>
-                    <Input
-                      value={newWorkflow.description}
-                      onChange={(e) => {
-                        setNewWorkflow({ ...newWorkflow, description: e.target.value });
-                        if (workflowErrors.description) setWorkflowErrors((p) => ({ ...p, description: undefined }));
-                      }}
-                      aria-invalid={!!workflowErrors.description}
-                      aria-describedby={workflowErrors.description ? "wf-desc-error" : undefined}
-                      placeholder="Brief description..."
-                      className={`rounded-xl border ${workflowErrors.description ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
-                    />
-                    {workflowErrors.description && (
-                      <p id="wf-desc-error" className="mt-1 text-sm text-red-300">{workflowErrors.description}</p>
-                    )}
-                  </div>
-                  <Button
-                    onClick={handleCreateWorkflow}
-                    className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
-                    disabled={!newWorkflow.prompt}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+                <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                      <BarChart3 className="h-6 w-6" />
+                      Executions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-extrabold text-white">247</div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* Create Workflow Button */}
+            <div className="mb-8">
+              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25">
+                    <Plus className="mr-2 h-6 w-6" />
+                    Create New Workflow
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-2xl max-w-2xl text-white">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
                   >
-                    Generate Workflow
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-extrabold">Create AI Workflow</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="font-semibold mb-2 block">Workflow Title</label>
+                        <Input
+                          value={newWorkflow.title}
+                          onChange={(e) => {
+                            setNewWorkflow({ ...newWorkflow, title: e.target.value });
+                            if (workflowErrors.title) setWorkflowErrors((p) => ({ ...p, title: undefined }));
+                          }}
+                          aria-invalid={!!workflowErrors.title}
+                          aria-describedby={workflowErrors.title ? "wf-title-error" : undefined}
+                          placeholder="Enter workflow title..."
+                          className={`rounded-xl border ${workflowErrors.title ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
+                        />
+                        {workflowErrors.title && (
+                          <p id="wf-title-error" className="mt-1 text-sm text-red-300">{workflowErrors.title}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="font-semibold mb-2 block">Category</label>
+                        <Select
+                          value={newWorkflow.category}
+                          onValueChange={(value) => {
+                            setNewWorkflow({ ...newWorkflow, category: value });
+                            if (workflowErrors.category) setWorkflowErrors((p) => ({ ...p, category: undefined }));
+                          }}
+                        >
+                          <SelectTrigger className={`rounded-xl border ${workflowErrors.category ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="backdrop-blur-xl bg-black/60 border border-white/20 text-white">
+                            <SelectItem value="automation">Automation</SelectItem>
+                            <SelectItem value="email">Email</SelectItem>
+                            <SelectItem value="data">Data Processing</SelectItem>
+                            <SelectItem value="social">Social Media</SelectItem>
+                            <SelectItem value="reporting">Reporting</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {workflowErrors.category && (
+                          <p className="mt-1 text-sm text-red-300">{workflowErrors.category}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="font-semibold mb-2 block">Describe your workflow</label>
+                        <Textarea
+                          value={newWorkflow.prompt}
+                          onChange={(e) => {
+                            setNewWorkflow({ ...newWorkflow, prompt: e.target.value });
+                            if (workflowErrors.prompt) setWorkflowErrors((p) => ({ ...p, prompt: undefined }));
+                          }}
+                          aria-invalid={!!workflowErrors.prompt}
+                          aria-describedby={workflowErrors.prompt ? "wf-prompt-error" : undefined}
+                          placeholder="Describe what you want to automate..."
+                          className={`rounded-xl border ${workflowErrors.prompt ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50 min-h-[120px]`}
+                        />
+                        {workflowErrors.prompt && (
+                          <p id="wf-prompt-error" className="mt-1 text-sm text-red-300">{workflowErrors.prompt}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="font-semibold mb-2 block">Description (optional)</label>
+                        <Input
+                          value={newWorkflow.description}
+                          onChange={(e) => {
+                            setNewWorkflow({ ...newWorkflow, description: e.target.value });
+                            if (workflowErrors.description) setWorkflowErrors((p) => ({ ...p, description: undefined }));
+                          }}
+                          aria-invalid={!!workflowErrors.description}
+                          aria-describedby={workflowErrors.description ? "wf-desc-error" : undefined}
+                          placeholder="Brief description..."
+                          className={`rounded-xl border ${workflowErrors.description ? "border-red-500/70" : "border-white/20"} bg-white/10 text-white placeholder:text-white/50`}
+                        />
+                        {workflowErrors.description && (
+                          <p id="wf-desc-error" className="mt-1 text-sm text-red-300">{workflowErrors.description}</p>
+                        )}
+                      </div>
+                      <Button
+                        onClick={handleCreateWorkflow}
+                        className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
+                        disabled={!newWorkflow.prompt}
+                      >
+                        Generate Workflow
+                      </Button>
+                    </div>
+                  </motion.div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* Workflows Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {workflows?.map((workflow, index) => (
+                <motion.div
+                  key={workflow._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl hover:bg-white/10 transition">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-white font-extrabold text-lg">
+                          {workflow.title}
+                        </CardTitle>
+                        <Badge
+                          className={`rounded-full border border-white/20 ${
+                            workflow.status === "active"
+                              ? "bg-emerald-400/20 text-emerald-200"
+                              : workflow.status === "paused"
+                              ? "bg-amber-400/20 text-amber-200"
+                              : "bg-white/10 text-white/80"
+                          }`}
+                        >
+                          {workflow.status.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <p className="text-white/80 font-medium text-sm">{workflow.description}</p>
+                      <Badge className="rounded-full border border-white/20 bg-white/10 text-white w-fit">
+                        {workflow.category.toUpperCase()}
+                      </Badge>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex gap-2 flex-wrap">
+                        <Button
+                          size="sm"
+                          onClick={() => handleStatusToggle(workflow._id, workflow.status)}
+                          className={`rounded-xl border border-white/20 font-semibold text-white ${
+                            workflow.status === "active"
+                              ? "bg-white/10 hover:bg-white/20"
+                              : "bg-emerald-500/20 hover:bg-emerald-500/30"
+                          }`}
+                        >
+                          {workflow.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => handleUpgradeWithAI(workflow._id)}
+                          className="rounded-xl border border-white/20 bg-purple-500/20 text-purple-100 hover:bg-purple-500/30"
+                        >
+                          <Zap className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20"
+                        >
+                          <Settings className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => handleDeleteWorkflow(workflow._id)}
+                          className="rounded-xl bg-rose-500/20 text-rose-100 border border-white/20 hover:bg-rose-500/30"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Empty State */}
+            {workflows?.length === 0 && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+                <div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl p-8 max-w-md mx-auto">
+                  <h3 className="text-2xl font-extrabold text-white mb-4">No workflows yet</h3>
+                  <p className="text-white/80 mb-6">
+                    Create your first AI-powered workflow to get started!
+                  </p>
+                  <Button
+                    onClick={() => setIsCreateDialogOpen(true)}
+                    className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
+                  >
+                    Create Workflow
                   </Button>
                 </div>
               </motion.div>
-            </DialogContent>
-          </Dialog>
-        </div>
+            )}
+          </TabsContent>
 
-        {/* Workflows Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {workflows?.map((workflow, index) => (
-            <motion.div
-              key={workflow._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl hover:bg-white/10 transition">
+          <TabsContent value="analytics" className="space-y-8">
+            <div className="flex justify-between items-center">
+              <h2 className="text-3xl font-extrabold text-white">Analytics & Reports</h2>
+              <Button
+                onClick={handleExportReport}
+                className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Export Report
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Workflows per Day */}
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
                 <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="text-white font-extrabold text-lg">
-                      {workflow.title}
-                    </CardTitle>
-                    <Badge
-                      className={`rounded-full border border-white/20 ${
-                        workflow.status === "active"
-                          ? "bg-emerald-400/20 text-emerald-200"
-                          : workflow.status === "paused"
-                          ? "bg-amber-400/20 text-amber-200"
-                          : "bg-white/10 text-white/80"
-                      }`}
-                    >
-                      {workflow.status.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <p className="text-white/80 font-medium text-sm">{workflow.description}</p>
-                  <Badge className="rounded-full border border-white/20 bg-white/10 text-white w-fit">
-                    {workflow.category.toUpperCase()}
-                  </Badge>
+                  <CardTitle className="text-white font-extrabold">Workflows per Day (Last 30 Days)</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => handleStatusToggle(workflow._id, workflow.status)}
-                      className={`rounded-xl border border-white/20 font-semibold text-white ${
-                        workflow.status === "active"
-                          ? "bg-white/10 hover:bg-white/20"
-                          : "bg-emerald-500/20 hover:bg-emerald-500/30"
-                      }`}
-                    >
-                      {workflow.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => handleDeleteWorkflow(workflow._id)}
-                      className="rounded-xl bg-rose-500/20 text-rose-100 border border-white/20 hover:bg-rose-500/30"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <BarChart data={runsPerDay || []}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="count" fill="#8b5cf6" />
+                    </BarChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+
+              {/* Distribution by Category */}
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                <CardHeader>
+                  <CardTitle className="text-white font-extrabold">Workflows by Category</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <PieChart>
+                      <Pie
+                        data={distributionByCategory || []}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        dataKey="value"
+                        label={({ label, percent }) => `${label} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {(distributionByCategory || []).map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                    </PieChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+
+              {/* Savings Over Time */}
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="text-white font-extrabold">Savings Over Time</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <LineChart data={savingsOverTime || []}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="t" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Line type="monotone" dataKey="dollarsSaved" stroke="#10b981" strokeWidth={2} />
+                    </LineChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="savings" className="space-y-8">
+            <div className="flex justify-between items-center">
+              <h2 className="text-3xl font-extrabold text-white">Savings Dashboard</h2>
+              <div className="flex items-center gap-4">
+                <Input
+                  placeholder="Hourly rate ($)"
+                  value={hourlyRateInput}
+                  onChange={(e) => setHourlyRateInput(e.target.value)}
+                  className="w-32 rounded-xl border border-white/20 bg-white/10 text-white placeholder:text-white/50"
+                />
+                <Button
+                  onClick={handleUpdateHourlyRate}
+                  className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
+                >
+                  Update Rate
+                </Button>
+              </div>
+            </div>
+
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                    <Clock className="h-5 w-5" />
+                    Hours Saved
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-extrabold text-white">
+                    {Math.round(totalHours)}h
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
-        </div>
 
-        {/* Empty State */}
-        {workflows?.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
-            <div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl p-8 max-w-md mx-auto">
-              <h3 className="text-2xl font-extrabold text-white mb-4">No workflows yet</h3>
-              <p className="text-white/80 mb-6">
-                Create your first AI-powered workflow to get started!
-              </p>
-              <Button
-                onClick={() => setIsCreateDialogOpen(true)}
-                className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md hover:bg-white/20"
-              >
-                Create Workflow
-              </Button>
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                    <DollarSign className="h-5 w-5" />
+                    Money Saved
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-extrabold text-white">
+                    ${Math.round(totalSavings)}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    ROI
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-extrabold text-white">
+                    {roi}x
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white font-extrabold flex items-center gap-2">
+                    <Target className="h-5 w-5" />
+                    Hourly Rate
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-extrabold text-white">
+                    ${settings?.hourlyRate || 25}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </motion.div>
-        )}
+
+            {/* Per-Workflow Savings */}
+            <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-white font-extrabold">Savings by Workflow (This Month)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {perWorkflowSavings?.map((saving, index) => (
+                    <div key={saving.workflowId} className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/10">
+                      <div>
+                        <h4 className="font-semibold text-white">{saving.title}</h4>
+                        <p className="text-white/70 text-sm">{Math.round(saving.hours * 10) / 10} hours saved</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-white">${Math.round(saving.dollars)}</div>
+                      </div>
+                    </div>
+                  ))}
+                  {(!perWorkflowSavings || perWorkflowSavings.length === 0) && (
+                    <div className="text-center py-8 text-white/70">
+                      No workflow savings data available yet. Run some workflows to see your savings!
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="advisor" className="space-y-8">
+            <h2 className="text-3xl font-extrabold text-white">AI Business Advisor</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {businessSuggestions?.map((suggestion, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl hover:bg-white/10 transition">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-white font-extrabold text-lg">
+                          <Badge className={`rounded-full mr-2 ${
+                            suggestion.type === "new_automation" ? "bg-blue-500/20 text-blue-200" :
+                            suggestion.type === "bottleneck" ? "bg-red-500/20 text-red-200" :
+                            suggestion.type === "profit_idea" ? "bg-green-500/20 text-green-200" :
+                            "bg-purple-500/20 text-purple-200"
+                          }`}>
+                            {suggestion.type.replace('_', ' ').toUpperCase()}
+                          </Badge>
+                        </CardTitle>
+                      </div>
+                      <p className="text-white/80 font-medium text-sm">{suggestion.message}</p>
+                    </CardHeader>
+                    <CardContent>
+                      <Button
+                        size="sm"
+                        onClick={() => toast(`${suggestion.action} clicked! Feature coming soon.`)}
+                        className="rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20"
+                      >
+                        {suggestion.action}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+              
+              {(!businessSuggestions || businessSuggestions.length === 0) && (
+                <div className="col-span-2 text-center py-16">
+                  <div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl p-8">
+                    <Lightbulb className="h-16 w-16 text-white/50 mx-auto mb-4" />
+                    <h3 className="text-2xl font-extrabold text-white mb-4">No suggestions yet</h3>
+                    <p className="text-white/80">
+                      Create and run some workflows to get personalized AI recommendations!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-8">
+            <div className="flex justify-between items-center">
+              <h2 className="text-3xl font-extrabold text-white">Smart Notifications</h2>
+              <Badge className="bg-white/10 text-white border border-white/20">
+                {unreadNotifications.length} unread
+              </Badge>
+            </div>
+
+            <div className="space-y-4">
+              {notifications?.map((notification) => (
+                <Card
+                  key={notification._id}
+                  className={`rounded-2xl border backdrop-blur-xl transition ${
+                    notification.readAt
+                      ? "border-white/10 bg-white/5"
+                      : "border-white/20 bg-white/10"
+                  }`}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge className={`rounded-full ${
+                            notification.severity === "error" ? "bg-red-500/20 text-red-200" :
+                            notification.severity === "warning" ? "bg-amber-500/20 text-amber-200" :
+                            "bg-blue-500/20 text-blue-200"
+                          }`}>
+                            {notification.kind.replace('_', ' ').toUpperCase()}
+                          </Badge>
+                          <Badge className={`rounded-full ${
+                            notification.severity === "error" ? "bg-red-500/20 text-red-200" :
+                            notification.severity === "warning" ? "bg-amber-500/20 text-amber-200" :
+                            "bg-blue-500/20 text-blue-200"
+                          }`}>
+                            {notification.severity.toUpperCase()}
+                          </Badge>
+                        </div>
+                        <p className="text-white font-medium">{notification.message}</p>
+                        <p className="text-white/50 text-sm mt-1">
+                          {new Date(notification._creationTime).toLocaleString()}
+                        </p>
+                      </div>
+                      {!notification.readAt && (
+                        <Button
+                          size="sm"
+                          onClick={() => markNotificationRead({ notificationId: notification._id })}
+                          className="rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20"
+                        >
+                          <BellOff className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {(!notifications || notifications.length === 0) && (
+                <div className="text-center py-16">
+                  <div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl p-8">
+                    <Bell className="h-16 w-16 text-white/50 mx-auto mb-4" />
+                    <h3 className="text-2xl font-extrabold text-white mb-4">No notifications</h3>
+                    <p className="text-white/80">
+                      You're all caught up! Notifications will appear here when workflows fail or need attention.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
 
         {/* Admin: FAQ Management */}
         {isAdmin && (

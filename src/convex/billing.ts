@@ -11,7 +11,7 @@ export const createInvoice = internalMutation({
     number: v.string(),
     amountCents: v.number(),
     currency: v.string(),
-    status: v.union(v.literal("draft"), v.literal("paid"), v.literal("void")),
+    status: v.union(v.literal("pending"), v.literal("paid"), v.literal("failed")),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("invoices", args);

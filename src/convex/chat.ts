@@ -11,6 +11,6 @@ export const logChat = internalMutation({
     confidence: v.number(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.insert("chats", args);
+    await ctx.db.insert("chatLogs", args);
   },
 });

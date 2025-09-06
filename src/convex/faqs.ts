@@ -1,7 +1,6 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { mutation } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
 
 // Add helper: ensure the caller is admin
 async function ensureAdmin(ctx: any) {
@@ -9,7 +8,7 @@ async function ensureAdmin(ctx: any) {
   if (!identity?.email) throw new Error("Unauthorized");
   const user = await ctx.db
     .query("users")
-    .withIndex("email", (q: any) => q.eq("email", identity.email!))
+    .withIndex("by_email", (q: any) => q.eq("email", identity.email!)) // Add explicit any typing
     .unique();
   if (!user || user.role !== "admin") throw new Error("Forbidden");
   return user;
@@ -26,13 +25,13 @@ export const searchFAQs = query({
     if (!args.query.trim()) {
       return await ctx.db
         .query("faqs")
-        .withIndex("by_isActive", (q) => q.eq("isActive", true))
+        .withIndex("by_active", (q) => q.eq("isActive", true))
         .take(limit);
     }
 
     return await ctx.db
       .query("faqs")
-      .withSearchIndex("search_content", (q: any) =>
+      .withSearchIndex("search_question", (q: any) =>
         q.search("question", args.query).eq("isActive", true)
       )
       .take(limit);
@@ -62,7 +61,7 @@ export const getAllFAQs = query({
     } catch {
       return await ctx.db
         .query("faqs")
-        .withIndex("by_isActive", (q: any) => q.eq("isActive", true))
+        .withIndex("by_active", (q) => q.eq("isActive", true))
         .collect();
     }
   },
