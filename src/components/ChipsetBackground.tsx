@@ -73,16 +73,16 @@ export default function ChipsetBackground() {
       const W = width();
       const H = height();
 
-      // Subtle grid (denser)
-      for (let gx = 0; gx < W; gx += 60) {
+      // Subtle grid (less dense)
+      for (let gx = 0; gx < W; gx += 80) {
         traces.push({ points: [{ x: gx, y: 0 }, { x: gx, y: H }], width: 0.6, faint: true, pulses: [] });
       }
-      for (let gy = 0; gy < H; gy += 60) {
+      for (let gy = 0; gy < H; gy += 80) {
         traces.push({ points: [{ x: 0, y: gy }, { x: W, y: gy }], width: 0.6, faint: true, pulses: [] });
       }
 
-      // Chips (more of them)
-      const chipCount = Math.min(10, Math.max(5, Math.floor((W * H) / 220000)));
+      // Chips (fewer)
+      const chipCount = Math.min(8, Math.max(4, Math.floor((W * H) / 300000)));
       for (let i = 0; i < chipCount; i++) {
         const cw = randi(140, 220);
         const ch = randi(90, 160);
@@ -104,9 +104,9 @@ export default function ChipsetBackground() {
         chips.push({ x: cx, y: cy, w: cw, h: ch, pins });
       }
 
-      // Connections (more)
+      // Connections (less)
       const allPins = chips.flatMap((c) => c.pins);
-      const connectionCount = Math.min(140, Math.max(60, Math.floor(allPins.length * 0.5)));
+      const connectionCount = Math.min(100, Math.max(30, Math.floor(allPins.length * 0.35)));
       for (let k = 0; k < connectionCount; k++) {
         const a = allPins[randi(0, allPins.length - 1)];
         const b = allPins[randi(0, allPins.length - 1)];
@@ -115,7 +115,7 @@ export default function ChipsetBackground() {
         const pts = manhattanPath(a, b);
         traces.push({
           points: pts,
-          width: Math.random() < 0.2 ? 3 : Math.random() < 0.5 ? 2 : 1,
+          width: Math.random() < 0.15 ? 3 : Math.random() < 0.45 ? 2 : 1,
           faint: false,
           pulses: [],
         });
@@ -132,15 +132,15 @@ export default function ChipsetBackground() {
 
     genChipsAndTraces();
 
-    // Pulses
+    // Pulses (slower, fewer concurrent)
     const pulseTimers: Array<ReturnType<typeof setInterval>> = [];
     function startPulseEmitter() {
       traces.forEach((tr) => {
         const timer = setInterval(() => {
           if ((tr as any).faint) return;
-          tr.pulses.push({ i: 0, speed: rand(1.5, 3.5) });
-          if (tr.pulses.length > 8) tr.pulses.shift();
-        }, randi(500, 1100));
+          tr.pulses.push({ i: 0, speed: rand(1.0, 2.4) });
+          if (tr.pulses.length > 4) tr.pulses.shift();
+        }, randi(1000, 1800));
         pulseTimers.push(timer);
       });
     }
@@ -243,5 +243,5 @@ export default function ChipsetBackground() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full pointer-events-none chipset-vignette" />;
 }
