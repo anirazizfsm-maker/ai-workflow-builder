@@ -123,13 +123,14 @@ export default function Landing() {
 
       {/* Global AI Assistant / Builder Modal */}
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-        <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground overflow-hidden">
+        <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground overflow-hidden rounded-2xl w-[92vw] sm:max-w-2xl sm:w-full p-0">
           {/* Animated modal content */}
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 260, damping: 24, mass: 0.9 }}
+            className="p-4 sm:p-6"
           >
             <DialogHeader>
               <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
@@ -255,7 +256,7 @@ export default function Landing() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-white/10 backdrop-blur-md border border-white/20">
+              <SheetContent side="right" className="bg-white/10 backdrop-blur-md border border-white/20 w-[85vw] max-w-sm">
                 <SheetHeader>
                   <SheetTitle className="text-foreground">Menu</SheetTitle>
                 </SheetHeader>
@@ -530,14 +531,23 @@ export default function Landing() {
                   <Tooltip key={w.title}>
                     <TooltipTrigger asChild>
                       <motion.div
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={isSelected}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setSelectedWorkflow((prev) => (prev === i ? null : i));
+                          }
+                        }}
                         onClick={() =>
                           setSelectedWorkflow((prev) => (prev === i ? null : i))
                         }
                         initial={{ opacity: 0, y: 12 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className={`cursor-pointer rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 md:p-5 text-foreground transition
-                          hover:bg-white/15 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
+                        className={`cursor-pointer rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 text-foreground transition
+                          hover:bg-white/15 active:scale-95 touch-manipulation
                           ${isSelected ? "ring-2 ring-[color:var(--ring)]" : ""}`}
                       >
                         <div className="mb-1 flex items-start justify-between">
@@ -548,7 +558,7 @@ export default function Landing() {
                         </div>
                         <p className="text-muted-foreground">{w.desc}</p>
                         {isSelected && (
-                          <div className="mt-3 text-xs text-muted-foreground grid grid-cols-3 gap-2">
+                          <div className="mt-3 text-xs text-muted-foreground grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {w.steps.map((s, idx) => (
                               <div
                                 key={idx}
@@ -850,7 +860,7 @@ export default function Landing() {
       </footer>
 
       {/* Floating Chatbot Button (bottom-right) */}
-      <div className="fixed bottom-5 right-5 z-[60]">
+      <div className="fixed z-[60] right-5 bottom-[calc(env(safe-area-inset-bottom)+1.25rem)]">
         <Button
           onClick={() => setAiOpen(true)}
           size="icon"
