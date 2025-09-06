@@ -45,36 +45,46 @@ export default function Dashboard() {
   const thirtyDaysAgo = useMemo(() => Date.now() - 30 * 24 * 60 * 60 * 1000, []);
   const monthStart = thirtyDaysAgo;
 
-  const workflows = useQuery(api.workflows.getUserWorkflows);
+  const workflows = useQuery(api.workflows.getUserWorkflows, isAuthenticated ? {} : "skip");
   const createWorkflow = useMutation(api.workflows.createWorkflow);
   const updateWorkflowStatus = useMutation(api.workflows.updateWorkflowStatus);
   const deleteWorkflow = useMutation(api.workflows.deleteWorkflow);
   const generateWorkflowJSON = useAction(api.workflowActions.generateWorkflowJSON);
   const upgradeWithAI = useAction(api.workflowActions.upgradeWithAI);
 
-  // Analytics data
-  const runsPerDay = useQuery(api.workflows.runsPerDay, { orgId: "demo-org", days: 30 });
-  const distributionByCategory = useQuery(api.workflows.distributionByCategory, { 
-    orgId: "demo-org", 
-    since: thirtyDaysAgo, // changed: memoized
-  });
-  const settings = useQuery(api.workflows.getSettings, { orgId: "demo-org" });
-  const savingsOverTime = useQuery(api.workflows.savingsOverTime, {
-    orgId: "demo-org",
-    since: thirtyDaysAgo, // changed: memoized
-    hourlyRate: settings?.hourlyRate || 25,
-  });
-  const perWorkflowSavings = useQuery(api.workflows.perWorkflowSavings, {
-    orgId: "demo-org",
-    month: monthStart, // changed: memoized
-  });
-  // moved: useAction hook defined below as fetchBusinessSuggestions
-  const notifications = useQuery(api.workflows.getNotifications, { orgId: "demo-org" });
+  // Analytics data (skip until authenticated)
+  const runsPerDay = useQuery(
+    api.workflows.runsPerDay,
+    isAuthenticated ? { orgId: "demo-org", days: 30 } : "skip"
+  );
+  const distributionByCategory = useQuery(
+    api.workflows.distributionByCategory,
+    isAuthenticated ? { orgId: "demo-org", since: thirtyDaysAgo } : "skip"
+  );
+  const settings = useQuery(
+    api.workflows.getSettings,
+    isAuthenticated ? { orgId: "demo-org" } : "skip"
+  );
+  const savingsOverTime = useQuery(
+    api.workflows.savingsOverTime,
+    isAuthenticated
+      ? { orgId: "demo-org", since: thirtyDaysAgo, hourlyRate: settings?.hourlyRate || 25 }
+      : "skip"
+  );
+  const perWorkflowSavings = useQuery(
+    api.workflows.perWorkflowSavings,
+    isAuthenticated ? { orgId: "demo-org", month: monthStart } : "skip"
+  );
+  const notifications = useQuery(
+    api.workflows.getNotifications,
+    isAuthenticated ? { orgId: "demo-org" } : "skip"
+  );
 
   const updateSettings = useMutation(api.workflows.updateSettings);
   const markNotificationRead = useMutation(api.workflows.markNotificationRead);
 
-  const faqs = useQuery(api.faqs.getAllFAQs);
+  // FAQs
+  const faqs = useQuery(api.faqs.getAllFAQs, isAuthenticated ? {} : "skip");
   const createFAQ = useMutation(api.faqs.createFAQ);
   const updateFAQ = useMutation(api.faqs.updateFAQ);
   const removeFAQ = useMutation(api.faqs.deleteFAQ);
@@ -174,7 +184,9 @@ export default function Dashboard() {
   const fetchBusinessSuggestions = useAction(api.workflowActions.getBusinessSuggestions);
   const [businessSuggestions, setBusinessSuggestions] = useState<Suggestion[]>([]);
 
+  // Update AI suggestions effect to only run when authenticated
   useEffect(() => {
+    if (!isAuthenticated) return;
     let isMounted = true;
     fetchBusinessSuggestions({ orgId: "demo-org" })
       .then((res) => {
@@ -186,7 +198,7 @@ export default function Dashboard() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [isAuthenticated, fetchBusinessSuggestions]);
 
   if (isLoading) {
     return (
@@ -296,10 +308,11 @@ export default function Dashboard() {
     }
   };
 
-  const totalSavings = perWorkflowSavings?.reduce((sum, s) => sum + s.dollars, 0) || 0;
-  const totalHours = perWorkflowSavings?.reduce((sum, s) => sum + s.hours, 0) || 0;
+  // Add explicit types to avoid implicit any
+  const totalSavings = perWorkflowSavings?.reduce((sum: number, s: any) => sum + s.dollars, 0) || 0;
+  const totalHours = perWorkflowSavings?.reduce((sum: number, s: any) => sum + s.hours, 0) || 0;
   const roi = settings ? Math.round((totalSavings / (settings.planPriceCents / 100)) * 100) / 100 : 0;
-  const unreadNotifications = notifications?.filter(n => !n.readAt) || [];
+  const unreadNotifications = notifications?.filter((n: any) => !n.readAt) || [];
 
   // FAQ functions (keep existing)
   const openCreateFaq = () => {
@@ -397,13 +410,13 @@ export default function Dashboard() {
             <span className="relative z-10">LETHIMDO</span>
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite"
             >
               LETHIMDO
             </span>
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite"
             >
               LETHIMDO
             </span>
@@ -507,7 +520,7 @@ export default function Dashboard() {
             <div className="mb-8">
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25">
+                  <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20">
                     <Plus className="mr-2 h-6 w-6" />
                     Create New Workflow
                   </Button>
@@ -759,7 +772,7 @@ export default function Dashboard() {
                         dataKey="value"
                         label={({ label, percent }) => `${label} ${(percent * 100).toFixed(0)}%`}
                       >
-                        {(distributionByCategory || []).map((entry, index) => (
+                        {(distributionByCategory || []).map((entry: any, index: number) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                       </Pie>
@@ -874,7 +887,7 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {perWorkflowSavings?.map((saving, index) => (
+                  {perWorkflowSavings?.map((saving: any, index: number) => (
                     <div key={saving.workflowId} className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/10">
                       <div>
                         <h4 className="font-semibold text-white">{saving.title}</h4>
@@ -958,7 +971,7 @@ export default function Dashboard() {
             </div>
 
             <div className="space-y-4">
-              {notifications?.map((notification) => (
+              {notifications?.map((notification: any) => (
                 <Card
                   key={notification._id}
                   className={`rounded-2xl border backdrop-blur-xl transition ${
