@@ -45,7 +45,7 @@ export default function Dashboard() {
   const thirtyDaysAgo = useMemo(() => Date.now() - 30 * 24 * 60 * 60 * 1000, []);
   const monthStart = thirtyDaysAgo;
 
-  const workflows = useQuery(api.workflows.getUserWorkflows, isAuthenticated ? {} : "skip");
+  const workflows = useQuery(api.workflows.getUserWorkflows, isAuthenticated ? {} : undefined);
   const createWorkflow = useMutation(api.workflows.createWorkflow);
   const updateWorkflowStatus = useMutation(api.workflows.updateWorkflowStatus);
   const deleteWorkflow = useMutation(api.workflows.deleteWorkflow);
@@ -99,7 +99,7 @@ export default function Dashboard() {
   const markNotificationRead = useMutation(api.workflows.markNotificationRead);
 
   // FAQs
-  const faqs = useQuery(api.faqs.getAllFAQs, isAuthenticated ? {} : "skip");
+  const faqs = useQuery(api.faqs.getAllFAQs, isAuthenticated ? {} : undefined);
   const createFAQ = useMutation(api.faqs.createFAQ);
   const updateFAQ = useMutation(api.faqs.updateFAQ);
   const removeFAQ = useMutation(api.faqs.deleteFAQ);
