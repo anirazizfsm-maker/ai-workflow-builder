@@ -22,13 +22,13 @@ export default function ChipsetBackground() {
     const width = () => canvas.clientWidth;
     const height = () => canvas.clientHeight;
 
-    // Colors / styles (neon cyan)
+    // Colors / styles (neon red)
     const BG = "#000000";
-    const TRACE = "rgba(0, 255, 220, 0.75)";
-    const TRACE_FAINT = "rgba(0, 120, 110, 0.35)";
-    const CHIP_FILL = "rgba(10, 20, 24, 0.9)";
-    const CHIP_STROKE = "rgba(0, 255, 220, 0.5)";
-    const VIA_FILL = "rgba(0, 255, 220, 0.9)";
+    const TRACE = "rgba(255, 60, 60, 0.80)";
+    const TRACE_FAINT = "rgba(120, 20, 20, 0.35)";
+    const CHIP_FILL = "rgba(24, 10, 10, 0.9)";
+    const CHIP_STROKE = "rgba(255, 60, 60, 0.5)";
+    const VIA_FILL = "rgba(255, 60, 60, 0.9)";
 
     // Data
     let traces: Array<{ points: Array<{ x: number; y: number }>; width: number; faint?: boolean; pulses: Array<{ i: number; speed: number }> }> = [];
@@ -205,7 +205,7 @@ export default function ChipsetBackground() {
             ctx.arc(pt.x, pt.y, Math.max(2, tr.width + 1.5), 0, Math.PI * 2);
             ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
             ctx.shadowBlur = 22;
-            ctx.shadowColor = "rgba(0, 255, 220, 1)";
+            ctx.shadowColor = "rgba(255, 60, 60, 1)";
             ctx.fill();
           });
         }
