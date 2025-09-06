@@ -16,10 +16,18 @@ export default function TesseractLogo({
       className={className}
       aria-label={title}
       role="img"
-      // Gentle oscillating rotation for life-like motion
-      animate={{ rotate: [-7, 7, -7] }}
-      transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-      style={{ transformOrigin: "50% 50%" }}
+      // 3D rotation with perspective for visible angles
+      animate={{
+        rotate: [-7, 7, -7],
+        rotateX: [10, -8, 10],
+        rotateY: [-8, 10, -8],
+      }}
+      transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+      style={{
+        transformOrigin: "50% 50%",
+        transformStyle: "preserve-3d",
+        perspective: 700,
+      }}
     >
       <svg
         viewBox="0 0 100 100"
@@ -44,7 +52,21 @@ export default function TesseractLogo({
           </linearGradient>
         </defs>
 
-        {/* Wireframe tesseract: cyan stroke with glow */}
+        {/* BACK-LAYER (faint/dashed to simulate hidden/back edges) */}
+        <g opacity="0.28" stroke={cyan} strokeWidth="2" strokeDasharray="3 3">
+          <rect x="18" y="18" width="64" height="64" rx="1" />
+          <rect x="36" y="36" width="28" height="28" rx="1" />
+          <path d="M18 18 L36 36" />
+          <path d="M82 18 L64 36" />
+          <path d="M18 82 L36 64" />
+          <path d="M82 82 L64 64" />
+          <path d="M36 36 L64 64" />
+          <path d="M64 36 L36 64" />
+          <path d="M18 18 L82 82" />
+          <path d="M82 18 L18 82" />
+        </g>
+
+        {/* FOREGROUND WIREFRAME with glow */}
         {/* Outer cube */}
         <rect
           x="18"
@@ -84,6 +106,27 @@ export default function TesseractLogo({
         {/* Outer diagonals for depth */}
         <path d="M18 18 L82 82" stroke={cyan} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
         <path d="M82 18 L18 82" stroke={cyan} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
+
+        {/* Subtle 4D hint: pulsating inner cube scale to simulate projection shift */}
+        <motion.g
+          initial={{ scale: 1 }}
+          animate={{ scale: [1.0, 0.94, 1.0] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <rect
+            x="36"
+            y="36"
+            width="28"
+            height="28"
+            rx="1"
+            stroke="url(#wire)"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.7"
+            filter="url(#glow)"
+          />
+        </motion.g>
       </svg>
     </motion.div>
   );
