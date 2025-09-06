@@ -144,7 +144,7 @@ export default function Landing() {
                   setWorkflowPrompt(next);
                 }}
                 placeholder="Ask a question or describe a workflow. Example: 'When a user signs up, send a welcome email and notify Slack'."
-                className="min-h[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
+                className="min-h-[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
               />
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span className={workflowPrompt.length > 450 ? "text-amber-600" : "text-muted-foreground"}>
@@ -638,7 +638,7 @@ export default function Landing() {
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="What is Lethimdo? How do I create workflows?"
                 className="h-12 flex-1 rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
-                onKeyPress={(e) => e.key === "Enter" && handleFAQSearch()}
+                onKeyDown={(e) => e.key === "Enter" && handleFAQSearch()}
               />
               <Button
                 onClick={handleFAQSearch}

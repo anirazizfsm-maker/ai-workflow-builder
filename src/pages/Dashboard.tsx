@@ -52,14 +52,19 @@ export default function Dashboard() {
   const generateWorkflowJSON = useAction(api.workflowActions.generateWorkflowJSON);
   const upgradeWithAI = useAction(api.workflowActions.upgradeWithAI);
 
-  // Analytics data (skip until authenticated)
+  // Analytics data
   const runsPerDay = useQuery(
     api.workflows.runsPerDay,
     isAuthenticated ? { orgId: "demo-org", days: 30 } : "skip"
   );
   const distributionByCategory = useQuery(
     api.workflows.distributionByCategory,
-    isAuthenticated ? { orgId: "demo-org", since: thirtyDaysAgo } : "skip"
+    isAuthenticated
+      ? {
+          orgId: "demo-org",
+          since: thirtyDaysAgo,
+        }
+      : "skip"
   );
   const settings = useQuery(
     api.workflows.getSettings,
@@ -68,13 +73,23 @@ export default function Dashboard() {
   const savingsOverTime = useQuery(
     api.workflows.savingsOverTime,
     isAuthenticated
-      ? { orgId: "demo-org", since: thirtyDaysAgo, hourlyRate: settings?.hourlyRate || 25 }
+      ? {
+          orgId: "demo-org",
+          since: thirtyDaysAgo,
+          hourlyRate: settings?.hourlyRate || 25,
+        }
       : "skip"
   );
   const perWorkflowSavings = useQuery(
     api.workflows.perWorkflowSavings,
-    isAuthenticated ? { orgId: "demo-org", month: monthStart } : "skip"
+    isAuthenticated
+      ? {
+          orgId: "demo-org",
+          month: monthStart,
+        }
+      : "skip"
   );
+  // moved: useAction hook defined below as fetchBusinessSuggestions
   const notifications = useQuery(
     api.workflows.getNotifications,
     isAuthenticated ? { orgId: "demo-org" } : "skip"
@@ -184,7 +199,6 @@ export default function Dashboard() {
   const fetchBusinessSuggestions = useAction(api.workflowActions.getBusinessSuggestions);
   const [businessSuggestions, setBusinessSuggestions] = useState<Suggestion[]>([]);
 
-  // Update AI suggestions effect to only run when authenticated
   useEffect(() => {
     if (!isAuthenticated) return;
     let isMounted = true;
@@ -308,11 +322,10 @@ export default function Dashboard() {
     }
   };
 
-  // Add explicit types to avoid implicit any
-  const totalSavings = perWorkflowSavings?.reduce((sum: number, s: any) => sum + s.dollars, 0) || 0;
-  const totalHours = perWorkflowSavings?.reduce((sum: number, s: any) => sum + s.hours, 0) || 0;
+  const totalSavings = (perWorkflowSavings ?? []).reduce((sum: number, s: any) => sum + s.dollars, 0);
+  const totalHours = (perWorkflowSavings ?? []).reduce((sum: number, s: any) => sum + s.hours, 0);
   const roi = settings ? Math.round((totalSavings / (settings.planPriceCents / 100)) * 100) / 100 : 0;
-  const unreadNotifications = notifications?.filter((n: any) => !n.readAt) || [];
+  const unreadNotifications = (notifications ?? []).filter((n: any) => !n.readAt);
 
   // FAQ functions (keep existing)
   const openCreateFaq = () => {
@@ -410,13 +423,13 @@ export default function Dashboard() {
             <span className="relative z-10">LETHIMDO</span>
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
             >
               LETHIMDO
             </span>
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
             >
               LETHIMDO
             </span>
@@ -520,7 +533,7 @@ export default function Dashboard() {
             <div className="mb-8">
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20">
+                  <Button className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25">
                     <Plus className="mr-2 h-6 w-6" />
                     Create New Workflow
                   </Button>
@@ -887,7 +900,7 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {perWorkflowSavings?.map((saving: any, index: number) => (
+                  {(perWorkflowSavings || []).map((saving: any, index: number) => (
                     <div key={saving.workflowId} className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/10">
                       <div>
                         <h4 className="font-semibold text-white">{saving.title}</h4>
@@ -971,7 +984,7 @@ export default function Dashboard() {
             </div>
 
             <div className="space-y-4">
-              {notifications?.map((notification: any) => (
+              {(notifications || []).map((notification: any) => (
                 <Card
                   key={notification._id}
                   className={`rounded-2xl border backdrop-blur-xl transition ${
