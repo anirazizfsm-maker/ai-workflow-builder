@@ -88,10 +88,16 @@ export default function TesseractLogo({
         const innerWorld = localVerts[i].clone().applyMatrix4(cubeInner.matrixWorld);
         const outerWorld = localVerts[i].clone().applyMatrix4(cubeOuter.matrixWorld);
 
+        // Inset the line endpoints slightly so lines sit inside the cubes (no protrusion)
+        const insetFactorStart = 0.08; // from inner corner towards outer
+        const insetFactorEnd = 0.08;   // from outer corner towards inner
+        const start = innerWorld.clone().lerp(outerWorld, insetFactorStart);
+        const end = innerWorld.clone().lerp(outerWorld, 1 - insetFactorEnd);
+
         const geom = connectors[i].geometry as THREE.BufferGeometry;
         const pos = geom.getAttribute("position") as THREE.BufferAttribute;
-        pos.setXYZ(0, innerWorld.x, innerWorld.y, innerWorld.z);
-        pos.setXYZ(1, outerWorld.x, outerWorld.y, outerWorld.z);
+        pos.setXYZ(0, start.x, start.y, start.z);
+        pos.setXYZ(1, end.x, end.y, end.z);
         pos.needsUpdate = true;
       }
 
