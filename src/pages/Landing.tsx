@@ -119,7 +119,7 @@ export default function Landing() {
       {/* Subtle vertical gradient overlay for depth */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/30 to-black/90"
+        className="pointer-events-none absolute inset-0 -z-10 bg-black"
       />
 
       {/* Global AI Assistant / Builder Modal */}
@@ -312,19 +312,7 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="relative px-4 py-12 sm:py-20 md:py-24">
-        {/* Slow animated gradient behind hero (20s loop) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-15"
-        >
-          <div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-               style={{
-                 background:
-                   "conic-gradient(from 0deg, color-mix(in oklab, var(--ring) 80%, transparent), transparent 25%, color-mix(in oklab, var(--accent) 70%, transparent), transparent 50%, color-mix(in oklab, white 25%, transparent), transparent 75%, color-mix(in oklab, var(--ring) 80%, transparent))"
-               }}
-          />
-          <div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite]" />
-        </div>
+        {/* Background glow removed for a pure black backdrop */}
 
         <div className="mx-auto max-w-7xl text-center">
           <motion.div
