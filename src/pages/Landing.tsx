@@ -122,53 +122,6 @@ export default function Landing() {
         className="pointer-events-none absolute inset-0 -z-10 bg-black"
       />
 
-      {/* Purple silk blanket background (top 1/4 page, slow wave) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[25vh] z-0 opacity-80"
-      >
-        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="silkGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="oklch(0.30 0.25 310)" />
-              <stop offset="50%" stopColor="oklch(0.22 0.19 300)" />
-              <stop offset="100%" stopColor="oklch(0.18 0.16 290)" />
-            </linearGradient>
-            <filter id="silkWave">
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.015"
-                numOctaves="2"
-                seed="2"
-                result="noise"
-              >
-                <animate
-                  attributeName="baseFrequency"
-                  dur="18s"
-                  values="0.012;0.018;0.012"
-                  repeatCount="indefinite"
-                />
-              </feTurbulence>
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="noise"
-                scale="8"
-                xChannelSelector="R"
-                yChannelSelector="G"
-              >
-                <animate
-                  attributeName="scale"
-                  dur="18s"
-                  values="6;10;6"
-                  repeatCount="indefinite"
-                />
-              </feDisplacementMap>
-            </filter>
-          </defs>
-          <rect x="0" y="0" width="100" height="100" fill="url(#silkGrad)" filter="url(#silkWave)" />
-        </svg>
-      </div>
-
       {/* Global AI Assistant / Builder Modal */}
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
         <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground overflow-hidden rounded-2xl w-[92vw] sm:max-w-2xl sm:w-full p-0">
