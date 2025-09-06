@@ -33,7 +33,7 @@ export default function Plans() {
             onClick={() => navigate("/")}
             className="text-white font-extrabold tracking-tight text-xl md:text-2xl hover:opacity-90 transition flex items-center gap-2"
           >
-            <TesseractLogo className="h-6 w-6 md:h-7 md:w-7" />
+            <TesseractLogo className="h-5 w-5 md:h-6 md:w-6" />
             <span>LETHIMDO</span>
           </button>
           <div className="flex items-center gap-3">

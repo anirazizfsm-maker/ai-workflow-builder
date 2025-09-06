@@ -14,7 +14,7 @@ export default function FixedBrand() {
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
       aria-label="Go to home"
     >
-      <TesseractLogo className="h-6 w-6 md:h-7 md:w-7" />
+      <TesseractLogo className="h-5 w-5 md:h-6 md:w-6" />
       <span className="font-extrabold tracking-tight">LETHIMDO</span>
     </motion.button>
   );
