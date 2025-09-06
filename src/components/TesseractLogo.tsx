@@ -7,6 +7,9 @@ type Props = {
   title?: string;
   size?: number;   // pixel size of the square canvas
   color?: string;  // wireframe color
+  // Add: adjustable glow intensity (in px) and stroke opacity
+  glow?: number;       // overall glow intensity for perceived thickness
+  strokeOpacity?: number; // line material opacity
 };
 
 export default function TesseractLogo({
@@ -14,6 +17,8 @@ export default function TesseractLogo({
   title = "LETHIMDO Logo",
   size = 80,
   color = "#00e5ff",
+  glow = 18,             // NEW: default glow intensity
+  strokeOpacity = 0.95,  // NEW: default stroke opacity
 }: Props) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -31,12 +36,24 @@ export default function TesseractLogo({
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(size, size);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    // Cyan glow using CSS filter (cheaper than post-processing)
-    renderer.domElement.style.filter = "drop-shadow(0 0 12px rgba(0, 229, 255, 0.9))";
+    // Updated multi-layer glow to increase perceived thickness; uses chosen color
+    const glow1 = Math.max(8, glow * 0.8);
+    const glow2 = Math.max(12, glow * 1.6);
+    renderer.domElement.style.filter = `
+      drop-shadow(0 0 ${glow1}px ${color}CC)
+      drop-shadow(0 0 ${glow2}px ${color}88)
+    `;
     container.appendChild(renderer.domElement);
 
     // Wireframe materials/geometries
-    const wire = new THREE.LineBasicMaterial({ color: new THREE.Color(color) });
+    const wire = new THREE.LineBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: strokeOpacity,
+    });
+    // Note: linewidth is not widely supported in WebGL, but harmless to set.
+    wire.linewidth = 2;
+
     const box = new THREE.BoxGeometry(1, 1, 1);
     const edges = new THREE.EdgesGeometry(box);
 
@@ -127,7 +144,7 @@ export default function TesseractLogo({
       box.dispose();
       container.innerHTML = "";
     };
-  }, [size, color]);
+  }, [size, color, glow, strokeOpacity]);
 
   return (
     <motion.div
