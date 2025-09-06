@@ -26,12 +26,16 @@ export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
   
-  // Add redirect effect to avoid navigating during render
+  // Add a one-time redirect guard to prevent repeated navigations causing re-renders
+  const [didRedirect, setDidRedirect] = useState(false);
+
+  // Add redirect effect with guard
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate("/auth");
+    if (!isLoading && !isAuthenticated && !didRedirect) {
+      setDidRedirect(true);
+      navigate("/auth", { replace: true });
     }
-  }, [isLoading, isAuthenticated, navigate]);
+  }, [isLoading, isAuthenticated, didRedirect, navigate]);
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
