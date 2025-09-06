@@ -154,6 +154,18 @@ export default function ChipsetBackground() {
     }
     startPulseEmitter();
 
+    // Add smooth scroll-based zooming state
+    let targetScrollProgress = 0;
+    let smoothScrollProgress = 0;
+
+    function updateScrollProgress() {
+      const doc = document.documentElement;
+      const maxScrollable = Math.max(1, doc.scrollHeight - window.innerHeight);
+      targetScrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollable));
+    }
+    updateScrollProgress();
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+
     function drawBackground() {
       const W = width(),
         H = height();
@@ -246,10 +258,11 @@ export default function ChipsetBackground() {
     function tick() {
       drawBackground();
 
-      // Apply a gentle scale that increases with scroll and keep content centered
+      // Smoothly interpolate scroll progress for a gentle zoom effect
+      smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.08;
       const W = width(), H = height();
-      // Disable scroll-based scaling; keep scale at 1 for a static background
-      const scale = 1;
+      const scale = 1 + smoothScrollProgress * 0.08; // up to ~8% zoom at bottom
+
       ctx.save();
       ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
       ctx.scale(scale, scale);
@@ -265,11 +278,13 @@ export default function ChipsetBackground() {
     const handleResize = () => {
       setupCanvas();
       genChipsAndTraces();
+      updateScrollProgress();
     };
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", updateScrollProgress);
       pulseTimers.forEach(clearInterval);
     };
   }, []);
