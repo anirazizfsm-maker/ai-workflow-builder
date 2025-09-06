@@ -423,7 +423,7 @@ export default function Dashboard() {
 
       <div className="mx-auto max-w-7xl p-4 md:p-6 text-white">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-6 md:mb-8 w-full overflow-x-auto bg-white/10 backdrop-blur-xl border border-white/15 inline-flex md:grid md:grid-cols-5 gap-1 rounded-xl p-1">
+          <TabsList className="mb-6 md:mb-8 w-full overflow-x-auto bg-white/10 backdrop-blur-xl border border-white/15 inline-flex md:grid md:grid-cols-5 gap-1 rounded-xl p-1 no-scrollbar">
             <TabsTrigger value="overview" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <Zap className="w-4 h-4 mr-2" />
               Overview
@@ -617,7 +617,7 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl hover:bg-white/10 transition">
+                  <Card className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl">
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <CardTitle className="text-white font-extrabold text-lg">
