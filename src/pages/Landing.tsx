@@ -228,7 +228,7 @@ export default function Landing() {
             </a>
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl px-5 py-2 font-semibold shadow-md"
+              className="rounded-xl px-5 py-2 font-semibold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
             >
               {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
@@ -266,7 +266,7 @@ export default function Landing() {
                   </a>
                   <Button
                     onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                    className="mt-2 rounded-xl px-5 py-3 font-bold shadow-md"
+                    className="mt-2 rounded-xl px-5 py-3 font-bold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
                   >
                     {isAuthenticated ? "Go to Dashboard" : "Get Started"}
                   </Button>
@@ -312,7 +312,7 @@ export default function Landing() {
                   navigate(isAuthenticated ? "/dashboard" : "/auth")
                 }
                 size="lg"
-                className="w-full sm:w-auto rounded-xl px-8 py-4 text-lg font-bold shadow-md hover:scale-[1.02]"
+                className="w-full sm:w-auto rounded-xl px-8 py-4 text-lg font-bold shadow-md hover:scale-[1.02] border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
               >
                 <Rocket className="mr-2 h-5 w-5" />
                 Start Building
@@ -778,7 +778,7 @@ export default function Landing() {
           <div className="mt-5 flex items-center justify-center gap-3">
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl px-6 py-3 font-bold shadow-md hover:scale-[1.02]"
+              className="rounded-xl px-6 py-3 font-bold shadow-md hover:scale-[1.02] border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
             >
               <Rocket className="mr-2 h-5 w-5" />
               Start free
@@ -846,7 +846,7 @@ export default function Landing() {
         <Button
           onClick={() => setAiOpen(true)}
           size="icon"
-          className="size-12 rounded-full shadow-xl"
+          className="size-12 rounded-full shadow-xl border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
           aria-label="Open Assistant"
           title="Ask AI / FAQ"
         >
