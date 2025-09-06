@@ -21,6 +21,7 @@ import ChipsetBackground from "@/components/ChipsetBackground";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
@@ -389,9 +390,10 @@ export default function Dashboard() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
           <motion.h1
             whileHover={{ scale: 1.05 }}
-            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow group"
+            className="relative flex items-center gap-2 cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow group"
             onClick={() => navigate("/")}
           >
+            <TesseractLogo className="h-7 w-7 md:h-8 md:w-8" />
             <span className="relative z-10">LETHIMDO</span>
             <span
               aria-hidden

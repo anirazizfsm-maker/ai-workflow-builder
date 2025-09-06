@@ -5,44 +5,53 @@ type Props = {
   title?: string;
 };
 
+// Replace previous tesseract with a cyan-glow animated decagon + internal starframe
 export default function TesseractLogo({
   className = "h-8 w-8",
-  title = "LETHIMDO Tesseract",
+  title = "LETHIMDO Logo",
 }: Props) {
   const cyan = "#00e5ff";
+
+  // Generate regular polygon points
+  const polyPoints = (sides: number, r: number, cx: number, cy: number, rotation = -Math.PI / 2) => {
+    const pts: Array<[number, number]> = [];
+    for (let i = 0; i < sides; i++) {
+      const a = rotation + (i * 2 * Math.PI) / sides;
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    return pts;
+  };
+
+  const outer = polyPoints(10, 40, 50, 50);
+  const inner = polyPoints(10, 22, 50, 50);
+
+  const toStr = (pts: Array<[number, number]>) => pts.map(([x, y]) => `${x},${y}`).join(" ");
 
   return (
     <motion.div
       className={className}
       aria-label={title}
       role="img"
-      // 3D rotation with perspective for visible angles
       animate={{
-        rotate: [-7, 7, -7],
+        rotate: [-6, 6, -6],
         rotateX: [10, -8, 10],
         rotateY: [-8, 10, -8],
       }}
-      transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
+      transition={{ duration: 5.0, repeat: Infinity, ease: "easeInOut" }}
       style={{
         transformOrigin: "50% 50%",
         transformStyle: "preserve-3d",
         perspective: 700,
       }}
     >
-      <svg
-        viewBox="0 0 100 100"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="overflow-visible"
-      >
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="overflow-visible">
         <defs>
-          {/* Cyan outer glow */}
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="1.6" result="blur1" />
-            <feGaussianBlur in="blur1" stdDeviation="1.6" result="blur2" />
+            <feGaussianBlur stdDeviation="1.6" result="b1" />
+            <feGaussianBlur in="b1" stdDeviation="1.6" result="b2" />
             <feMerge>
-              <feMergeNode in="blur1" />
-              <feMergeNode in="blur2" />
+              <feMergeNode in="b1" />
+              <feMergeNode in="b2" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
@@ -52,78 +61,85 @@ export default function TesseractLogo({
           </linearGradient>
         </defs>
 
-        {/* BACK-LAYER (faint/dashed to simulate hidden/back edges) */}
-        <g opacity="0.28" stroke={cyan} strokeWidth="2" strokeDasharray="3 3">
-          <rect x="18" y="18" width="64" height="64" rx="1" />
-          <rect x="36" y="36" width="28" height="28" rx="1" />
-          <path d="M18 18 L36 36" />
-          <path d="M82 18 L64 36" />
-          <path d="M18 82 L36 64" />
-          <path d="M82 82 L64 64" />
-          <path d="M36 36 L64 64" />
-          <path d="M64 36 L36 64" />
-          <path d="M18 18 L82 82" />
-          <path d="M82 18 L18 82" />
+        {/* Back edges (faint dashed for depth) */}
+        <g opacity="0.28" stroke={cyan} strokeWidth="1.4" strokeDasharray="3 3">
+          <polygon points={toStr(outer)} />
+          <polygon points={toStr(inner)} />
+          {outer.map(([x, y], i) => {
+            const [ix, iy] = inner[i];
+            return <line key={`b-oi-${i}`} x1={x} y1={y} x2={ix} y2={iy} />;
+          })}
+          {outer.map(([x, y], i) => {
+            const [tx, ty] = outer[(i + 2) % outer.length];
+            return <line key={`b-star-${i}`} x1={x} y1={y} x2={tx} y2={ty} />;
+          })}
         </g>
 
-        {/* FOREGROUND WIREFRAME with glow */}
-        {/* Outer cube */}
-        <rect
-          x="18"
-          y="18"
-          width="64"
-          height="64"
-          rx="1"
+        {/* Foreground frame with cyan glow */}
+        <polygon
+          points={toStr(outer)}
           stroke="url(#wire)"
-          strokeWidth="2.6"
+          strokeWidth="2.4"
           strokeLinecap="round"
           strokeLinejoin="round"
           filter="url(#glow)"
         />
-        {/* Inner cube */}
-        <rect
-          x="36"
-          y="36"
-          width="28"
-          height="28"
-          rx="1"
+        <polygon
+          points={toStr(inner)}
           stroke="url(#wire)"
-          strokeWidth="2.6"
+          strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
           filter="url(#glow)"
         />
-        {/* Connectors */}
-        <path d="M18 18 L36 36" stroke={cyan} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-        <path d="M82 18 L64 36" stroke={cyan} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-        <path d="M18 82 L36 64" stroke={cyan} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-        <path d="M82 82 L64 64" stroke={cyan} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
 
-        {/* Interior diagonals */}
-        <path d="M36 36 L64 64" stroke={cyan} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-        <path d="M64 36 L36 64" stroke={cyan} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
+        {/* Spokes: outer->inner */}
+        {outer.map(([x, y], i) => {
+          const [ix, iy] = inner[i];
+          return (
+            <line
+              key={`f-oi-${i}`}
+              x1={x}
+              y1={y}
+              x2={ix}
+              y2={iy}
+              stroke={cyan}
+              strokeWidth="2.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              filter="url(#glow)"
+            />
+          );
+        })}
 
-        {/* Outer diagonals for depth */}
-        <path d="M18 18 L82 82" stroke={cyan} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
-        <path d="M82 18 L18 82" stroke={cyan} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)" />
+        {/* Star connections (every second vertex) */}
+        {outer.map(([x, y], i) => {
+          const [tx, ty] = outer[(i + 2) % outer.length];
+          return (
+            <line
+              key={`f-star-${i}`}
+              x1={x}
+              y1={y}
+              x2={tx}
+              y2={ty}
+              stroke={cyan}
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              filter="url(#glow)"
+            />
+          );
+        })}
 
-        {/* Subtle 4D hint: pulsating inner cube scale to simulate projection shift */}
-        <motion.g
-          initial={{ scale: 1 }}
-          animate={{ scale: [1.0, 0.94, 1.0] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <rect
-            x="36"
-            y="36"
-            width="28"
-            height="28"
-            rx="1"
+        {/* Subtle 4D hint: pulsating inner polygon */}
+        <motion.g initial={{ scale: 1 }} animate={{ scale: [1.0, 0.94, 1.0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+          <polygon
+            points={toStr(inner)}
             stroke="url(#wire)"
-            strokeWidth="1.2"
+            strokeWidth="1.1"
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.7"
+            opacity="0.75"
             filter="url(#glow)"
           />
         </motion.g>
