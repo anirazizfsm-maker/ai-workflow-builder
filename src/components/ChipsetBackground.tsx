@@ -157,6 +157,8 @@ export default function ChipsetBackground() {
     // Add smooth scroll-based zooming state
     let targetScrollProgress = 0;
     let smoothScrollProgress = 0;
+    // Track eased progress per-frame for styling polish
+    let lastEasedP = 0;
 
     function updateScrollProgress() {
       const doc = document.documentElement;
@@ -219,7 +221,9 @@ export default function ChipsetBackground() {
         for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
         ctx.lineWidth = tr.width;
         ctx.strokeStyle = (tr as any).faint ? TRACE_FAINT : TRACE;
-        ctx.shadowBlur = (tr as any).faint ? 0 : 18; // more pronounced neon
+        // Dynamic glow scales gently with depth for polish
+        const traceGlow = (tr as any).faint ? 0 : Math.min(22, 12 + lastEasedP * 10);
+        ctx.shadowBlur = traceGlow;
         // Switch trace glow to space-black
         ctx.shadowColor = GLOW;
         ctx.stroke();
@@ -232,9 +236,11 @@ export default function ChipsetBackground() {
             const idx = Math.floor(p.i);
             const pt = pts[Math.min(idx, pts.length - 1)];
             ctx.beginPath();
-            ctx.arc(pt.x, pt.y, Math.max(2.5, tr.width + 2), 0, Math.PI * 2); // slightly larger pulse
+            // Pulse size/blur gently enhanced by depth to feel more premium
+            const pulseR = Math.max(2.5, tr.width + 2) + lastEasedP * 0.8;
+            ctx.arc(pt.x, pt.y, pulseR, 0, Math.PI * 2);
             ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-            ctx.shadowBlur = 26; // brighter pulse glow
+            ctx.shadowBlur = 18 + lastEasedP * 10; // subtle dynamic brightening
             // Pulse glow becomes space-black
             ctx.shadowColor = GLOW;
             ctx.fill();
@@ -247,7 +253,7 @@ export default function ChipsetBackground() {
         ctx.beginPath();
         ctx.arc(v.x, v.y, v.r, 0, Math.PI * 2);
         ctx.fillStyle = VIA_FILL;
-        ctx.shadowBlur = 14; // more luminous vias
+        ctx.shadowBlur = 12 + lastEasedP * 6; // slightly reactive vias for cohesion
         // Via glow becomes space-black
         ctx.shadowColor = GLOW;
         ctx.fill();
@@ -261,26 +267,25 @@ export default function ChipsetBackground() {
       // Smoothly interpolate scroll progress for a gentle zoom effect
       smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.08;
       const W = width(), H = height();
-      const scale = 1 + smoothScrollProgress * 0.08; // up to ~8% zoom at bottom
+      // Use eased progress so zoom and parallax feel buttery
+      const p = Math.max(0, Math.min(1, smoothScrollProgress));
+      const easedP = p * p * (3 - 2 * p); // smoothstep
+      lastEasedP = easedP;
+      const scale = 1 + easedP * 0.06; // gentle cap for a classy feel
 
       ctx.save();
       ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
       ctx.scale(scale, scale);
 
-      // Parallax offsets (background traces move less, chips move slightly more)
-      const p = smoothScrollProgress;
-      // Apply a smooth easing so parallax ramps in/out more gracefully
-      const easedP = p * p * (3 - 2 * p); // smoothstep
+      // Parallax offsets (polished ratios for natural motion)
+      const offsetBgX = easedP * W * 0.012;
+      const offsetBgY = easedP * H * 0.024;
+      const offsetFgX = easedP * W * 0.035;
+      const offsetFgY = easedP * H * 0.07;
 
-      // Tuned parallax strengths
-      const offsetBgX = easedP * W * 0.015;
-      const offsetBgY = easedP * H * 0.03;
-      const offsetFgX = easedP * W * 0.045;
-      const offsetFgY = easedP * H * 0.09;
-
-      // Layer-specific micro-scales for added depth
-      const fgScale = 1 + easedP * 0.02; // subtle pop toward viewer
-      const bgScale = 1 - easedP * 0.01; // subtle settle away
+      // Layer-specific micro-scales for a cohesive depth cue
+      const fgScale = 1 + easedP * 0.015; // a touch subtler
+      const bgScale = 1 - easedP * 0.006; // lighter counter-scale
 
       // Foreground (chips) - slightly stronger parallax and micro-scale
       ctx.save();
@@ -294,7 +299,7 @@ export default function ChipsetBackground() {
       ctx.save();
       ctx.translate(-offsetBgX, -offsetBgY);
       ctx.scale(bgScale, bgScale);
-      const bgAlpha = Math.max(0.65, 0.9 - 0.25 * easedP); // depth fog
+      const bgAlpha = Math.max(0.6, 0.85 - 0.25 * easedP); // smoother fog curve
       ctx.globalAlpha = bgAlpha;
       drawTracesAndPulses();
       ctx.restore();
