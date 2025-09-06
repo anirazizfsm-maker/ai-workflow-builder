@@ -269,23 +269,38 @@ export default function ChipsetBackground() {
 
       // Parallax offsets (background traces move less, chips move slightly more)
       const p = smoothScrollProgress;
-      const offsetBgX = p * W * 0.02;
-      const offsetBgY = p * H * 0.04;
-      const offsetFgX = p * W * 0.04;
-      const offsetFgY = p * H * 0.08;
+      // Apply a smooth easing so parallax ramps in/out more gracefully
+      const easedP = p * p * (3 - 2 * p); // smoothstep
 
-      // Foreground (chips) - slightly stronger parallax
+      // Tuned parallax strengths
+      const offsetBgX = easedP * W * 0.015;
+      const offsetBgY = easedP * H * 0.03;
+      const offsetFgX = easedP * W * 0.045;
+      const offsetFgY = easedP * H * 0.09;
+
+      // Layer-specific micro-scales for added depth
+      const fgScale = 1 + easedP * 0.02; // subtle pop toward viewer
+      const bgScale = 1 - easedP * 0.01; // subtle settle away
+
+      // Foreground (chips) - slightly stronger parallax and micro-scale
       ctx.save();
       ctx.translate(-offsetFgX, -offsetFgY);
+      ctx.scale(fgScale, fgScale);
+      ctx.globalAlpha = 1; // ensure crisp foreground
       drawChips();
       ctx.restore();
 
-      // Background traces & pulses - lighter parallax
+      // Background traces & pulses - lighter parallax, slight fade for depth
       ctx.save();
       ctx.translate(-offsetBgX, -offsetBgY);
+      ctx.scale(bgScale, bgScale);
+      const bgAlpha = Math.max(0.65, 0.9 - 0.25 * easedP); // depth fog
+      ctx.globalAlpha = bgAlpha;
       drawTracesAndPulses();
       ctx.restore();
 
+      // Reset any global styles
+      ctx.globalAlpha = 1;
       ctx.restore();
       requestAnimationFrame(tick);
     }
