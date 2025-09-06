@@ -27,6 +27,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
+import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -202,27 +203,32 @@ export default function Landing() {
       {/* Header - glass */}
       <header className="sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
-          <motion.h1
-            whileHover={{ scale: 1.05 }}
-            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow group"
-          >
-            {/* Base logo text */}
-            <span className="relative z-10">LETHIMDO</span>
-            {/* Glitch layer 1 - replace colored text with neutral */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[1px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+          {/* Wrap logo icon + wordmark */}
+          <div className="flex items-center gap-3">
+            {/* New animated tesseract logo */}
+            <TesseractLogo className="h-8 w-8 md:h-9 md:w-9" />
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow group"
             >
-              LETHIMDO
-            </span>
-            {/* Glitch layer 2 - replace colored text with neutral */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[0.5px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
-            >
-              LETHIMDO
-            </span>
-          </motion.h1>
+              {/* Base logo text */}
+              <span className="relative z-10">LETHIMDO</span>
+              {/* Glitch layer 1 - replace colored text with neutral */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[1px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+              >
+                LETHIMDO
+              </span>
+              {/* Glitch layer 2 - replace colored text with neutral */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[0.5px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+              >
+                LETHIMDO
+              </span>
+            </motion.h1>
+          </div>
           <nav className="hidden items-center gap-3 md:flex">
             <a
               href="#workflows"
