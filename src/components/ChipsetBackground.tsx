@@ -73,16 +73,16 @@ export default function ChipsetBackground() {
       const W = width();
       const H = height();
 
-      // Subtle grid
-      for (let gx = 0; gx < W; gx += 80) {
+      // Subtle grid (denser)
+      for (let gx = 0; gx < W; gx += 60) {
         traces.push({ points: [{ x: gx, y: 0 }, { x: gx, y: H }], width: 0.6, faint: true, pulses: [] });
       }
-      for (let gy = 0; gy < H; gy += 80) {
+      for (let gy = 0; gy < H; gy += 60) {
         traces.push({ points: [{ x: 0, y: gy }, { x: W, y: gy }], width: 0.6, faint: true, pulses: [] });
       }
 
-      // Chips
-      const chipCount = Math.min(6, Math.max(3, Math.floor((W * H) / 350000)));
+      // Chips (more of them)
+      const chipCount = Math.min(10, Math.max(5, Math.floor((W * H) / 220000)));
       for (let i = 0; i < chipCount; i++) {
         const cw = randi(140, 220);
         const ch = randi(90, 160);
@@ -104,9 +104,9 @@ export default function ChipsetBackground() {
         chips.push({ x: cx, y: cy, w: cw, h: ch, pins });
       }
 
-      // Connections
+      // Connections (more)
       const allPins = chips.flatMap((c) => c.pins);
-      const connectionCount = Math.min(80, Math.max(30, Math.floor(allPins.length * 0.35)));
+      const connectionCount = Math.min(140, Math.max(60, Math.floor(allPins.length * 0.5)));
       for (let k = 0; k < connectionCount; k++) {
         const a = allPins[randi(0, allPins.length - 1)];
         const b = allPins[randi(0, allPins.length - 1)];
@@ -125,7 +125,7 @@ export default function ChipsetBackground() {
             q = pts[i],
             r = pts[i + 1];
           const turn = (p.x === q.x && q.x !== r.x) || (p.y === q.y && q.y !== r.y);
-          if (turn && Math.random() < 0.15) vias.push({ x: q.x, y: q.y, r: rand(2, 3.5) });
+          if (turn && Math.random() < 0.25) vias.push({ x: q.x, y: q.y, r: rand(2.5, 4) });
         }
       }
     }
@@ -139,8 +139,8 @@ export default function ChipsetBackground() {
         const timer = setInterval(() => {
           if ((tr as any).faint) return;
           tr.pulses.push({ i: 0, speed: rand(1.5, 3.5) });
-          if (tr.pulses.length > 6) tr.pulses.shift();
-        }, randi(700, 1400));
+          if (tr.pulses.length > 8) tr.pulses.shift();
+        }, randi(500, 1100));
         pulseTimers.push(timer);
       });
     }
@@ -243,5 +243,5 @@ export default function ChipsetBackground() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full chipset-vignette pointer-events-none" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full pointer-events-none" />;
 }
