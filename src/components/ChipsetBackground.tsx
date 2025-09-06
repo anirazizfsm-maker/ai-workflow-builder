@@ -37,6 +37,9 @@ export default function ChipsetBackground() {
     let chips: Array<{ x: number; y: number; w: number; h: number; pins: Array<{ x: number; y: number }> }> = [];
     let vias: Array<{ x: number; y: number; r: number }> = [];
 
+    // Scroll progress (0 at top, 1 at bottom of page)
+    let scrollProgress = 0;
+
     // Utilities
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
     const randi = (a: number, b: number) => Math.floor(rand(a, b + 1));
@@ -75,16 +78,19 @@ export default function ChipsetBackground() {
       const W = width();
       const H = height();
 
-      // Subtle grid (less dense)
-      for (let gx = 0; gx < W; gx += 80) {
+      // Density scales with scroll: tighter grid and more detail as you scroll
+      const gridStep = Math.max(40, 80 - Math.floor(40 * scrollProgress)); // from 80px down to 40px
+      // Subtle grid
+      for (let gx = 0; gx < W; gx += gridStep) {
         traces.push({ points: [{ x: gx, y: 0 }, { x: gx, y: H }], width: 0.6, faint: true, pulses: [] });
       }
-      for (let gy = 0; gy < H; gy += 80) {
+      for (let gy = 0; gy < H; gy += gridStep) {
         traces.push({ points: [{ x: 0, y: gy }, { x: W, y: gy }], width: 0.6, faint: true, pulses: [] });
       }
 
-      // Chips (fewer)
-      const chipCount = Math.min(8, Math.max(4, Math.floor((W * H) / 300000)));
+      // Chips: slightly increase count with scroll
+      const baseChipCount = Math.min(8, Math.max(4, Math.floor((W * H) / 300000)));
+      const chipCount = Math.min(12, Math.floor(baseChipCount * (1 + 0.5 * scrollProgress)));
       for (let i = 0; i < chipCount; i++) {
         const cw = randi(140, 220);
         const ch = randi(90, 160);
@@ -106,9 +112,10 @@ export default function ChipsetBackground() {
         chips.push({ x: cx, y: cy, w: cw, h: ch, pins });
       }
 
-      // Connections (less)
+      // Connections: increase with scroll
       const allPins = chips.flatMap((c) => c.pins);
-      const connectionCount = Math.min(100, Math.max(30, Math.floor(allPins.length * 0.35)));
+      const baseConnections = Math.min(100, Math.max(30, Math.floor(allPins.length * 0.35)));
+      const connectionCount = Math.min(160, Math.floor(baseConnections * (1 + 0.6 * scrollProgress)));
       for (let k = 0; k < connectionCount; k++) {
         const a = allPins[randi(0, allPins.length - 1)];
         const b = allPins[randi(0, allPins.length - 1)];
@@ -123,9 +130,7 @@ export default function ChipsetBackground() {
         });
 
         for (let i = 1; i < pts.length - 1; i++) {
-          const p = pts[i - 1],
-            q = pts[i],
-            r = pts[i + 1];
+          const p = pts[i - 1], q = pts[i], r = pts[i + 1];
           const turn = (p.x === q.x && q.x !== r.x) || (p.y === q.y && q.y !== r.y);
           if (turn && Math.random() < 0.25) vias.push({ x: q.x, y: q.y, r: rand(2.5, 4) });
         }
@@ -231,11 +236,35 @@ export default function ChipsetBackground() {
 
     function tick() {
       drawBackground();
+
+      // Apply a gentle scale that increases with scroll and keep content centered
+      const W = width(), H = height();
+      const scale = 1 + scrollProgress * 0.35; // up to +35% size
+      ctx.save();
+      ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
+      ctx.scale(scale, scale);
+
       drawChips();
       drawTracesAndPulses();
+
+      ctx.restore();
       requestAnimationFrame(tick);
     }
     tick();
+
+    // Scroll handler to update density/scale as the user scrolls
+    const handleScroll = () => {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const p = Math.min(1, Math.max(0, window.scrollY / max));
+      // Only regenerate when progress meaningfully changes to avoid excessive work
+      const prev = scrollProgress;
+      scrollProgress = p;
+      if (Math.abs(scrollProgress - prev) > 0.02) {
+        genChipsAndTraces();
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
     const handleResize = () => {
       setupCanvas();
@@ -245,6 +274,7 @@ export default function ChipsetBackground() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
       pulseTimers.forEach(clearInterval);
     };
   }, []);
