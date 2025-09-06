@@ -12,7 +12,7 @@ type Props = {
 export default function TesseractLogo({
   className = "h-8 w-8",
   title = "LETHIMDO Logo",
-  size = 96,
+  size = 80,
   color = "#00e5ff",
 }: Props) {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -88,9 +88,9 @@ export default function TesseractLogo({
         const innerWorld = localVerts[i].clone().applyMatrix4(cubeInner.matrixWorld);
         const outerWorld = localVerts[i].clone().applyMatrix4(cubeOuter.matrixWorld);
 
-        // Inset the line endpoints slightly so lines sit inside the cubes (no protrusion)
-        const insetFactorStart = 0.08; // from inner corner towards outer
-        const insetFactorEnd = 0.08;   // from outer corner towards inner
+        // Increase inset so lines sit fully within the cubes and never protrude
+        const insetFactorStart = 0.14; // from inner corner towards outer
+        const insetFactorEnd = 0.14;   // from outer corner towards inner
         const start = innerWorld.clone().lerp(outerWorld, insetFactorStart);
         const end = innerWorld.clone().lerp(outerWorld, 1 - insetFactorEnd);
 

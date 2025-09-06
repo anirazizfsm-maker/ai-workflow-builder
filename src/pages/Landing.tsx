@@ -206,7 +206,7 @@ export default function Landing() {
           {/* Wrap logo icon + wordmark */}
           <div className="flex items-center gap-3">
             {/* New animated tesseract logo */}
-            <TesseractLogo className="h-8 w-8 md:h-9 md:w-9" />
+            <TesseractLogo className="h-6 w-6 md:h-7 md:w-7" />
             <motion.h1
               whileHover={{ scale: 1.05 }}
               className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow group"
