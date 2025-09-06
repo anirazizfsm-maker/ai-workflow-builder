@@ -11,6 +11,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { Home, LogOut } from "lucide-react";
 import { useNavigate } from "react-router";
+import TesseractLogo from "@/components/TesseractLogo";
 
 export function LogoDropdown() {
   const { isAuthenticated, signOut } = useAuth();
@@ -32,8 +33,8 @@ export function LogoDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-10 px-3">
-          LETHIMDO
+        <Button variant="ghost" size="icon" className="h-10 w-10">
+          <TesseractLogo className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-48">
