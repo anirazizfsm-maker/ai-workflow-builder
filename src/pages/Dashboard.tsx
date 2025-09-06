@@ -720,12 +720,22 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent>
                   <ChartContainer config={chartConfig} className="h-[220px] md:h-[300px]">
-                    <BarChart data={runsPerDay || []}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
+                    <BarChart
+                      data={runsPerDay || []}
+                      margin={{ top: 8, right: 12, bottom: 8, left: 0 }}
+                      barCategoryGap="20%"
+                      barGap={2}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                      <XAxis
+                        dataKey="date"
+                        tickLine={false}
+                        axisLine={false}
+                        padding={{ left: 10, right: 10 }}
+                      />
+                      <YAxis tickLine={false} axisLine={false} />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="#8b5cf6" />
+                      <Bar dataKey="count" fill="#8b5cf6" radius={[6, 6, 0, 0]} maxBarSize={28} />
                     </BarChart>
                   </ChartContainer>
                 </CardContent>
