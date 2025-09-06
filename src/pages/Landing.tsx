@@ -123,7 +123,7 @@ export default function Landing() {
 
       {/* Global AI Assistant / Builder Modal */}
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-        <DialogContent className="bg-card border shadow-2xl text-foreground">
+        <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground">
           <DialogHeader>
             <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
           </DialogHeader>
@@ -216,13 +216,13 @@ export default function Landing() {
           <nav className="hidden items-center gap-3 md:flex">
             <a
               href="#workflows"
-              className="rounded-xl border border-border bg-card px-4 py-2 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
+              className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
             >
               Workflows
             </a>
             <a
               href="#faq"
-              className="rounded-xl border border-border bg-card px-4 py-2 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
+              className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
             >
               FAQ
             </a>
@@ -247,20 +247,20 @@ export default function Landing() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-card border border-border">
+              <SheetContent side="right" className="bg-white/10 backdrop-blur-md border border-white/20">
                 <SheetHeader>
                   <SheetTitle className="text-foreground">Menu</SheetTitle>
                 </SheetHeader>
                 <div className="mt-6 flex flex-col gap-3">
                   <a
                     href="#workflows"
-                    className="rounded-xl border border-border bg-card px-4 py-3 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
+                    className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
                   >
                     Workflows
                   </a>
                   <a
                     href="#faq"
-                    className="rounded-xl border border-border bg-card px-4 py-3 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
+                    className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
                   >
                     FAQ
                   </a>
@@ -298,7 +298,7 @@ export default function Landing() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-10 max-w-4xl rounded-2xl border border-border bg-card p-6 md:p-8 shadow-lg"
+            className="mx-auto mb-10 max-w-4xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-6 md:p-8 shadow-lg"
           >
             <h1 className="mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-4xl md:text-7xl font-extrabold tracking-tight text-transparent">
               Build AI Workflows Instantly
@@ -387,7 +387,7 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * i }}
-                className="rounded-2xl border border-border bg-card p-5 md:p-6 text-left text-foreground shadow-sm"
+                className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 md:p-6 text-left text-foreground shadow-sm"
               >
                 <feature.icon className="mb-3 md:mb-4 h-7 w-7 md:h-8 md:w-8 text-foreground" />
                 <h3 className="mb-1 text-lg md:text-xl font-bold">{feature.title}</h3>
@@ -406,7 +406,7 @@ export default function Landing() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-border bg-card shadow-lg"
+            className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-lg"
           >
             <Card className="border-0 bg-transparent shadow-none">
               <CardHeader>
@@ -483,7 +483,7 @@ export default function Landing() {
               <Button
                 onClick={() => setAiOpen(true)}
                 variant="outline"
-                className="rounded-xl border border-border bg-card text-foreground hover:bg-accent/10 shadow-sm transition"
+                className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15 shadow-sm transition"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
                 Describe Your Workflow
@@ -528,8 +528,8 @@ export default function Landing() {
                         initial={{ opacity: 0, y: 12 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className={`cursor-pointer rounded-2xl border border-border bg-card p-4 md:p-5 text-foreground transition
-                          hover:bg-accent/10 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
+                        className={`cursor-pointer rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 md:p-5 text-foreground transition
+                          hover:bg-white/15 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
                           ${isSelected ? "ring-2 ring-[color:var(--ring)]" : ""}`}
                       >
                         <div className="mb-1 flex items-start justify-between">
@@ -553,7 +553,7 @@ export default function Landing() {
                         )}
                       </motion.div>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-card border border-border text-foreground shadow-lg">
+                    <TooltipContent className="bg-white/10 backdrop-blur-md border border-white/20 text-foreground shadow-lg">
                       <div className="text-xs">
                         <div className="font-semibold mb-1">Steps Preview</div>
                         <ol className="list-decimal list-inside space-y-0.5 text-muted-foreground">
@@ -588,7 +588,7 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-lg">
+          <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 md:p-6 shadow-lg">
             <div className="flex flex-col gap-3 sm:flex-row">
               <Input
                 ref={faqInputRef}
@@ -641,10 +641,10 @@ export default function Landing() {
                 <Accordion type="multiple" className="w-full">
                   {faqResults.map((faq: FAQ) => (
                     <AccordionItem key={faq._id as unknown as string} value={String(faq._id)}>
-                      <AccordionTrigger className="rounded-2xl border border-border bg-card px-4 py-3 text-foreground hover:bg-accent/10">
+                      <AccordionTrigger className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 text-foreground hover:bg-white/15">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="rounded-b-2xl border-x border-b border-border bg-card p-4 text-foreground">
+                      <AccordionContent className="rounded-b-2xl border-x border-b border-white/20 bg-white/10 backdrop-blur-md p-4 text-foreground">
                         <p className="text-sm text-muted-foreground">{faq.answer}</p>
                         <Badge className="mt-3 border border-border bg-card text-foreground">
                           {faq.category}
@@ -672,7 +672,7 @@ export default function Landing() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-border bg-card p-3 md:p-4 shadow-lg"
+            className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-3 md:p-4 shadow-lg"
           >
             <div className="overflow-hidden rounded-xl border border-border">
               <video
@@ -714,7 +714,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
+              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5" />
@@ -730,7 +730,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
+              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="h-5 w-5" />
@@ -746,7 +746,7 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
+              className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Bot className="h-5 w-5" />
@@ -767,7 +767,7 @@ export default function Landing() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-7xl rounded-2xl border border-border bg-card p-6 md:p-8 shadow-lg text-foreground text-center"
+          className="mx-auto max-w-7xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-6 md:p-8 shadow-lg text-foreground text-center"
         >
           <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
             Build your first workflow today
@@ -807,7 +807,7 @@ export default function Landing() {
             ].map((b) => (
               <div
                 key={b.label}
-                className="rounded-xl border border-border bg-card p-3 text-center text-muted-foreground shadow-sm"
+                className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md p-3 text-center text-muted-foreground shadow-sm"
               >
                 <span className="mr-2">{b.icon}</span>
                 {b.label}
@@ -819,7 +819,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="px-4 pb-8 md:pb-10">
-        <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-card p-4 md:p-6 text-center text-foreground shadow-sm">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 md:p-6 text-center text-foreground shadow-sm">
           <p className="font-semibold">
             Powered by{" "}
             <a
