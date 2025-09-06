@@ -31,8 +31,16 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [otpError, setOtpError] = useState<string | null>(null);
+
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const isValidEmail = (val: string) => emailRegex.test(val.trim());
+  const isValidOtp = (val: string) => /^\d{6}$/.test(val);
+
+  const isEmailValid = isValidEmail(email);
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
@@ -45,14 +53,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     event.preventDefault();
     setIsLoading(true);
     setError(null);
-    setOtpError(null);
-
-    // Validate email
-    const formData = new FormData(event.currentTarget);
-    const emailValue = ((formData.get("email") as string) ?? email).trim();
-    const emailPattern =
-      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!emailValue || !emailPattern.test(emailValue)) {
+    if (!isEmailValid) {
+      setEmailTouched(true);
       setEmailError("Please enter a valid email address.");
       setIsLoading(false);
       return;
@@ -60,8 +62,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     setEmailError(null);
 
     try {
+      const formData = new FormData();
+      formData.set("email", email.trim());
       await signIn("email-otp", formData);
-      setStep({ email: emailValue });
+      setStep({ email: email.trim() });
       setIsLoading(false);
     } catch (error) {
       console.error("Email sign-in error:", error);
@@ -78,11 +82,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
     event.preventDefault();
     setIsLoading(true);
     setError(null);
-
-    // Validate OTP: exactly 6 digits
-    const numericOtp = otp.replace(/\D/g, "");
-    if (!/^\d{6}$/.test(numericOtp)) {
-      setOtpError("Enter the 6-digit code from your email.");
+    if (!isValidOtp(otp)) {
+      setOtpError("Enter the 6-digit code.");
       setIsLoading(false);
       return;
     }
@@ -130,7 +131,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       {/* Auth Content */}
       <div className="flex-1 flex items-center justify-center">
         <div className="flex items-center justify-center h-full flex-col">
-        <Card className="min-w-[350px] pb-0 border shadow-md">
+        <Card className="min-w[350px] pb-0 border shadow-md">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
@@ -151,6 +152,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               </CardHeader>
               <form onSubmit={handleEmailSubmit}>
                 <CardContent>
+                  
                   <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -163,36 +165,38 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         required
                         value={email}
                         onChange={(e) => {
-                          const val = e.target.value;
-                          setEmail(val);
-                          const trimmed = val.trim();
-                          const emailPattern =
-                            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-                          if (!trimmed || !emailPattern.test(trimmed)) {
-                            setEmailError("Please enter a valid email address.");
-                          } else {
-                            setEmailError(null);
+                          const next = e.target.value;
+                          setEmail(next);
+                          if (emailTouched) {
+                            if (!isValidEmail(next)) {
+                              setEmailError("Please enter a valid email address.");
+                            } else {
+                              setEmailError(null);
+                            }
                           }
                         }}
-                        onBlur={(e) => {
-                          const trimmed = e.target.value.trim();
-                          const emailPattern =
-                            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-                          if (!trimmed || !emailPattern.test(trimmed)) {
+                        onBlur={() => {
+                          setEmailTouched(true);
+                          if (!isValidEmail(email)) {
                             setEmailError("Please enter a valid email address.");
                           } else {
                             setEmailError(null);
                           }
                         }}
                         aria-invalid={!!emailError}
-                        aria-describedby="email-error"
+                        aria-describedby={emailError ? "email-error" : undefined}
                       />
+                      {emailError && (
+                        <p id="email-error" className="mt-2 text-xs text-red-500">
+                          {emailError}
+                        </p>
+                      )}
                     </div>
                     <Button
                       type="submit"
                       variant="outline"
                       size="icon"
-                      disabled={isLoading || !!emailError || email.trim().length === 0}
+                      disabled={isLoading || !isEmailValid}
                     >
                       {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -201,14 +205,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       )}
                     </Button>
                   </div>
-                  {emailError && (
-                    <p id="email-error" className="mt-2 text-sm text-red-500">
-                      {emailError}
-                    </p>
-                  )}
                   {error && (
                     <p className="mt-2 text-sm text-red-500">{error}</p>
                   )}
+                  
                   <div className="mt-4">
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
@@ -251,10 +251,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   <div className="flex justify-center">
                     <InputOTP
                       value={otp}
-                      onChange={(value) => {
-                        const next = value.replace(/\D/g, "").slice(0, 6);
+                      onChange={(val) => {
+                        const next = (val || "").replace(/\D/g, "").slice(0, 6);
                         setOtp(next);
-                        if (next.length === 6) {
+                        if (otpError && /^\d{0,6}$/.test(next)) {
                           setOtpError(null);
                         }
                       }}
@@ -301,7 +301,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={isLoading || otp.length !== 6}
+                    disabled={isLoading || !isValidOtp(otp)}
                   >
                     {isLoading ? (
                       <>
