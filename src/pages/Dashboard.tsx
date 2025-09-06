@@ -25,6 +25,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
+  
+  // Add redirect effect to avoid navigating during render
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate("/auth");
+    }
+  }, [isLoading, isAuthenticated, navigate]);
+
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   
@@ -180,7 +188,6 @@ export default function Dashboard() {
   }
 
   if (!isAuthenticated) {
-    navigate("/auth");
     return null;
   }
 
