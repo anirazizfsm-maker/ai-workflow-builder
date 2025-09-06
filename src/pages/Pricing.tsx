@@ -4,6 +4,7 @@ import ChipsetBackground from "@/components/ChipsetBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function Pricing() {
       features: [
         "✅ Unlimited workflows.",
         "✅ Full AI Builder (autonomous upgrades & personalized workflows).",
-        "✅ Workflow concierge: “Just describe business, we automate.”",
+        "✅ Workflow concierge: \"Just describe business, we automate.\"",
         "✅ Full analytics dashboard (savings, usage, logs).",
         "✅ Premium integrations (enterprise tools, CRMs).",
         "✅ Priority support.",
@@ -90,9 +91,10 @@ export default function Pricing() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
           <button
             onClick={() => navigate("/")}
-            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow"
+            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow flex items-center gap-2"
           >
-            LETHIMDO
+            <TesseractLogo className="h-6 w-6 md:h-7 md:w-7" />
+            <span>LETHIMDO</span>
           </button>
           <div className="flex items-center gap-3">
             <Button
