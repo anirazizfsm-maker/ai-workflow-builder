@@ -37,6 +37,8 @@ export default function TesseractLogo({
         rotateX: [10, -8, 10],
         rotateY: [-8, 10, -8],
       }}
+      whileHover={{ scale: 1.08, rotate: 8, rotateX: -12, rotateY: 12 }}
+      whileTap={{ scale: 0.96 }}
       transition={{ duration: 5.0, repeat: Infinity, ease: "easeInOut" }}
       style={{
         transformOrigin: "50% 50%",
