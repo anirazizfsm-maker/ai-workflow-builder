@@ -23,12 +23,12 @@ export default function ChipsetBackground() {
     const height = () => canvas.clientHeight;
 
     // Colors / styles (revert from neon red + black glow back to cyan neon)
-    const BG = "#000000";
-    const TRACE = "rgba(0, 240, 255, 0.80)";
-    const TRACE_FAINT = "rgba(0, 180, 200, 0.35)";
-    const CHIP_FILL = "rgba(10, 14, 24, 0.9)";
-    const CHIP_STROKE = "rgba(0, 240, 255, 0.4)";
-    const VIA_FILL = "rgba(0, 240, 255, 0.9)";
+    const BG = "#05060A"; // slightly deeper space black for contrast
+    const TRACE = "rgba(0, 255, 255, 0.88)"; // brighter cyan
+    const TRACE_FAINT = "rgba(0, 200, 220, 0.28)"; // softer faint lines
+    const CHIP_FILL = "rgba(8, 12, 20, 0.92)"; // subtle glassy fill
+    const CHIP_STROKE = "rgba(0, 255, 255, 0.55)"; // stronger chip outline
+    const VIA_FILL = "rgba(0, 255, 255, 0.95)"; // brighter vias
     // Cyan neon glow
     const GLOW = "rgba(0, 255, 255, 0.9)";
 
@@ -166,13 +166,21 @@ export default function ChipsetBackground() {
       chips.forEach((c) => {
         ctx.fillStyle = CHIP_FILL;
         ctx.strokeStyle = CHIP_STROKE;
-        ctx.lineWidth = 2;
-        ctx.shadowBlur = 8;
+        ctx.lineWidth = 2.5; // slightly thicker for crispness
+        ctx.shadowBlur = 10; // stronger glow
         // Use space-black glow instead of red
         ctx.shadowColor = GLOW;
         ctx.beginPath();
         ctx.rect(c.x, c.y, c.w, c.h);
         ctx.fill();
+        ctx.stroke();
+
+        // subtle inner highlight stroke for depth
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.rect(c.x + 1, c.y + 1, c.w - 2, c.h - 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        ctx.lineWidth = 1;
         ctx.stroke();
         ctx.shadowBlur = 0;
 
@@ -198,7 +206,7 @@ export default function ChipsetBackground() {
         for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
         ctx.lineWidth = tr.width;
         ctx.strokeStyle = (tr as any).faint ? TRACE_FAINT : TRACE;
-        ctx.shadowBlur = (tr as any).faint ? 0 : 14;
+        ctx.shadowBlur = (tr as any).faint ? 0 : 18; // more pronounced neon
         // Switch trace glow to space-black
         ctx.shadowColor = GLOW;
         ctx.stroke();
@@ -211,9 +219,9 @@ export default function ChipsetBackground() {
             const idx = Math.floor(p.i);
             const pt = pts[Math.min(idx, pts.length - 1)];
             ctx.beginPath();
-            ctx.arc(pt.x, pt.y, Math.max(2, tr.width + 1.5), 0, Math.PI * 2);
+            ctx.arc(pt.x, pt.y, Math.max(2.5, tr.width + 2), 0, Math.PI * 2); // slightly larger pulse
             ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-            ctx.shadowBlur = 22;
+            ctx.shadowBlur = 26; // brighter pulse glow
             // Pulse glow becomes space-black
             ctx.shadowColor = GLOW;
             ctx.fill();
@@ -226,7 +234,7 @@ export default function ChipsetBackground() {
         ctx.beginPath();
         ctx.arc(v.x, v.y, v.r, 0, Math.PI * 2);
         ctx.fillStyle = VIA_FILL;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 14; // more luminous vias
         // Via glow becomes space-black
         ctx.shadowColor = GLOW;
         ctx.fill();
