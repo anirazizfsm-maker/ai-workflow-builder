@@ -33,13 +33,13 @@ export default function TesseractLogo({
       aria-label={title}
       role="img"
       animate={{
-        rotate: [-6, 6, -6],
-        rotateX: [10, -8, 10],
-        rotateY: [-8, 10, -8],
+        rotate: [-12, 12, -12],
+        rotateX: [18, -16, 18],
+        rotateY: [-16, 18, -16],
       }}
-      whileHover={{ scale: 1.08, rotate: 8, rotateX: -12, rotateY: 12 }}
-      whileTap={{ scale: 0.96 }}
-      transition={{ duration: 5.0, repeat: Infinity, ease: "easeInOut" }}
+      whileHover={{ scale: 1.1, rotate: 10, rotateX: -18, rotateY: 18 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 8.0, repeat: Infinity, ease: "easeInOut" }}
       style={{
         transformOrigin: "50% 50%",
         transformStyle: "preserve-3d",
@@ -134,7 +134,18 @@ export default function TesseractLogo({
         })}
 
         {/* Subtle 4D hint: pulsating inner polygon */}
-        <motion.g initial={{ scale: 1 }} animate={{ scale: [1.0, 0.94, 1.0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+        <motion.g
+          initial={{ scale: 1 }}
+          animate={{
+            scale: [1.0, 0.94, 1.0],
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
           <polygon
             points={toStr(inner)}
             stroke="url(#wire)"
