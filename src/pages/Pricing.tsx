@@ -4,7 +4,6 @@ import ChipsetBackground from "@/components/ChipsetBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -93,7 +92,6 @@ export default function Pricing() {
             onClick={() => navigate("/")}
             className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow flex items-center gap-2"
           >
-            <TesseractLogo className="h-5 w-5 md:h-6 md:w-6" />
             <span>LETHIMDO</span>
           </button>
           <div className="flex items-center gap-3">
