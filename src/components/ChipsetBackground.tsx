@@ -38,7 +38,8 @@ export default function ChipsetBackground() {
     let vias: Array<{ x: number; y: number; r: number }> = [];
 
     // Scroll progress (0 at top, 1 at bottom of page)
-    let scrollProgress = 0;
+    // Disable scroll-reactive behavior: keep progress fixed at 0
+    const scrollProgress = 0;
 
     // Utilities
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -247,7 +248,8 @@ export default function ChipsetBackground() {
 
       // Apply a gentle scale that increases with scroll and keep content centered
       const W = width(), H = height();
-      const scale = 1 + scrollProgress * 0.35; // up to +35% size
+      // Disable scroll-based scaling; keep scale at 1 for a static background
+      const scale = 1;
       ctx.save();
       ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
       ctx.scale(scale, scale);
@@ -260,20 +262,6 @@ export default function ChipsetBackground() {
     }
     tick();
 
-    // Scroll handler to update density/scale as the user scrolls
-    const handleScroll = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const p = Math.min(1, Math.max(0, window.scrollY / max));
-      // Only regenerate when progress meaningfully changes to avoid excessive work
-      const prev = scrollProgress;
-      scrollProgress = p;
-      if (Math.abs(scrollProgress - prev) > 0.02) {
-        genChipsAndTraces();
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
     const handleResize = () => {
       setupCanvas();
       genChipsAndTraces();
@@ -282,7 +270,6 @@ export default function ChipsetBackground() {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
       pulseTimers.forEach(clearInterval);
     };
   }, []);
