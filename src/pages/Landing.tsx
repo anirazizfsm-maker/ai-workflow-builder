@@ -42,6 +42,7 @@ export default function Landing() {
   const [isSearching, setIsSearching] = useState(false);
   const [aiOpen, setAiOpen] = useState(false); // Floating chatbot / AI builder modal
   const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Keyboard shortcut: '/' focuses FAQ input (like many apps)
   useEffect(() => {
@@ -245,7 +246,7 @@ export default function Landing() {
 
           {/* Mobile menu */}
           <div className="md:hidden">
-            <Sheet>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="outline"
@@ -263,18 +264,23 @@ export default function Landing() {
                 <div className="mt-6 flex flex-col gap-3">
                   <a
                     href="#workflows"
+                    onClick={() => setMenuOpen(false)}
                     className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
                   >
                     Workflows
                   </a>
                   <a
                     href="#faq"
+                    onClick={() => setMenuOpen(false)}
                     className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 font-semibold text-foreground transition hover:bg-white/15 shadow-sm"
                   >
                     FAQ
                   </a>
                   <Button
-                    onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate(isAuthenticated ? "/dashboard" : "/auth");
+                    }}
                     className="mt-2 rounded-xl px-5 py-3 font-bold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
                   >
                     {isAuthenticated ? "Go to Dashboard" : "Get Started"}
