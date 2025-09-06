@@ -267,8 +267,24 @@ export default function ChipsetBackground() {
       ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
       ctx.scale(scale, scale);
 
+      // Parallax offsets (background traces move less, chips move slightly more)
+      const p = smoothScrollProgress;
+      const offsetBgX = p * W * 0.02;
+      const offsetBgY = p * H * 0.04;
+      const offsetFgX = p * W * 0.04;
+      const offsetFgY = p * H * 0.08;
+
+      // Foreground (chips) - slightly stronger parallax
+      ctx.save();
+      ctx.translate(-offsetFgX, -offsetFgY);
       drawChips();
+      ctx.restore();
+
+      // Background traces & pulses - lighter parallax
+      ctx.save();
+      ctx.translate(-offsetBgX, -offsetBgY);
       drawTracesAndPulses();
+      ctx.restore();
 
       ctx.restore();
       requestAnimationFrame(tick);
