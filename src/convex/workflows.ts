@@ -7,10 +7,11 @@ export const getUserWorkflows = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
+    // Use .first() instead of .unique() to avoid crashes if duplicates exist
     const user = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .unique();
+      .first();
 
     if (!user) throw new Error("User not found");
 
@@ -33,10 +34,11 @@ export const createWorkflow = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
+    // Use .first() instead of .unique() to avoid crashes if duplicates exist
     const user = await ctx.db
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", identity.email!))
-      .unique();
+      .first();
 
     if (!user) throw new Error("User not found");
 
