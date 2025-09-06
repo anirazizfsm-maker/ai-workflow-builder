@@ -40,6 +40,10 @@ export default function Dashboard() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   
+  // Add: memoized time windows to avoid changing useQuery args on each render
+  const thirtyDaysAgo = useMemo(() => Date.now() - 30 * 24 * 60 * 60 * 1000, []);
+  const monthStart = thirtyDaysAgo;
+
   const workflows = useQuery(api.workflows.getUserWorkflows);
   const createWorkflow = useMutation(api.workflows.createWorkflow);
   const updateWorkflowStatus = useMutation(api.workflows.updateWorkflowStatus);
@@ -51,17 +55,17 @@ export default function Dashboard() {
   const runsPerDay = useQuery(api.workflows.runsPerDay, { orgId: "demo-org", days: 30 });
   const distributionByCategory = useQuery(api.workflows.distributionByCategory, { 
     orgId: "demo-org", 
-    since: Date.now() - 30 * 24 * 60 * 60 * 1000 
+    since: thirtyDaysAgo, // changed: memoized
   });
   const settings = useQuery(api.workflows.getSettings, { orgId: "demo-org" });
   const savingsOverTime = useQuery(api.workflows.savingsOverTime, {
     orgId: "demo-org",
-    since: Date.now() - 30 * 24 * 60 * 60 * 1000,
+    since: thirtyDaysAgo, // changed: memoized
     hourlyRate: settings?.hourlyRate || 25,
   });
   const perWorkflowSavings = useQuery(api.workflows.perWorkflowSavings, {
     orgId: "demo-org",
-    month: Date.now() - 30 * 24 * 60 * 60 * 1000,
+    month: monthStart, // changed: memoized
   });
   // moved: useAction hook defined below as fetchBusinessSuggestions
   const notifications = useQuery(api.workflows.getNotifications, { orgId: "demo-org" });
@@ -181,7 +185,7 @@ export default function Dashboard() {
     return () => {
       isMounted = false;
     };
-  }, [fetchBusinessSuggestions]);
+  }, []);
 
   if (isLoading) {
     return (
