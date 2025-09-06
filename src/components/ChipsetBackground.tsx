@@ -22,15 +22,15 @@ export default function ChipsetBackground() {
     const width = () => canvas.clientWidth;
     const height = () => canvas.clientHeight;
 
-    // Colors / styles (neon red)
+    // Colors / styles (revert from neon red + black glow back to cyan neon)
     const BG = "#000000";
-    const TRACE = "rgba(255, 60, 60, 0.80)";
-    const TRACE_FAINT = "rgba(120, 20, 20, 0.35)";
-    const CHIP_FILL = "rgba(24, 10, 10, 0.9)";
-    const CHIP_STROKE = "rgba(255, 60, 60, 0.5)";
-    const VIA_FILL = "rgba(255, 60, 60, 0.9)";
-    // Add a space-black glow color
-    const GLOW = "rgba(0, 0, 0, 0.9)";
+    const TRACE = "rgba(0, 240, 255, 0.80)";
+    const TRACE_FAINT = "rgba(0, 180, 200, 0.35)";
+    const CHIP_FILL = "rgba(10, 14, 24, 0.9)";
+    const CHIP_STROKE = "rgba(0, 240, 255, 0.4)";
+    const VIA_FILL = "rgba(0, 240, 255, 0.9)";
+    // Cyan neon glow
+    const GLOW = "rgba(0, 255, 255, 0.9)";
 
     // Data
     let traces: Array<{ points: Array<{ x: number; y: number }>; width: number; faint?: boolean; pulses: Array<{ i: number; speed: number }> }> = [];
