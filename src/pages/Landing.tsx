@@ -119,7 +119,7 @@ export default function Landing() {
       {/* Subtle vertical gradient overlay for depth */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-transparent to-black/80"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/30 to-black/90"
       />
 
       {/* Global AI Assistant / Builder Modal */}
@@ -315,7 +315,7 @@ export default function Landing() {
         {/* Slow animated gradient behind hero (20s loop) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-30"
+          className="pointer-events-none absolute inset-0 -z-10 opacity-15"
         >
           <div className="absolute left-1/2 top-1/2 h-[120vmax] w-[120vmax] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
                style={{
