@@ -423,24 +423,24 @@ export default function Dashboard() {
 
       <div className="mx-auto max-w-7xl p-4 md:p-6 text-white">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 bg-white/10 backdrop-blur-xl border border-white/15">
-            <TabsTrigger value="overview" className="text-white data-[state=active]:text-black">
+          <TabsList className="mb-6 md:mb-8 w-full overflow-x-auto bg-white/10 backdrop-blur-xl border border-white/15 inline-flex md:grid md:grid-cols-5 gap-1 rounded-xl p-1">
+            <TabsTrigger value="overview" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <Zap className="w-4 h-4 mr-2" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-white data-[state=active]:text-black">
+            <TabsTrigger value="analytics" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <BarChart3 className="w-4 h-4 mr-2" />
               Analytics
             </TabsTrigger>
-            <TabsTrigger value="savings" className="text-white data-[state=active]:text-black">
+            <TabsTrigger value="savings" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <DollarSign className="w-4 h-4 mr-2" />
               Savings
             </TabsTrigger>
-            <TabsTrigger value="advisor" className="text-white data-[state=active]:text-black">
+            <TabsTrigger value="advisor" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <Lightbulb className="w-4 h-4 mr-2" />
               AI Advisor
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="text-white data-[state=active]:text-black relative">
+            <TabsTrigger value="notifications" className="relative shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <Bell className="w-4 h-4 mr-2" />
               Alerts
               {unreadNotifications.length > 0 && (
@@ -719,7 +719,7 @@ export default function Dashboard() {
                   <CardTitle className="text-white font-extrabold">Workflows per Day (Last 30 Days)</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
+                  <ChartContainer config={chartConfig} className="h-[220px] md:h-[300px]">
                     <BarChart data={runsPerDay || []}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="date" />
@@ -737,7 +737,7 @@ export default function Dashboard() {
                   <CardTitle className="text-white font-extrabold">Workflows by Category</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
+                  <ChartContainer config={chartConfig} className="h-[220px] md:h-[300px]">
                     <PieChart>
                       <Pie
                         data={distributionByCategory || []}
@@ -763,7 +763,7 @@ export default function Dashboard() {
                   <CardTitle className="text-white font-extrabold">Savings Over Time</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px]">
+                  <ChartContainer config={chartConfig} className="h-[220px] md:h-[300px]">
                     <LineChart data={savingsOverTime || []}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="t" />
