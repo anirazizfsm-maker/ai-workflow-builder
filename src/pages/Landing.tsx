@@ -123,69 +123,77 @@ export default function Landing() {
 
       {/* Global AI Assistant / Builder Modal */}
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-        <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground">
-          <DialogHeader>
-            <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            <Textarea
-              value={workflowPrompt}
-              onChange={(e) => {
-                const next = e.target.value.slice(0, 500);
-                setWorkflowPrompt(next);
-              }}
-              placeholder="Ask a question or describe a workflow. Example: 'When a user signs up, send a welcome email and notify Slack'."
-              className="min-h-[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
-            />
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span className={workflowPrompt.length > 450 ? "text-amber-600" : "text-muted-foreground"}>
-                {workflowPrompt.length}/500
-              </span>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => {
-                    setFaqQuery(workflowPrompt);
-                    setCommittedQuery(workflowPrompt);
-                    setAiOpen(false);
-                    setTimeout(() => {
-                      document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
-                    }, 50);
-                  }}
-                  variant="outline"
-                  className="rounded-xl border border-border bg-card hover:bg-accent/10 shadow-sm"
-                >
-                  Search FAQs
-                </Button>
-                <Button
-                  onClick={handleGenerateWorkflow}
-                  disabled={isGenerating || !workflowPrompt.trim()}
-                  aria-busy={isGenerating}
-                  className="rounded-xl shadow-md"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      Generate
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
+        <DialogContent className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground overflow-hidden">
+          {/* Animated modal content */}
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 12, scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24, mass: 0.9 }}
+          >
+            <DialogHeader>
+              <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3">
+              <Textarea
+                value={workflowPrompt}
+                onChange={(e) => {
+                  const next = e.target.value.slice(0, 500);
+                  setWorkflowPrompt(next);
+                }}
+                placeholder="Ask a question or describe a workflow. Example: 'When a user signs up, send a welcome email and notify Slack'."
+                className="min-h[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
+              />
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span className={workflowPrompt.length > 450 ? "text-amber-600" : "text-muted-foreground"}>
+                  {workflowPrompt.length}/500
+                </span>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => {
+                      setFaqQuery(workflowPrompt);
+                      setCommittedQuery(workflowPrompt);
+                      setAiOpen(false);
+                      setTimeout(() => {
+                        document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                      }, 50);
+                    }}
+                    variant="outline"
+                    className="rounded-xl border border-border bg-card hover:bg-accent/10 shadow-sm"
+                  >
+                    Search FAQs
+                  </Button>
+                  <Button
+                    onClick={handleGenerateWorkflow}
+                    disabled={isGenerating || !workflowPrompt.trim()}
+                    aria-busy={isGenerating}
+                    className="rounded-xl shadow-md"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        Generate
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
+              {workflowResult && (
+                <div className="mt-1 rounded-xl border border-border bg-card p-3 text-foreground shadow-sm">
+                  <h4 className="mb-1 text-xs font-bold tracking-tight">Generated workflow</h4>
+                  <p className="mb-2 text-xs text-muted-foreground">{workflowResult.title}</p>
+                  <pre className="max-h-40 overflow-auto rounded-lg bg-background p-3 text-[11px] text-foreground">
+                    {JSON.stringify(workflowResult.workflowJSON, null, 2)}
+                  </pre>
+                </div>
+              )}
             </div>
-            {workflowResult && (
-              <div className="mt-1 rounded-xl border border-border bg-card p-3 text-foreground shadow-sm">
-                <h4 className="mb-1 text-xs font-bold tracking-tight">Generated workflow</h4>
-                <p className="mb-2 text-xs text-muted-foreground">{workflowResult.title}</p>
-                <pre className="max-h-40 overflow-auto rounded-lg bg-background p-3 text-[11px] text-foreground">
-                  {JSON.stringify(workflowResult.workflowJSON, null, 2)}
-                </pre>
-              </div>
-            )}
-          </div>
+          </motion.div>
         </DialogContent>
       </Dialog>
 
