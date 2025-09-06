@@ -243,5 +243,5 @@ export default function ChipsetBackground() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 w-full h-full chipset-vignette pointer-events-none" />;
 }

@@ -215,3 +215,20 @@
     opacity: 0.9;
   }
 }
+
+/* Add vignette mask for the chipset canvas background */
+.chipset-vignette {
+  /* Fade edges using a radial mask for wide browser support */
+  -webkit-mask-image: radial-gradient(
+    120% 90% at 50% 40%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0.7) 75%,
+    rgba(0,0,0,0) 100%
+  );
+  mask-image: radial-gradient(
+    120% 90% at 50% 40%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0.7) 75%,
+    rgba(0,0,0,0) 100%
+  );
+}
