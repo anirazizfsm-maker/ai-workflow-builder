@@ -47,16 +47,25 @@ export default function TesseractLogo({
     scene.add(cubeInner);
     scene.add(cubeOuter);
 
-    // Connectors: link each inner vertex to the corresponding outer vertex
-    const connectors: THREE.Line[] = [];
-    const verts: Array<[number, number, number]> = [
-      [-0.5, -0.5, -0.5], [-0.5, -0.5, 0.5], [-0.5, 0.5, -0.5], [-0.5, 0.5, 0.5],
-      [0.5, -0.5, -0.5], [0.5, -0.5, 0.5], [0.5, 0.5, -0.5], [0.5, 0.5, 0.5],
+    // Replace previous static connectors with dynamic ones that update each frame
+    // Define local-space vertices for a unit cube (±0.5 coordinates).
+    const localVerts: THREE.Vector3[] = [
+      new THREE.Vector3(-0.5, -0.5, -0.5),
+      new THREE.Vector3(-0.5, -0.5,  0.5),
+      new THREE.Vector3(-0.5,  0.5, -0.5),
+      new THREE.Vector3(-0.5,  0.5,  0.5),
+      new THREE.Vector3( 0.5, -0.5, -0.5),
+      new THREE.Vector3( 0.5, -0.5,  0.5),
+      new THREE.Vector3( 0.5,  0.5, -0.5),
+      new THREE.Vector3( 0.5,  0.5,  0.5),
     ];
-    for (const [x, y, z] of verts) {
-      const inner = new THREE.Vector3(x, y, z);
-      const outer = inner.clone().multiplyScalar(1.6);
-      const geom = new THREE.BufferGeometry().setFromPoints([inner, outer]);
+
+    const connectors: THREE.Line[] = [];
+    for (let i = 0; i < localVerts.length; i++) {
+      const geom = new THREE.BufferGeometry();
+      // allocate a position buffer for 2 points (inner corner -> outer corner)
+      const positions = new Float32Array(6); // 2 * 3 floats
+      geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
       const line = new THREE.Line(geom, wire);
       scene.add(line);
       connectors.push(line);
@@ -73,6 +82,18 @@ export default function TesseractLogo({
       cubeInner.rotation.y += 0.014;
       cubeOuter.rotation.x -= 0.006;
       cubeOuter.rotation.y -= 0.008;
+
+      // Update connector endpoints to always attach to current cube corners
+      for (let i = 0; i < localVerts.length; i++) {
+        const innerWorld = localVerts[i].clone().applyMatrix4(cubeInner.matrixWorld);
+        const outerWorld = localVerts[i].clone().applyMatrix4(cubeOuter.matrixWorld);
+
+        const geom = connectors[i].geometry as THREE.BufferGeometry;
+        const pos = geom.getAttribute("position") as THREE.BufferAttribute;
+        pos.setXYZ(0, innerWorld.x, innerWorld.y, innerWorld.z);
+        pos.setXYZ(1, outerWorld.x, outerWorld.y, outerWorld.z);
+        pos.needsUpdate = true;
+      }
 
       // Global slight wobble to show 3D angles
       scene.rotation.x = Math.sin(t) * 0.18;
