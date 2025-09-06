@@ -265,13 +265,15 @@ export default function ChipsetBackground() {
       drawBackground();
 
       // Smoothly interpolate scroll progress for a gentle zoom effect
-      smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.08;
+      // Increase smoothness by easing slightly slower (was 0.08)
+      smoothScrollProgress += (targetScrollProgress - smoothScrollProgress) * 0.06;
       const W = width(), H = height();
       // Use eased progress so zoom and parallax feel buttery
       const p = Math.max(0, Math.min(1, smoothScrollProgress));
       const easedP = p * p * (3 - 2 * p); // smoothstep
       lastEasedP = easedP;
-      const scale = 1 + easedP * 0.06; // gentle cap for a classy feel
+      // Increase zoom range for more noticeable zoom (was 0.06)
+      const scale = 1 + easedP * 0.12;
 
       ctx.save();
       ctx.translate((W * (1 - scale)) / 2, (H * (1 - scale)) / 2);
