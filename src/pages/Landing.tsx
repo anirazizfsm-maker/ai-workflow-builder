@@ -27,7 +27,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
-import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -205,8 +204,6 @@ export default function Landing() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
           {/* Wrap logo icon + wordmark */}
           <div className="flex items-center gap-3">
-            {/* New animated tesseract logo */}
-            <TesseractLogo className="h-6 w-6 md:h-7 md:w-7" />
             <motion.h1
               whileHover={{ scale: 1.05 }}
               className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow group"

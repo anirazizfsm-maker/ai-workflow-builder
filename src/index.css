@@ -142,11 +142,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-weight: 400;
   }
   .font-sans {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
   }
   .font-mono {
     font-family: 'JetBrains Mono', Menlo, "Courier New", monospace;
@@ -157,7 +157,7 @@
 
   /* Headings use the same unified font */
   h1, h2, h3 {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: 0;
   }
@@ -165,7 +165,7 @@
   /* Buttons also use the unified font */
   button,
   [role="button"] {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     font-weight: 600;
     text-transform: uppercase;
   }
