@@ -29,6 +29,8 @@ export default function ChipsetBackground() {
     const CHIP_FILL = "rgba(24, 10, 10, 0.9)";
     const CHIP_STROKE = "rgba(255, 60, 60, 0.5)";
     const VIA_FILL = "rgba(255, 60, 60, 0.9)";
+    // Add a space-black glow color
+    const GLOW = "rgba(0, 0, 0, 0.9)";
 
     // Data
     let traces: Array<{ points: Array<{ x: number; y: number }>; width: number; faint?: boolean; pulses: Array<{ i: number; speed: number }> }> = [];
@@ -161,7 +163,8 @@ export default function ChipsetBackground() {
         ctx.strokeStyle = CHIP_STROKE;
         ctx.lineWidth = 2;
         ctx.shadowBlur = 8;
-        ctx.shadowColor = CHIP_STROKE;
+        // Use space-black glow instead of red
+        ctx.shadowColor = GLOW;
         ctx.beginPath();
         ctx.rect(c.x, c.y, c.w, c.h);
         ctx.fill();
@@ -191,7 +194,8 @@ export default function ChipsetBackground() {
         ctx.lineWidth = tr.width;
         ctx.strokeStyle = (tr as any).faint ? TRACE_FAINT : TRACE;
         ctx.shadowBlur = (tr as any).faint ? 0 : 14;
-        ctx.shadowColor = TRACE;
+        // Switch trace glow to space-black
+        ctx.shadowColor = GLOW;
         ctx.stroke();
 
         if (!(tr as any).faint && tr.pulses.length) {
@@ -205,7 +209,8 @@ export default function ChipsetBackground() {
             ctx.arc(pt.x, pt.y, Math.max(2, tr.width + 1.5), 0, Math.PI * 2);
             ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
             ctx.shadowBlur = 22;
-            ctx.shadowColor = "rgba(255, 60, 60, 1)";
+            // Pulse glow becomes space-black
+            ctx.shadowColor = GLOW;
             ctx.fill();
           });
         }
@@ -217,7 +222,8 @@ export default function ChipsetBackground() {
         ctx.arc(v.x, v.y, v.r, 0, Math.PI * 2);
         ctx.fillStyle = VIA_FILL;
         ctx.shadowBlur = 10;
-        ctx.shadowColor = TRACE;
+        // Via glow becomes space-black
+        ctx.shadowColor = GLOW;
         ctx.fill();
       });
       ctx.shadowBlur = 0;
