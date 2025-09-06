@@ -16,7 +16,7 @@ import {
 
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowRight, Loader2, Mail, UserX } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 
 import FixedBrand from "@/components/FixedBrand";
@@ -36,6 +36,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   const [emailTouched, setEmailTouched] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [otpError, setOtpError] = useState<string | null>(null);
+  const [resendSeconds, setResendSeconds] = useState(0);
+  const otpFormRef = useRef<HTMLFormElement | null>(null);
 
   const emailRegex =
     /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -43,6 +45,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   const isValidOtp = (val: string) => /^\d{6}$/.test(val);
 
   const isEmailValid = isValidEmail(email);
+
+  useEffect(() => {
+    if (resendSeconds <= 0) return;
+    const id = setInterval(() => setResendSeconds((s) => s - 1), 1000);
+    return () => clearInterval(id);
+  }, [resendSeconds]);
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
@@ -68,6 +76,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       formData.set("email", email.trim());
       await signIn("email-otp", formData);
       setStep({ email: email.trim() });
+      setResendSeconds(30);
       setIsLoading(false);
     } catch (error) {
       console.error("Email sign-in error:", error);
@@ -107,6 +116,26 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
       setOtp("");
     }
+  };
+
+  const handleResendCode = async () => {
+    if (resendSeconds > 0 || isLoading || step === "signIn") return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.set("email", step.email);
+      await signIn("email-otp", formData);
+      setResendSeconds(30);
+    } catch (error) {
+      console.error("Resend code error:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to resend code. Please try again."
+      );
+    }
+    setIsLoading(false);
   };
 
   const handleGuestLogin = async () => {
@@ -166,7 +195,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         required
                         value={email}
                         onChange={(e) => {
-                          const next = e.target.value;
+                          const next = e.target.value.replace(/\s+/g, "");
                           setEmail(next);
                           if (emailTouched) {
                             if (!isValidEmail(next)) {
@@ -244,7 +273,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   We've sent a code to {step.email}
                 </CardDescription>
               </CardHeader>
-              <form onSubmit={handleOtpSubmit}>
+              <form onSubmit={handleOtpSubmit} ref={otpFormRef}>
                 <CardContent className="pb-4">
                   <input type="hidden" name="email" value={step.email} />
                   <input type="hidden" name="code" value={otp} />
@@ -258,9 +287,22 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         if (otpError && /^\d{0,6}$/.test(next)) {
                           setOtpError(null);
                         }
+                        if (next.length === 6 && isValidOtp(next) && !isLoading) {
+                          otpFormRef.current?.requestSubmit();
+                        }
                       }}
                       maxLength={6}
                       disabled={isLoading}
+                      onPaste={(e) => {
+                        const text = e.clipboardData.getData("text") ?? "";
+                        const digits = text.replace(/\D/g, "").slice(0, 6);
+                        if (!digits) return;
+                        e.preventDefault();
+                        setOtp(digits);
+                        if (digits.length === 6 && !isLoading) {
+                          otpFormRef.current?.requestSubmit();
+                        }
+                      }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && otp.length === 6 && !isLoading) {
                           const form = (e.target as HTMLElement).closest("form");
@@ -287,12 +329,33 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       {error}
                     </p>
                   )}
-                  <p className="text-sm text-muted-foreground text-center mt-4">
-                    Didn't receive a code?{" "}
+
+                  <div className="mt-4 flex items-center justify-center gap-2 text-sm">
+                    <span className="text-muted-foreground">
+                      Didn't receive a code?
+                    </span>
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-auto"
+                      onClick={handleResendCode}
+                      disabled={isLoading || resendSeconds > 0}
+                    >
+                      {resendSeconds > 0 ? `Resend in ${resendSeconds}s` : "Resend code"}
+                    </Button>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground text-center mt-2">
+                    Wrong email?{" "}
                     <Button
                       variant="link"
                       className="p-0 h-auto"
-                      onClick={() => setStep("signIn")}
+                      onClick={() => {
+                        setStep("signIn");
+                        setOtp("");
+                        setOtpError(null);
+                        setError(null);
+                      }}
                     >
                       Try again
                     </Button>
