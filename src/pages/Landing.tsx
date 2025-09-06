@@ -123,7 +123,7 @@ export default function Landing() {
 
       {/* Global AI Assistant / Builder Modal */}
       <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-        <DialogContent className="bg-black/70 border-white/10 backdrop-blur-2xl text-white">
+        <DialogContent className="bg-card border shadow-2xl text-foreground">
           <DialogHeader>
             <DialogTitle>Ask or Describe Your Workflow</DialogTitle>
           </DialogHeader>
@@ -135,10 +135,10 @@ export default function Landing() {
                 setWorkflowPrompt(next);
               }}
               placeholder="Ask a question or describe a workflow. Example: 'When a user signs up, send a welcome email and notify Slack'."
-              className="min-h-[120px] resize-none rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+              className="min-h-[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
             />
-            <div className="flex items-center justify-between text-xs text-white/70">
-              <span className={workflowPrompt.length > 450 ? "text-amber-300" : "text-white/60"}>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span className={workflowPrompt.length > 450 ? "text-amber-600" : "text-muted-foreground"}>
                 {workflowPrompt.length}/500
               </span>
               <div className="flex gap-2">
@@ -147,13 +147,12 @@ export default function Landing() {
                     setFaqQuery(workflowPrompt);
                     setCommittedQuery(workflowPrompt);
                     setAiOpen(false);
-                    // Scroll to FAQ for results
                     setTimeout(() => {
                       document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
                     }, 50);
                   }}
                   variant="outline"
-                  className="rounded-xl border-white/20 bg-white/5 hover:bg-white/10"
+                  className="rounded-xl border border-border bg-card hover:bg-accent/10 shadow-sm"
                 >
                   Search FAQs
                 </Button>
@@ -161,7 +160,7 @@ export default function Landing() {
                   onClick={handleGenerateWorkflow}
                   disabled={isGenerating || !workflowPrompt.trim()}
                   aria-busy={isGenerating}
-                  className="rounded-xl border border-white/15 bg-white/10 hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]"
+                  className="rounded-xl shadow-md"
                 >
                   {isGenerating ? (
                     <>
@@ -178,10 +177,10 @@ export default function Landing() {
               </div>
             </div>
             {workflowResult && (
-              <div className="mt-1 rounded-xl border border-white/15 bg-black/40 p-3 text-white backdrop-blur-sm">
+              <div className="mt-1 rounded-xl border border-border bg-card p-3 text-foreground shadow-sm">
                 <h4 className="mb-1 text-xs font-bold tracking-tight">Generated workflow</h4>
-                <p className="mb-2 text-xs">{workflowResult.title}</p>
-                <pre className="max-h-40 overflow-auto rounded-lg bg-black/60 p-3 text-[11px] text-[#C8F6FF]">
+                <p className="mb-2 text-xs text-muted-foreground">{workflowResult.title}</p>
+                <pre className="max-h-40 overflow-auto rounded-lg bg-background p-3 text-[11px] text-foreground">
                   {JSON.stringify(workflowResult.workflowJSON, null, 2)}
                 </pre>
               </div>
@@ -195,21 +194,21 @@ export default function Landing() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
           <motion.h1
             whileHover={{ scale: 1.05 }}
-            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-white drop-shadow group"
+            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow group"
           >
             {/* Base logo text */}
             <span className="relative z-10">LETHIMDO</span>
             {/* Glitch layer 1 - replace colored text with neutral */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/60 opacity-0 blur-[1px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[1px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2200ms_infinite]"
             >
               LETHIMDO
             </span>
             {/* Glitch layer 2 - replace colored text with neutral */}
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-white/40 opacity-0 blur-[0.5px] mix-blend-screen group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
+              className="pointer-events-none absolute inset-0 z-0 translate-x-0 translate-y-0 text-muted-foreground opacity-0 blur-[0.5px] mix-blend-normal group-hover:opacity-100 animate-[glitch_2000ms_infinite]"
             >
               LETHIMDO
             </span>
@@ -217,19 +216,19 @@ export default function Landing() {
           <nav className="hidden items-center gap-3 md:flex">
             <a
               href="#workflows"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+              className="rounded-xl border border-border bg-card px-4 py-2 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
             >
               Workflows
             </a>
             <a
               href="#faq"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+              className="rounded-xl border border-border bg-card px-4 py-2 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
             >
               FAQ
             </a>
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 font-semibold text-white backdrop-blur-md transition hover:bg-white/20 hover:shadow-lg hover:shadow-white/20"
+              className="rounded-xl px-5 py-2 font-semibold shadow-md"
             >
               {isAuthenticated ? "Dashboard" : "Get Started"}
             </Button>
@@ -248,26 +247,26 @@ export default function Landing() {
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-black/70 border-white/10 backdrop-blur-xl">
+              <SheetContent side="right" className="bg-card border border-border">
                 <SheetHeader>
-                  <SheetTitle className="text-white">Menu</SheetTitle>
+                  <SheetTitle className="text-foreground">Menu</SheetTitle>
                 </SheetHeader>
                 <div className="mt-6 flex flex-col gap-3">
                   <a
                     href="#workflows"
-                    className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+                    className="rounded-xl border border-border bg-card px-4 py-3 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
                   >
                     Workflows
                   </a>
                   <a
                     href="#faq"
-                    className="rounded-xl border border-white/15 bg-white/5 px-4 py-3 font-semibold text-white backdrop-blur-md transition hover:bg-white/10"
+                    className="rounded-xl border border-border bg-card px-4 py-3 font-semibold text-foreground transition hover:bg-accent/10 shadow-sm"
                   >
                     FAQ
                   </a>
                   <Button
                     onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                    className="mt-2 rounded-xl border border-white/15 bg-white/10 px-5 py-3 font-bold text-white backdrop-blur-md transition hover:bg-white/20"
+                    className="mt-2 rounded-xl px-5 py-3 font-bold shadow-md"
                   >
                     {isAuthenticated ? "Go to Dashboard" : "Get Started"}
                   </Button>
@@ -299,12 +298,12 @@ export default function Landing() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-10 max-w-4xl rounded-2xl border border-white/15 bg-white/5 p-6 md:p-8 backdrop-blur-xl"
+            className="mx-auto mb-10 max-w-4xl rounded-2xl border border-border bg-card p-6 md:p-8 shadow-lg"
           >
-            <h1 className="mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-4xl md:text-7xl font-extrabold tracking-tight text-transparent">
+            <h1 className="mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-4xl md:text-7xl font-extrabold tracking-tight text-transparent">
               Build AI Workflows Instantly
             </h1>
-            <p className="mx-auto mb-8 max-w-2xl text-base md:text-lg font-medium text-white/80">
+            <p className="mx-auto mb-8 max-w-2xl text-base md:text-lg font-medium text-muted-foreground">
               Describe your automation in plain English. We'll turn it into a working workflow in seconds.
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
@@ -313,7 +312,7 @@ export default function Landing() {
                   navigate(isAuthenticated ? "/dashboard" : "/auth")
                 }
                 size="lg"
-                className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25"
+                className="w-full sm:w-auto rounded-xl px-8 py-4 text-lg font-bold shadow-md hover:scale-[1.02]"
               >
                 <Rocket className="mr-2 h-5 w-5" />
                 Start Building
@@ -326,13 +325,12 @@ export default function Landing() {
                     behavior: "smooth",
                   })
                 }
-                className="w-full sm:w-auto rounded-xl border border-white/15 bg-white/10 px-8 py-4 text-lg font-bold text-white backdrop-blur-md transition hover:bg-white/10"
+                className="w-full sm:w-auto rounded-xl border border-border bg-card px-8 py-4 text-lg font-bold text-foreground hover:bg-accent/10 shadow-sm"
               >
                 See How it Works
               </Button>
             </div>
 
-            {/* Global search (hero) → reuses FAQ search */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -346,7 +344,7 @@ export default function Landing() {
                 value={faqQuery}
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="Search FAQs, e.g. pricing, workflows, onboarding…"
-                className="h-12 flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+                className="h-12 flex-1 rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
               />
               <Button
                 type="submit"
@@ -354,12 +352,7 @@ export default function Landing() {
                 aria-busy={isSearching}
                 aria-label="Search FAQs"
                 title="Search FAQs"
-                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
-                           hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
-                           focus-visible:ring-ring/60 focus-visible:ring-[3px]
-                           disabled:opacity-60
-                           sm:p-0 sm:grid sm:place-items-center
-                           hover:scale-[1.03] active:scale-95"
+                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full shadow-md focus-visible:ring-ring/60 focus-visible:ring-[3px] disabled:opacity-60 sm:p-0 sm:grid sm:place-items-center hover:scale-[1.03] active:scale-95"
               >
                 {isSearching ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -394,11 +387,11 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * i }}
-                className="rounded-2xl border border-white/15 bg-white/5 p-5 md:p-6 text-left text-white backdrop-blur-md"
+                className="rounded-2xl border border-border bg-card p-5 md:p-6 text-left text-foreground shadow-sm"
               >
-                <feature.icon className="mb-3 md:mb-4 h-7 w-7 md:h-8 md:w-8 text-white" />
+                <feature.icon className="mb-3 md:mb-4 h-7 w-7 md:h-8 md:w-8 text-foreground" />
                 <h3 className="mb-1 text-lg md:text-xl font-bold">{feature.title}</h3>
-                <p className="text-white/75 text-sm md:text-base">{feature.desc}</p>
+                <p className="text-muted-foreground text-sm md:text-base">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -413,11 +406,11 @@ export default function Landing() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-xl"
+            className="rounded-2xl border border-border bg-card shadow-lg"
           >
             <Card className="border-0 bg-transparent shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl font-extrabold text-white">
+                <CardTitle className="flex items-center gap-2 text-2xl font-extrabold text-foreground">
                   <Bot className="h-7 w-7" />
                   Describe your workflow
                 </CardTitle>
@@ -430,11 +423,11 @@ export default function Landing() {
                     setWorkflowPrompt(next);
                   }}
                   placeholder="Example: Send a welcome email when someone signs up..."
-                  className="min-h-[120px] resize-none rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+                  className="min-h-[120px] resize-none rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
                 />
                 {/* Prompt character counter */}
-                <div className="flex items-center justify-end text-xs text-white/70">
-                  <span className={workflowPrompt.length > 450 ? "text-amber-300" : "text-white/60"}>
+                <div className="flex items-center justify-end text-xs text-muted-foreground">
+                  <span className={workflowPrompt.length > 450 ? "text-amber-600" : "text-muted-foreground"}>
                     {workflowPrompt.length}/500
                   </span>
                 </div>
@@ -442,7 +435,7 @@ export default function Landing() {
                   onClick={handleGenerateWorkflow}
                   disabled={isGenerating || !workflowPrompt.trim()}
                   aria-busy={isGenerating}
-                  className="w-full rounded-xl border border-white/15 bg-white/10 py-3 font-bold text-white backdrop-blur-md hover:bg-white/20 disabled:opacity-60"
+                  className="w-full rounded-xl py-3 font-bold shadow-md disabled:opacity-60"
                 >
                   {isGenerating ? (
                     <>
@@ -461,13 +454,13 @@ export default function Landing() {
                   <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 rounded-xl border border-white/15 bg-black/40 p-4 text-white backdrop-blur-sm"
+                    className="mt-2 rounded-xl border border-border bg-card p-4 text-foreground shadow-sm"
                   >
                     <h4 className="mb-2 text-sm font-bold tracking-tight">
                       Generated workflow
                     </h4>
-                    <p className="mb-2 text-sm">{workflowResult.title}</p>
-                    <pre className="max-h-64 overflow-auto rounded-lg bg-black/60 p-3 text-xs text-[#C8F6FF]">
+                    <p className="mb-2 text-sm text-muted-foreground">{workflowResult.title}</p>
+                    <pre className="max-h-64 overflow-auto rounded-lg bg-background p-3 text-xs text-foreground">
                       {JSON.stringify(workflowResult.workflowJSON, null, 2)}
                     </pre>
                   </motion.div>
@@ -484,13 +477,13 @@ export default function Landing() {
             className="space-y-4"
           >
             <div className="flex items-center justify-between">
-              <h3 className="mb-4 text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+              <h3 className="mb-4 text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
                 Popular Workflows
               </h3>
               <Button
                 onClick={() => setAiOpen(true)}
                 variant="outline"
-                className="rounded-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:shadow-[0_0_14px_color-mix(in_oklab,var(--ring)_55%,transparent)] transition"
+                className="rounded-xl border border-border bg-card text-foreground hover:bg-accent/10 shadow-sm transition"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
                 Describe Your Workflow
@@ -535,23 +528,23 @@ export default function Landing() {
                         initial={{ opacity: 0, y: 12 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className={`cursor-pointer rounded-2xl border border-white/15 bg-white/5 p-4 md:p-5 text-white backdrop-blur-md transition
-                          hover:bg-white/10 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
-                          ${isSelected ? "ring-2 ring-[color:var(--ring)] shadow-[0_0_22px_color-mix(in_oklab,var(--ring)_65%,transparent)]" : ""}`}
+                        className={`cursor-pointer rounded-2xl border border-border bg-card p-4 md:p-5 text-foreground transition
+                          hover:bg-accent/10 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_55%,transparent)]
+                          ${isSelected ? "ring-2 ring-[color:var(--ring)]" : ""}`}
                       >
                         <div className="mb-1 flex items-start justify-between">
                           <h4 className="text-lg font-bold">{w.title}</h4>
-                          <Badge className="rounded-full border border-white/20 bg-white/10 text-white">
+                          <Badge className="rounded-full border border-border bg-card text-foreground">
                             {w.tag}
                           </Badge>
                         </div>
-                        <p className="text-white/75">{w.desc}</p>
+                        <p className="text-muted-foreground">{w.desc}</p>
                         {isSelected && (
-                          <div className="mt-3 text-xs text-white/75 grid grid-cols-3 gap-2">
+                          <div className="mt-3 text-xs text-muted-foreground grid grid-cols-3 gap-2">
                             {w.steps.map((s, idx) => (
                               <div
                                 key={idx}
-                                className="rounded-md border border-white/15 bg-black/30 px-2 py-1 text-center"
+                                className="rounded-md border border-border bg-background px-2 py-1 text-center"
                               >
                                 {s}
                               </div>
@@ -560,10 +553,10 @@ export default function Landing() {
                         )}
                       </motion.div>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-black/80 border-white/15 text-white backdrop-blur-xl">
+                    <TooltipContent className="bg-card border border-border text-foreground shadow-lg">
                       <div className="text-xs">
                         <div className="font-semibold mb-1">Steps Preview</div>
-                        <ol className="list-decimal list-inside space-y-0.5 text-white/80">
+                        <ol className="list-decimal list-inside space-y-0.5 text-muted-foreground">
                           {w.steps.map((s) => (
                             <li key={s}>{s}</li>
                           ))}
@@ -587,22 +580,22 @@ export default function Landing() {
             transition={{ duration: 0.5 }}
             className="mb-8 text-center"
           >
-            <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-white">
+            <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-foreground">
               FAQ Chatbot
             </h2>
-            <p className="text-white/80">
+            <p className="text-muted-foreground">
               Ask questions and get instant answers from our knowledge base.
             </p>
           </motion.div>
 
-          <div className="rounded-2xl border border-white/15 bg-white/5 p-5 md:p-6 backdrop-blur-xl">
+          <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-lg">
             <div className="flex flex-col gap-3 sm:flex-row">
               <Input
                 ref={faqInputRef}
                 value={faqQuery}
                 onChange={(e) => setFaqQuery(e.target.value)}
                 placeholder="What is Lethimdo? How do I create workflows?"
-                className="h-12 flex-1 rounded-xl border-white/20 bg-white/5 font-medium text-white placeholder:text-white/50 backdrop-blur-sm"
+                className="h-12 flex-1 rounded-xl border border-border bg-card font-medium text-foreground placeholder:text-muted-foreground"
                 onKeyPress={(e) => e.key === "Enter" && handleFAQSearch()}
               />
               <Button
@@ -611,12 +604,7 @@ export default function Landing() {
                 aria-busy={isSearching}
                 aria-label="Search FAQs"
                 title="Search FAQs"
-                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition
-                           hover:bg-white/20 hover:shadow-[0_0_18px_color-mix(in_oklab,var(--ring)_65%,transparent)]
-                           focus-visible:ring-ring/60 focus-visible:ring-[3px]
-                           disabled:opacity-60
-                           sm:p-0 sm:grid sm:place-items-center
-                           hover:scale-[1.03] active:scale-95"
+                className="h-12 group w-full sm:w-12 sm:h-12 rounded-xl sm:rounded-full shadow-md focus-visible:ring-ring/60 focus-visible:ring-[3px] disabled:opacity-60 sm:p-0 sm:grid sm:place-items-center hover:scale-[1.03] active:scale-95"
               >
                 {isSearching ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -631,11 +619,11 @@ export default function Landing() {
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
-                    className="animate-pulse rounded-2xl border border-white/10 bg-white/5 p-4"
+                    className="animate-pulse rounded-2xl border border-border bg-card p-4"
                   >
-                    <div className="h-4 w-1/3 bg-white/20 rounded mb-2" />
-                    <div className="h-3 w-2/3 bg-white/10 rounded mb-1.5" />
-                    <div className="h-3 w-1/2 bg-white/10 rounded" />
+                    <div className="h-4 w-1/3 bg-muted rounded mb-2" />
+                    <div className="h-3 w-2/3 bg-muted rounded mb-1.5" />
+                    <div className="h-3 w-1/2 bg-muted rounded" />
                   </div>
                 ))}
               </div>
@@ -647,18 +635,18 @@ export default function Landing() {
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 space-y-4"
               >
-                <h4 className="text-sm font-bold text-white/80">
+                <h4 className="text-sm font-bold text-muted-foreground">
                   Search Results
                 </h4>
                 <Accordion type="multiple" className="w-full">
                   {faqResults.map((faq: FAQ) => (
                     <AccordionItem key={faq._id as unknown as string} value={String(faq._id)}>
-                      <AccordionTrigger className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white backdrop-blur-md hover:bg-white/10">
+                      <AccordionTrigger className="rounded-2xl border border-border bg-card px-4 py-3 text-foreground hover:bg-accent/10">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="rounded-b-2xl border-x border-b border-white/15 bg-white/5 p-4 text-white/90 backdrop-blur-md">
-                        <p className="text-sm">{faq.answer}</p>
-                        <Badge className="mt-3 border border-white/20 bg-white/10 text-white">
+                      <AccordionContent className="rounded-b-2xl border-x border-b border-border bg-card p-4 text-foreground">
+                        <p className="text-sm text-muted-foreground">{faq.answer}</p>
+                        <Badge className="mt-3 border border-border bg-card text-foreground">
                           {faq.category}
                         </Badge>
                       </AccordionContent>
@@ -669,7 +657,7 @@ export default function Landing() {
             )}
 
             {!isSearching && faqQuery && faqResults.length === 0 && (
-              <div className="py-8 text-center text-white/80">
+              <div className="py-8 text-center text-muted-foreground">
                 No results found. Try a different question!
               </div>
             )}
@@ -684,9 +672,9 @@ export default function Landing() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-white/15 bg-white/5 p-3 md:p-4 backdrop-blur-xl"
+            className="rounded-2xl border border-border bg-card p-3 md:p-4 shadow-lg"
           >
-            <div className="overflow-hidden rounded-xl border border-white/10">
+            <div className="overflow-hidden rounded-xl border border-border">
               <video
                 src="https://cdn.coverr.co/videos/coverr-working-on-laptop-typing-typing-5175/1080p.mp4"
                 className="w-full h-[220px] md:h-[360px] object-cover"
@@ -697,7 +685,7 @@ export default function Landing() {
                 poster="/logo_bg.png"
               />
             </div>
-            <p className="mt-3 text-center text-white/80 text-sm">
+            <p className="mt-3 text-center text-muted-foreground text-sm">
               See workflows in action: trigger → AI step → email/report delivery.
             </p>
           </motion.div>
@@ -713,10 +701,10 @@ export default function Landing() {
             transition={{ duration: 0.5 }}
             className="mb-8 text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
               Why LETHIMDO
             </h2>
-            <p className="mt-2 text-white/80 max-w-2xl mx-auto">
+            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">
               Launch automations faster, collaborate better, and stay in control.
             </p>
           </motion.div>
@@ -726,13 +714,13 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-5 w-5" />
                 <h3 className="font-bold text-lg">From Idea to Live in Minutes</h3>
               </div>
-              <p className="text-white/75 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Turn a plain-English prompt into a structured, working workflow—
                 no glue code, no setup tax.
               </p>
@@ -742,13 +730,13 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="h-5 w-5" />
                 <h3 className="font-bold text-lg">Built with AI Assistance</h3>
               </div>
-              <p className="text-white/75 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Smart defaults and suggestions help you configure steps, parameters,
                 and triggers with confidence.
               </p>
@@ -758,13 +746,13 @@ export default function Landing() {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="rounded-2xl border border-white/15 bg-white/5 p-5 backdrop-blur-md text-white"
+              className="rounded-2xl border border-border bg-card p-5 shadow-sm text-foreground"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Bot className="h-5 w-5" />
                 <h3 className="font-bold text-lg">Scale Without the Drag</h3>
               </div>
-              <p className="text-white/75 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Designed for reliability and speed, so your team ships workflows and
                 iterates without friction.
               </p>
@@ -779,18 +767,18 @@ export default function Landing() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-7xl rounded-2xl border border-white/15 bg-white/5 p-6 md:p-8 backdrop-blur-xl text-white text-center"
+          className="mx-auto max-w-7xl rounded-2xl border border-border bg-card p-6 md:p-8 shadow-lg text-foreground text-center"
         >
           <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
             Build your first workflow today
           </h3>
-          <p className="mt-2 text-white/80 max-w-2xl mx-auto">
+          <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">
             Get started free. No credit card required.
           </p>
           <div className="mt-5 flex items-center justify-center gap-3">
             <Button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-              className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/20 hover:shadow-lg hover:shadow-white/25"
+              className="rounded-xl px-6 py-3 font-bold shadow-md hover:scale-[1.02]"
             >
               <Rocket className="mr-2 h-5 w-5" />
               Start free
@@ -800,7 +788,7 @@ export default function Landing() {
               onClick={() =>
                 document.getElementById("workflows")?.scrollIntoView({ behavior: "smooth" })
               }
-              className="rounded-xl border border-white/15 bg-white/10 px-6 py-3 font-bold text-white backdrop-blur-md transition hover:bg-white/10"
+              className="rounded-xl border border-border bg-card px-6 py-3 font-bold text-foreground hover:bg-accent/10 shadow-sm"
             >
               See it in action
             </Button>
@@ -819,7 +807,7 @@ export default function Landing() {
             ].map((b) => (
               <div
                 key={b.label}
-                className="rounded-xl border border-white/10 bg-white/5 p-3 text-center text-white/80 backdrop-blur-xl"
+                className="rounded-xl border border-border bg-card p-3 text-center text-muted-foreground shadow-sm"
               >
                 <span className="mr-2">{b.icon}</span>
                 {b.label}
@@ -831,21 +819,21 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="px-4 pb-8 md:pb-10">
-        <div className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 text-center text-white backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-border bg-card p-4 md:p-6 text-center text-foreground shadow-sm">
           <p className="font-semibold">
             Powered by{" "}
             <a
               href="https://vly.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline decoration-white/40 underline-offset-4 hover:text-white"
+              className="underline decoration-muted-foreground/40 underline-offset-4 hover:text-foreground"
             >
               vly.ai
             </a>
           </p>
-          <p className="mt-2 text-white/80 text-sm">
+          <p className="mt-2 text-muted-foreground text-sm">
             Need help?{" "}
-            <a href="mailto:support@lethimdo.com" className="underline hover:text-white">
+            <a href="mailto:support@lethimdo.com" className="underline hover:text-foreground">
               support@lethimdo.com
             </a>{" "}
             | Live Chat
@@ -858,7 +846,7 @@ export default function Landing() {
         <Button
           onClick={() => setAiOpen(true)}
           size="icon"
-          className="size-12 rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-xl hover:bg-white/20 hover:shadow-[0_0_22px_color-mix(in_oklab,var(--ring)_60%,transparent)] transition"
+          className="size-12 rounded-full shadow-xl"
           aria-label="Open Assistant"
           title="Ask AI / FAQ"
         >
