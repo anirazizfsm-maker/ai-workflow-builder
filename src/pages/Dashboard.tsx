@@ -423,7 +423,7 @@ export default function Dashboard() {
 
       <div className="mx-auto max-w-7xl p-4 md:p-6 text-white">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-6 md:mb-8 w-full overflow-x-auto bg-white/10 backdrop-blur-xl border border-white/15 inline-flex md:grid md:grid-cols-5 gap-1 rounded-xl p-1 no-scrollbar">
+          <TabsList className="mb-6 md:mb-8 w-full overflow-x-auto bg-white/10 backdrop-blur-xl border border-white/15 inline-flex items-center md:grid md:grid-cols-5 gap-1 rounded-xl p-2 no-scrollbar h-12">
             <TabsTrigger value="overview" className="shrink-0 px-3 py-2 text-sm text-white data-[state=active]:text-black">
               <Zap className="w-4 h-4 mr-2" />
               Overview
