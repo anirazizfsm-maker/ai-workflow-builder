@@ -151,18 +151,19 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      {/* Background video (replaces static backdrop if provided). 
-         Swap the src to your exported /assets/falling_into_space_loop.mp4 after uploading */}
-      {/* <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+      {/* Background video: tries your exported /assets/falling_into_space_loop.mp4 first, then falls back */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
         <video
           className="h-full w-full object-cover opacity-45"
-          src="/assets/Recording_2025-09-07_050448.mp4"
           autoPlay
           muted
           loop
           playsInline
-        />
-      </div> */}
+        >
+          <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
+          <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
+        </video>
+      </div>
       {/* Keep chipset animation locked in the background */}
       <ChipsetBackground />
 

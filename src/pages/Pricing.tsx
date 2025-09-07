@@ -83,6 +83,20 @@ export default function Pricing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
+      {/* Background video: tries your exported /assets/falling_into_space_loop.mp4 first, then falls back */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+        <video
+          className="h-full w-full object-cover opacity-45"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
+          <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
+        </video>
+      </div>
+
       {/* Background from the home page */}
       <ChipsetBackground />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
