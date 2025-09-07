@@ -4,6 +4,7 @@ import ChipsetBackground from "@/components/ChipsetBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -115,119 +116,121 @@ export default function Pricing() {
       {/* Hero */}
       <section className="px-4 pt-8 md:pt-12">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-4xl text-center rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-6 md:p-8 shadow-lg"
+          className="mx-auto max-w-3xl text-center rounded-2xl border border-white/10 bg-[#0a1429]/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
         >
-          <h1 className="mb-3 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-4xl md:text-6xl font-extrabold tracking-tight text-transparent">
-            Simple, market‑aligned pricing
-          </h1>
-          <p className="mx-auto max-w-2xl text-base md:text-lg font-medium text-muted-foreground">
-            Pick a plan that fits your stage. Upgrade or cancel anytime.
-          </p>
-          <div className="mt-5 flex items-center justify-center gap-3">
-            <Button
-              onClick={() => navigate("/auth")}
-              className="rounded-xl px-6 py-3 font-bold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
-            >
-              Start Free
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => navigate("/plans")}
-              className="rounded-xl border border-border bg-card px-6 py-3 font-bold text-foreground hover:bg-accent/10 shadow-sm"
-            >
-              Go to Checkout
-            </Button>
+          <div className="mb-2 text-xs font-semibold tracking-wide text-[#9bb1e9]">
+            ✦ Pricing ✦
           </div>
+          <h1 className="mb-3 text-3xl md:text-5xl font-extrabold tracking-tight text-white">
+            The Best Pricing Plans
+          </h1>
+          <p className="mx-auto max-w-2xl text-sm md:text-base text-[#9bb1e9]">
+            Find the perfect plan to streamline your workflow and unlock powerful tools designed to save time and boost productivity.
+          </p>
         </motion.div>
       </section>
 
       {/* Plans */}
       <section className="px-4 py-10 md:py-14">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {plans.map((plan, i) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className={`rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md shadow-lg ${
-                plan.accent ? "ring-1 ring-[color:var(--ring)]/50" : ""
-              }`}
-            >
-              <Card className="border-0 bg-transparent shadow-none">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-foreground text-xl font-extrabold tracking-tight">
-                      {plan.name}
-                    </CardTitle>
-                    {plan.accent && (
-                      <Badge className="rounded-full border border-border bg-card text-foreground">
-                        Popular
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="mt-2">
-                    <div className="flex items-end gap-1">
-                      <div className="text-3xl font-extrabold text-foreground">{plan.price}</div>
-                      <div className="text-muted-foreground">{plan.cadence}</div>
+          {plans.map((plan, i) => {
+            // Feature icon + cleaned label from emoji prefix
+            const renderFeature = (f: string) => {
+              const isGood = f.trim().startsWith("✅");
+              const isBad = f.trim().startsWith("❌");
+              const label = f.replace(/^✅\s*/,"").replace(/^❌\s*/,"");
+              return (
+                <li
+                  key={f}
+                  className="flex items-start gap-2 rounded-md border border-white/10 bg-[#0b1120]/60 px-2 py-2"
+                >
+                  {isGood ? (
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-[#60a5fa]" />
+                  ) : isBad ? (
+                    <XCircle className="mt-0.5 h-4 w-4 text-[#ef4444]" />
+                  ) : (
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-[#9bb1e9]" />
+                  )}
+                  <span className="text-sm text-[#c6d4f7]">{label}</span>
+                </li>
+              );
+            };
+
+            return (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className={`rounded-2xl border bg-gradient-to-b from-[#0e1a38] to-[#0b142b] backdrop-blur-xl shadow-[0_18px_60px_-20px_rgba(37,99,235,0.45)] ${
+                  plan.accent ? "ring-1 ring-[color:var(--ring)]/40" : "border-white/10"
+                }`}
+              >
+                <Card className="border-0 bg-transparent shadow-none">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-white text-xl font-extrabold tracking-tight">
+                        {plan.name}
+                      </CardTitle>
+                      {plan.accent && (
+                        <Badge className="rounded-full border border-white/15 bg-white/10 text-[#9bb1e9]">
+                          Popular
+                        </Badge>
+                      )}
                     </div>
-                    <div className="mt-1 text-xs text-muted-foreground">{plan.highlight}</div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-1.5 text-sm text-muted-foreground">
-                    {plan.features.map((f) => (
-                      <li key={f} className="rounded-md border border-border bg-background/60 px-2 py-1">
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-xs text-muted-foreground">{plan.bestFor}</div>
-                  <Button
-                    onClick={plan.cta}
-                    className="w-full rounded-xl py-2.5 font-bold border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
-                  >
-                    {plan.ctaLabel}
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                    <div className="mt-2">
+                      <div className="flex items-end gap-1">
+                        <div className="text-3xl font-extrabold text-white">{plan.price}</div>
+                        <div className="text-[#9bb1e9]">{plan.cadence}</div>
+                      </div>
+                      <div className="mt-1 text-xs text-[#9bb1e9]">{plan.highlight}</div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-xs uppercase tracking-wide text-[#9bb1e9]">
+                      Included Benefits
+                    </div>
+                    <ul className="space-y-1.5">
+                      {plan.features.map(renderFeature)}
+                    </ul>
+                    <div className="text-xs text-[#8fa2c9]">{plan.bestFor}</div>
+                    <Button
+                      onClick={plan.cta}
+                      className="w-full rounded-xl py-2.5 font-bold bg-[#1f51ff] hover:bg-[#1b45da] text-white"
+                    >
+                      {plan.ctaLabel}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA Bar */}
       <section className="px-4 pb-10 md:pb-14">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-7xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-6 md:p-8 shadow-lg text-center text-foreground"
+          className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-[#0a1429]/70 backdrop-blur-xl p-5 md:p-6 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
         >
-          <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-            Not sure where to start?
-          </h3>
-          <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">
-            Start free, then scale with Starter, Pro, or Business as you grow.
-          </p>
-          <div className="mt-5 flex items-center justify-center gap-3">
-            <Button
-              onClick={() => navigate("/auth")}
-              className="rounded-xl px-6 py-3 font-bold shadow-md border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
-            >
-              Start Free
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => navigate("/plans")}
-              className="rounded-xl border border-border bg-card px-6 py-3 font-bold text-foreground hover:bg-accent/10 shadow-sm"
-            >
-              Go to Checkout
-            </Button>
+          <div className="flex flex-col gap-3 items-center justify-between text-center md:flex-row">
+            <p className="text-white font-semibold">Your workflow upgrade starts here</p>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => navigate("/auth")}
+                className="rounded-xl bg-[#1f51ff] hover:bg-[#1b45da] text-white"
+              >
+                Start Free Trial
+              </Button>
+            </div>
           </div>
         </motion.div>
       </section>
