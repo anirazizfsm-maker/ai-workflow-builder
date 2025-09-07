@@ -44,6 +44,32 @@ export default function Landing() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Typing animation for hero header
+  const [typedLine1, setTypedLine1] = useState("");
+  const [typedLine2, setTypedLine2] = useState("");
+  useEffect(() => {
+    const line1 = "Supercharge Your Productivity";
+    const line2 = "and Workflow with AI";
+    let i = 0;
+    let j = 0;
+
+    const interval = setInterval(() => {
+      if (i < line1.length) {
+        setTypedLine1((prev) => prev + line1[i]);
+        i++;
+        return;
+      }
+      if (j < line2.length) {
+        setTypedLine2((prev) => prev + line2[j]);
+        j++;
+        return;
+      }
+      clearInterval(interval);
+    }, 55); // type speed per char
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Keyboard shortcut: '/' focuses FAQ input (like many apps)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -204,10 +230,19 @@ export default function Landing() {
               <h1
                 className="relative mt-6 font-extrabold leading-[1.08] text-white text-[30px] sm:text-[42px] md:text-[60px] lg:text-[72px] tracking-tight text-balance px-1"
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
+                aria-live="polite"
               >
-                Supercharge Your Productivity
+                <span>{typedLine1}</span>
                 <br className="hidden md:block" />
-                and Workflow with AI
+                <span>{typedLine2}</span>
+                {/* caret */}
+                {(typedLine2.length < "and Workflow with AI".length) && (
+                  <span
+                    className="ml-1 inline-block align-baseline h-[0.9em] w-[0.6ch] rounded-[2px] animate-pulse"
+                    style={{ background: "linear-gradient(180deg, rgba(147,197,253,0.95), rgba(59,130,246,0.95))" }}
+                    aria-hidden
+                  />
+                )}
               </h1>
             </div>
 
