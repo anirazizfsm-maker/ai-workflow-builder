@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle } from "lucide-react";
+import ChipsetBackground from "@/components/ChipsetBackground";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -82,6 +83,17 @@ export default function Pricing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
+      {/* Background from the home page */}
+      <ChipsetBackground />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[#030611]" />
+        <div
+          className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[1200px] rounded-full blur-3xl opacity-70"
+          style={{ background: "radial-gradient(60% 60% at 50% 40%, rgba(29,78,216,0.55) 0%, rgba(3,6,17,0.0) 70%)" }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-[520px] [background:conic-gradient(from_180deg_at_50%_0%,rgba(59,130,246,0.25),transparent_35%,rgba(96,165,250,0.2)_60%,transparent_85%)] blur-2xl opacity-50" />
+      </div>
+
       {/* Header */}
       <header className="sticky top-0 z-40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
