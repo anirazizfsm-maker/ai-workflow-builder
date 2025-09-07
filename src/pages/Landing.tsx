@@ -136,9 +136,6 @@ export default function Landing() {
           <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] border border-white/10 bg-[#0a1429]/80 backdrop-blur-xl px-4 md:px-6 py-3.5 flex items-center justify-between gap-4 shadow-[0_8px_40px_-12px_rgba(30,64,175,0.45)]">
             {/* Brand */}
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] grid place-items-center shadow-[inset_0_0_12px_rgba(255,255,255,0.12)]">
-                <img src="/logo.svg" alt="logo" className="h-5 w-5 opacity-95" />
-              </div>
               <span className="text-white font-extrabold text-lg tracking-tight">LETHIMDO</span>
             </div>
 
@@ -228,9 +225,6 @@ export default function Landing() {
             {/* App top bar */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-3">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#1e40af] grid place-items-center border border-white/10">
-                  <img src="/logo.svg" alt="LETHIMDO" className="h-4 w-4 opacity-95" />
-                </div>
                 <span className="text-white/90 font-semibold tracking-tight">LETHIMDO</span>
                 <div className="hidden md:flex items-center gap-5 ml-6 text-[#9db2e9]">
                   <span className="hover:text-white transition-colors">Dashboard</span>
@@ -578,7 +572,8 @@ export default function Landing() {
         <footer className="border-t border-[#142554]">
           <div className="mx-auto max-w-7xl px-6 md:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="logo" className="h-8 w-8" />
+              {/* Removed footer logo image */}
+              {/* <img src="/logo.png" alt="logo" className="h-8 w-8" /> */}
               <span className="text-[#8fa2c9]">© {new Date().getFullYear()} Lethimdo</span>
             </div>
             <div className="flex flex-wrap items-center gap-4 text-[#8fa2c9]">
