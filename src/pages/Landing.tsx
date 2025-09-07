@@ -151,19 +151,7 @@ export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden dark">
       {/* Background video: tries your exported /assets/falling_into_space_loop.mp4 first, then falls back */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
-        <video
-          className="h-full w-full object-cover opacity-45"
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
-          <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
-        </video>
-      </div>
-      {/* Removed chipset canvas background */}
+      {/* Removed global page background video to scope it to hero only */}
       {/* <ChipsetBackground /> */}
       {/* Keep chipset animation locked in the background */}
       {/* <ChipsetBackground /> */}
@@ -237,7 +225,23 @@ export default function Landing() {
         </div>
 
         {/* HERO (replaced content to match screenshot) */}
-        <section className="mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10">
+        <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
+          {/* Hero-scoped cosmic background video */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            <video
+              className="h-full w-full object-cover opacity-70"
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
+              <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
+            </video>
+            {/* Readability overlay */}
+            <div className="absolute inset-0 bg-[#030611]/50" />
+          </div>
+
           <div className="flex flex-col items-center text-center">
             {/* Customer pill */}
             <div className="rounded-full bg-white/5 border border-white/10 backdrop-blur-xl px-3.5 py-2 flex items-center gap-3 shadow-[0_10px_32px_-12px_rgba(37,99,235,0.45)]">

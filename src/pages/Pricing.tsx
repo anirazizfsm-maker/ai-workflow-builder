@@ -82,30 +82,7 @@ export default function Pricing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      {/* Background video: tries your exported /assets/falling_into_space_loop.mp4 first, then falls back */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
-        <video
-          className="h-full w-full object-cover opacity-45"
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
-          <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
-        </video>
-      </div>
-
-      {/* Background from the home page */}
-      {/* <ChipsetBackground /> */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#030611]" />
-        <div
-          className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[1200px] rounded-full blur-3xl opacity-70"
-          style={{ background: "radial-gradient(60% 60% at 50% 40%, rgba(29,78,216,0.55) 0%, rgba(3,6,17,0.0) 70%)" }}
-        />
-        <div className="absolute top-0 left-0 right-0 h-[520px] [background:conic-gradient(from_180deg_at_50%_0%,rgba(59,130,246,0.25),transparent_35%,rgba(96,165,250,0.2)_60%,transparent_85%)] blur-2xl opacity-50" />
-      </div>
+      {/* Removed global background video; will scope to hero for visibility */}
 
       {/* Header */}
       <header className="sticky top-0 z-40">
@@ -134,8 +111,21 @@ export default function Pricing() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="px-4 pt-8 md:pt-12">
+      {/* Hero with scoped cosmic video */}
+      <section className="relative px-4 pt-8 md:pt-12 overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl">
+          <video
+            className="h-full w-full object-cover opacity-70"
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
+            <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-[#030611]/50" />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
