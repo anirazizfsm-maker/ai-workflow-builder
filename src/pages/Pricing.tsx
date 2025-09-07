@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle } from "lucide-react";
-import ChipsetBackground from "@/components/ChipsetBackground";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -98,7 +97,7 @@ export default function Pricing() {
       </div>
 
       {/* Background from the home page */}
-      <ChipsetBackground />
+      {/* <ChipsetBackground /> */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[#030611]" />
         <div

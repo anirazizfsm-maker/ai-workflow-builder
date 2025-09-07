@@ -20,7 +20,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import ChipsetBackground from "@/components/ChipsetBackground";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -164,8 +163,10 @@ export default function Landing() {
           <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
         </video>
       </div>
+      {/* Removed chipset canvas background */}
+      {/* <ChipsetBackground /> */}
       {/* Keep chipset animation locked in the background */}
-      <ChipsetBackground />
+      {/* <ChipsetBackground /> */}
 
       {/* Replace the overlay to a deep-blue beam backdrop matching the screenshot */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
