@@ -117,75 +117,96 @@ export default function Landing() {
       {/* Keep chipset animation locked in the background */}
       <ChipsetBackground />
 
-      {/* Dark veil + blue top glow overlay for screenshot theme */}
+      {/* Replace the overlay to a deep-blue beam backdrop matching the screenshot */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* base dark veil */}
-        <div className="absolute inset-0 bg-[#05070d]/92" />
-        {/* top-center blue radial glow */}
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 h-[420px] w-[1100px] rounded-full blur-3xl opacity-50"
-             style={{ background: "radial-gradient(60% 60% at 50% 40%, rgba(37,99,235,0.5) 0%, rgba(2,6,23,0.0) 70%)" }} />
-        {/* subtle horizon line glow */}
-        <div className="absolute top-[380px] left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#1c3d8a]/40 to-transparent" />
+        {/* base night backdrop */}
+        <div className="absolute inset-0 bg-[#030611]" />
+        {/* top-center deep blue glow */}
+        <div
+          className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[1200px] rounded-full blur-3xl opacity-70"
+          style={{ background: "radial-gradient(60% 60% at 50% 40%, rgba(29,78,216,0.55) 0%, rgba(3,6,17,0.0) 70%)" }}
+        />
+        {/* soft beams */}
+        <div className="absolute top-0 left-0 right-0 h-[520px] [background:conic-gradient(from_180deg_at_50%_0%,rgba(59,130,246,0.25),transparent_35%,rgba(96,165,250,0.2)_60%,transparent_85%)] blur-2xl opacity-50" />
       </div>
 
       <main className="relative z-0">
-        {/* HERO */}
-        <section className="mx-auto max-w-7xl px-6 md:px-8 py-20 md:py-24">
-          <div className="grid grid-cols-1 gap-10 items-center">
-            <div className="text-center">
-              <motion.h1
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="font-extrabold text-[40px] md:text-[56px] leading-tight text-white tracking-tight"
-                style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui" }}
-              >
-                Automation will grow your business 2x faster.
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.08, duration: 0.6 }}
-                className="mt-5 mx-auto max-w-3xl text-[#a6b3cf] text-[18px] md:text-[20px]"
-                style={{ fontFamily: "Inter, ui-sans-serif, system-ui" }}
-              >
-                Manage customer calls, manage social media posts, Daily Update your report, fix an appointment, automate anything by just a prompt.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.16, duration: 0.5 }}
-                className="mt-8 flex flex-wrap justify-center gap-4"
-              >
-                <Button
-                  onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                  className="rounded-xl px-7 py-6 text-base font-bold text-white bg-gradient-to-r from-[#1e3a8a] via-[#2563eb] to-[#1e40af] hover:from-[#1b2f6e] hover:via-[#1f4fd3] hover:to-[#19368e] shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_0_36px_0_rgba(37,99,235,0.45)] transition-shadow"
-                >
-                  🚀 Try AI Builder — Free Trial
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate("/pricing")}
-                  className="rounded-xl px-7 py-6 text-base font-bold border-[#204a9a] text-[#cfe0ff] bg-[#0b1020]/40 hover:bg-[#0f1730]/60"
-                >
-                  See Pricing
-                </Button>
-              </motion.div>
+        {/* NEW: Pill Navbar to match screenshot */}
+        <div className="mx-auto max-w-7xl px-6 md:px-8 pt-8">
+          <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] border border-white/10 bg-[#0a1429]/80 backdrop-blur-xl px-4 md:px-6 py-3.5 flex items-center justify-between gap-4 shadow-[0_8px_40px_-12px_rgba(30,64,175,0.45)]">
+            {/* Brand */}
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] grid place-items-center shadow-[inset_0_0_12px_rgba(255,255,255,0.12)]">
+                <img src="/logo.svg" alt="logo" className="h-5 w-5 opacity-95" />
+              </div>
+              <span className="text-white font-extrabold text-lg tracking-tight">Flowix</span>
             </div>
 
-            {/* Decorative hero visual panel (dark glass card) */}
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="h-[360px] md:h-[440px] rounded-2xl border border-[#1a2a55] bg-gradient-to-b from-[#0b1120] to-[#0a0f1e] shadow-2xl"
+            {/* Nav */}
+            <nav className="hidden md:flex items-center gap-6 text-[15px]">
+              <button className="text-[#9bb1e9] hover:text-white transition-colors">Home</button>
+              <button className="text-[#9bb1e9] hover:text-white transition-colors">Integrations</button>
+              <button onClick={() => navigate('/pricing')} className="text-[#9bb1e9] hover:text-white transition-colors">Pricing</button>
+              <button className="text-[#9bb1e9] hover:text-white transition-colors">Contact Us</button>
+            </nav>
+
+            {/* CTA */}
+            <div>
+              <Button
+                onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                className="rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white px-5 py-5 h-10 md:h-11 font-bold shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_0_28px_rgba(37,99,235,0.35)]"
+              >
+                Subscribe ↗
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* HERO (replaced content to match screenshot) */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10">
+          <div className="flex flex-col items-center text-center">
+            {/* Customer pill */}
+            <div className="rounded-full bg-white/5 border border-white/10 backdrop-blur-xl px-3.5 py-2 flex items-center gap-3 shadow-[0_10px_32px_-12px_rgba(37,99,235,0.45)]">
+              <div className="flex -space-x-2">
+                <img src="/logo_bg.png" alt="a1" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
+                <img src="/logo.png" alt="a2" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
+                <img src="/logo_bg.svg" alt="a3" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
+              </div>
+              <span className="text-[#cfe0ff] text-sm md:text-[15px]">Join 15,725+ other loving customers</span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="mt-6 font-extrabold leading-[1.08] text-white text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] tracking-tight"
+              style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui" }}
             >
-              <div className="h-full w-full rounded-2xl bg-[radial-gradient(60%_60%_at_50%_35%,rgba(37,99,235,0.18),transparent_70%)]" />
-            </motion.div>
+              Supercharge Your Productivity
+              <br className="hidden md:block" />
+              and Workflow with AI
+            </h1>
+
+            {/* Subcopy */}
+            <p className="mt-5 max-w-3xl text-[#a6b3cf] text-lg md:text-xl">
+              Automate the busywork, eliminate bottlenecks, and focus on what matters most — powered
+              by intelligent automation that learns with you.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Button
+                onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                className="rounded-xl px-7 py-6 text-base font-bold text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_36px_0_rgba(37,99,235,0.35)]"
+              >
+                Get Started Free
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/pricing')}
+                className="rounded-xl px-7 py-6 text-base font-bold border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
+              >
+                Try Live Demo
+              </Button>
+            </div>
           </div>
         </section>
 
