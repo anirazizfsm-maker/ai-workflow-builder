@@ -172,19 +172,9 @@ export default function Landing() {
               <span className="text-[#cfe0ff] text-sm md:text-[15px]">Join 15,725+ other loving customers</span>
             </div>
 
-            {/* Animated Headline wrapper with video overlay */}
+            {/* Animated Headline wrapper without video overlay */}
             <div className="relative w-full max-w-5xl mt-2 flex justify-center">
-              {/* Animation video overlay */}
-              <video
-                aria-hidden
-                className="pointer-events-none absolute -inset-x-8 -top-10 h-[220px] sm:h-[260px] md:h-[320px] w-[140%] sm:w-[120%] md:w-full object-cover opacity-80 mix-blend-screen [mask-image:radial-gradient(120%_80%_at_50%_45%,#000_45%,transparent_85%)]"
-                src="/assets/Recording_2025-09-07_050448.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-              {/* Headline */}
+              {/* Removed hero animation video per request */}
               <h1
                 className="relative mt-6 font-extrabold leading-[1.08] text-white text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] tracking-tight"
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
