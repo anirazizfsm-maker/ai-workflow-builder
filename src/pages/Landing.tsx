@@ -136,7 +136,7 @@ export default function Landing() {
           <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] border border-white/10 bg-[#0a1429]/80 backdrop-blur-xl px-4 md:px-6 py-3.5 flex items-center justify-between gap-4 shadow-[0_8px_40px_-12px_rgba(30,64,175,0.45)]">
             {/* Brand */}
             <div className="flex items-center gap-3">
-              <span className="text-white font-extrabold text-lg tracking-tight">LETHIMDO</span>
+              <span className="text-white font-extrabold text-base sm:text-lg tracking-tight">LETHIMDO</span>
             </div>
 
             {/* Nav */}
@@ -147,14 +147,40 @@ export default function Landing() {
               <button className="text-[#9bb1e9] hover:text-white transition-colors">Contact Us</button>
             </nav>
 
-            {/* CTA */}
-            <div>
+            {/* CTA + Mobile Menu */}
+            <div className="flex items-center gap-2">
               <Button
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                className="rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white px-5 py-5 h-10 md:h-11 font-bold shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_0_28px_rgba(37,99,235,0.35)]"
+                className="hidden md:inline-flex rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white px-5 py-5 h-10 md:h-11 font-bold shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_0_28px_rgba(37,99,235,0.35)]"
               >
                 Subscribe ↗
               </Button>
+
+              {/* Mobile menu */}
+              <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+                <SheetTrigger asChild>
+                  <button className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-[#0d1731]/70 text-white/80 hover:text-white">
+                    <Menu className="h-5 w-5" />
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[85vw] sm:w-[360px] bg-[#0a1429] text-white border-white/10">
+                  <SheetHeader>
+                    <SheetTitle className="text-white">Menu</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-4 grid gap-2">
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Home</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Integrations</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate('/pricing'); setMenuOpen(false); }}>Pricing</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Contact Us</button>
+                    <Button
+                      onClick={() => { navigate(isAuthenticated ? "/dashboard" : "/auth"); setMenuOpen(false); }}
+                      className="mt-3 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white"
+                    >
+                      Subscribe ↗
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
@@ -176,7 +202,7 @@ export default function Landing() {
             <div className="relative w-full max-w-5xl mt-2 flex justify-center">
               {/* Removed hero animation video per request */}
               <h1
-                className="relative mt-6 font-extrabold leading-[1.08] text-white text-[36px] sm:text-[48px] md:text-[64px] lg:text-[72px] tracking-tight"
+                className="relative mt-6 font-extrabold leading-[1.08] text-white text-[30px] sm:text-[42px] md:text-[60px] lg:text-[72px] tracking-tight text-balance px-1"
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
               >
                 Supercharge Your Productivity
