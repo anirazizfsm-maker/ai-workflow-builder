@@ -45,30 +45,40 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Typing animation for hero header
-  const [typedLine1, setTypedLine1] = useState("");
-  const [typedLine2, setTypedLine2] = useState("");
+  const headlineWords = ["Supercharge", "your", "productivity", "and", "workflow", "with", "AI."] as const;
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
-    const line1 = "Supercharge Your Productivity";
-    const line2 = "and Workflow with AI";
-    let i = 0;
-    let j = 0;
+    const currentWord = headlineWords[wordIndex];
+    const typeSpeed = isDeleting ? 50 : 85;
 
-    const interval = setInterval(() => {
-      if (i < line1.length) {
-        setTypedLine1((prev) => prev + line1[i]);
-        i++;
-        return;
+    const tick = () => {
+      if (!isDeleting) {
+        // typing forward
+        const next = currentWord.slice(0, displayText.length + 1);
+        setDisplayText(next);
+        if (next === currentWord) {
+          // full word typed, hold before deleting
+          setTimeout(() => setIsDeleting(true), 700);
+          return;
+        }
+      } else {
+        // deleting
+        const next = currentWord.slice(0, displayText.length - 1);
+        setDisplayText(next);
+        if (next.length === 0) {
+          // move to next word
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % headlineWords.length);
+        }
       }
-      if (j < line2.length) {
-        setTypedLine2((prev) => prev + line2[j]);
-        j++;
-        return;
-      }
-      clearInterval(interval);
-    }, 55); // type speed per char
+    };
 
-    return () => clearInterval(interval);
-  }, []);
+    const t = setTimeout(tick, typeSpeed);
+    return () => clearTimeout(t);
+  }, [displayText, isDeleting, wordIndex]);
 
   // Keyboard shortcut: '/' focuses FAQ input (like many apps)
   useEffect(() => {
@@ -232,17 +242,12 @@ export default function Landing() {
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
                 aria-live="polite"
               >
-                <span>{typedLine1}</span>
-                <br className="hidden md:block" />
-                <span>{typedLine2}</span>
-                {/* caret */}
-                {(typedLine2.length < "and Workflow with AI".length) && (
-                  <span
-                    className="ml-1 inline-block align-baseline h-[0.9em] w-[0.6ch] rounded-[2px] animate-pulse"
-                    style={{ background: "linear-gradient(180deg, rgba(147,197,253,0.95), rgba(59,130,246,0.95))" }}
-                    aria-hidden
-                  />
-                )}
+                {displayText}
+                <span
+                  className="ml-1 inline-block align-baseline h-[0.9em] w-[0.6ch] rounded-[2px] animate-pulse"
+                  style={{ background: "linear-gradient(180deg, rgba(147,197,253,0.95), rgba(59,130,246,0.95))" }}
+                  aria-hidden
+                />
               </h1>
             </div>
 
