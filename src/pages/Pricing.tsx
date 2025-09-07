@@ -111,19 +111,9 @@ export default function Pricing() {
         </div>
       </header>
 
-      {/* Hero with scoped cosmic video */}
+      {/* Hero with scoped cosmic background (video removed; keep overlay) */}
       <section className="relative px-4 pt-8 md:pt-12 overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl">
-          <video
-            className="h-full w-full object-cover opacity-70"
-            autoPlay
-            muted
-            loop
-            playsInline
-          >
-            <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
-            <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
-          </video>
           <div className="absolute inset-0 bg-[#030611]/50" />
         </div>
         <motion.div

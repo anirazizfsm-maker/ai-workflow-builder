@@ -226,19 +226,9 @@ export default function Landing() {
 
         {/* HERO (replaced content to match screenshot) */}
         <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
-          {/* Hero-scoped cosmic background video */}
+          {/* Hero-scoped cosmic background (video removed; keep overlay for readability) */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            <video
-              className="h-full w-full object-cover opacity-70"
-              autoPlay
-              muted
-              loop
-              playsInline
-            >
-              <source src="/assets/falling_into_space_loop.mp4" type="video/mp4" />
-              <source src="/assets/Recording_2025-09-07_050448.mp4" type="video/mp4" />
-            </video>
-            {/* Readability overlay */}
+            {/* Removed <video> background to delete asset usage */}
             <div className="absolute inset-0 bg-[#030611]/50" />
           </div>
 
