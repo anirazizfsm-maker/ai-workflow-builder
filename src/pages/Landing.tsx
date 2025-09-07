@@ -52,7 +52,8 @@ export default function Landing() {
 
   useEffect(() => {
     const currentWord = headlineWords[wordIndex];
-    const typeSpeed = isDeleting ? 50 : 85;
+    // Smoother speeds: slower typing, gentle delete
+    const typeSpeed = isDeleting ? 45 : 65;
 
     const tick = () => {
       if (!isDeleting) {
@@ -60,8 +61,8 @@ export default function Landing() {
         const next = currentWord.slice(0, displayText.length + 1);
         setDisplayText(next);
         if (next === currentWord) {
-          // full word typed, hold before deleting
-          setTimeout(() => setIsDeleting(true), 700);
+          // full word typed, hold a bit longer before deleting
+          setTimeout(() => setIsDeleting(true), 900);
           return;
         }
       } else {
