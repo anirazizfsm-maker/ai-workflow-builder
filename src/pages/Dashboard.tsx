@@ -17,11 +17,10 @@ import { Input as TextInput } from "@/components/ui/input";
 import { Pencil, PlusCircle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { FAQ } from "@/types/faq";
-import ChipsetBackground from "@/components/ChipsetBackground";
+import TesseractLogo from "@/components/TesseractLogo";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TesseractLogo from "@/components/TesseractLogo";
 
 export default function Dashboard() {
   const { isLoading, isAuthenticated, user, signOut } = useAuth();
@@ -406,11 +405,16 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      <ChipsetBackground />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black/20 via-transparent to-black/80"
-      />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        {/* Base background */}
+        <div className="absolute inset-0 bg-[#0a1429]" />
+        {/* Soft radial glow at the top center */}
+        <div className="pointer-events-none absolute -top-40 left-1/2 h-[720px] w-[720px] -translate-x-1/2 rounded-full blur-3xl opacity-40 bg-[radial-gradient(circle_at_center,rgba(37,99,235,0.45),transparent_60%)]" />
+        {/* Wide subtle radial to add depth */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-200px,rgba(99,102,241,0.18),transparent_60%)]" />
+        {/* Bottom vignette */}
+        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/40 to-transparent" />
+      </div>
 
       <header className="sticky top-0 z-50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
