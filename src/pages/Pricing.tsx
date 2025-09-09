@@ -87,12 +87,7 @@ export default function Pricing() {
       {/* Header */}
       <header className="sticky top-0 z-40">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
-          <button
-            onClick={() => navigate("/")}
-            className="relative cursor-pointer select-none text-2xl md:text-3xl font-extrabold tracking-tight text-foreground drop-shadow flex items-center gap-2"
-          >
-            <span>LETHIMDO</span>
-          </button>
+          <div />
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
