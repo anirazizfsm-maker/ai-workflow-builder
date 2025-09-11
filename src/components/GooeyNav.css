@@ -186,15 +186,24 @@
   text-decoration: none;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: white;
-  background: linear-gradient(90deg, #1e40af, #2563eb);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 28px rgba(37, 99, 235, 0.25);
-  transition: filter 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+
+  /* glass look */
+  color: #e6eeff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+
+  transition: filter 200ms ease, transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
 }
 
 .gooey-cta:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
-  box-shadow: 0 0 38px rgba(37, 99, 235, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 10px 28px rgba(0, 0, 0, 0.3);
 }
