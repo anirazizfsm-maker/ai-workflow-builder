@@ -68,7 +68,7 @@ export default function Landing() {
   }, []);
 
   // Remove typing animation state and effects; use a static headline instead
-  const staticHeadline = "Supercharge your productivity and workflow with AI.";
+  const staticHeadline = "Automation will grow your business 2x faster.";
 
   // Data
   const faqResults =
@@ -255,8 +255,7 @@ export default function Landing() {
 
             {/* Subcopy */}
             <p className="mt-5 max-w-3xl text-[#a6b3cf] text-lg md:text-xl">
-              Automate the busywork, eliminate bottlenecks, and focus on what matters most — powered
-              by intelligent automation that learns with you.
+              Manage customer calls, manage social media posts, daily reports, appointments, and automate anything with a single prompt.
             </p>
 
             {/* CTAs */}
@@ -265,15 +264,31 @@ export default function Landing() {
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
                 className="rounded-xl px-7 py-6 text-base font-bold text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_36px_0_rgba(37,99,235,0.35)]"
               >
-                Get Started Free
+                🚀 Try AI Builder — Free Trial
               </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate('/pricing')}
                 className="rounded-xl px-7 py-6 text-base font-bold border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
               >
-                Try Live Demo
+                See Pricing
               </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* TRUSTED BY */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 pt-2 pb-6">
+          <div className="rounded-2xl border border-[#18264c] bg-[#0a1327]/70 backdrop-blur-xl px-4 py-4">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <span className="text-[#9db2e9] text-sm">Trusted by forward-thinking teams</span>
+              <div className="flex items-center gap-6 opacity-80">
+                <img src="/logo.png" alt="Google" className="h-6 w-auto" />
+                <img src="/logo.png" alt="Slack" className="h-6 w-auto" />
+                <img src="/logo.png" alt="Shopify" className="h-6 w-auto" />
+                <img src="/logo.png" alt="Notion" className="h-6 w-auto" />
+                <img src="/logo.png" alt="Stripe" className="h-6 w-auto" />
+              </div>
             </div>
           </div>
         </section>
@@ -401,6 +416,7 @@ export default function Landing() {
                           <div className="h-6 w-6 rounded-md bg-[#10b981]/20 grid place-items-center text-[#7de9c0] text-xs">S</div>
                           <span className="text-xs px-2 py-0.5 rounded-md bg-[#1b2a55] text-[#8ab4ff]">Trigger</span>
                           <span className="text-xs px-2 py-0.5 rounded-md bg-[#3b2746] text-[#ff7aa8]">Action</span>
+                          <span className="text-xs px-2 py-0.5 rounded-md bg-[#3b2746] text-[#ff7aa8]">Action</span>
                           <span className="text-white font-medium text-sm">Insert data to sheet in a new row</span>
                         </div>
                         <div className="h-5 w-8 rounded bg-white/5 border border-white/10" />
@@ -483,130 +499,126 @@ export default function Landing() {
               transition={{ duration: 0.6 }}
               className="text-white"
             >
-              <h3 className="text-2xl md:text-3xl font-extrabold mb-4">Why Choose Lethimdo?</h3>
+              <h3 className="text-2xl md:text-3xl font-extrabold mb-4">Why teams choose Lethimdo</h3>
               <ul className="space-y-3 text-[#b6c5e6] text-lg">
                 <li className="flex items-start gap-3"><span>📞</span><span>Automatically manage customer calls</span></li>
                 <li className="flex items-start gap-3"><span>📣</span><span>Schedule & publish social media posts</span></li>
-                <li className="flex items-start gap-3"><span>📊</span><span>Daily business reports & insights</span></li>
-                <li className="flex items-start gap-3"><span>🤖</span><span>No coding needed, just a prompt</span></li>
+                <li className="flex items-start gap-3"><span>📊</span><span>Daily business reports delivered</span></li>
+                <li className="flex items-start gap-3"><span>🤖</span><span>Build workflows by writing a prompt</span></li>
+                <li className="flex items-start gap-3"><span>🔄</span><span>Self-healing workflows that auto-fix errors</span></li>
+                <li className="flex items-start gap-3"><span>🔐</span><span>Enterprise-grade security & privacy</span></li>
               </ul>
             </motion.div>
           </div>
         </section>
 
-        {/* TRUST & WORKFLOW CARDS (new section) */}
+        {/* AI ADVISOR */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
+          >
+            <div className="flex items-start gap-4">
+              <img src="/logo.png" alt="AI Advisor" className="h-12 w-12 rounded-full border border-white/10" />
+              <div>
+                <h3 className="text-2xl md:text-3xl font-extrabold">Your AI business assistant</h3>
+                <p className="text-[#9db2e9] mt-1">Lethimdo learns your business and suggests automations to help you grow faster.</p>
+                <ul className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-[#c6d4f7]">
+                  <li className="rounded-lg border border-white/10 bg-white/5 px-3 py-2">Automate weekly report delivery</li>
+                  <li className="rounded-lg border border-white/10 bg-white/5 px-3 py-2">Send Slack alerts for new leads</li>
+                  <li className="rounded-lg border border-white/10 bg-white/5 px-3 py-2">Auto-schedule social media campaigns</li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-6">How it works in 3 steps</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { icon: "📝", title: "Write your prompt", desc: "Describe what you want automated." },
+              { icon: "⚡", title: "AI builds the workflow", desc: "Instantly creates automation for you." },
+              { icon: "🚀", title: "Run & scale", desc: "Save hours weekly and focus on growth." },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="rounded-2xl border border-[#1a2a55] bg-[#0b1120]/80 p-5 text-white"
+              >
+                <div className="text-2xl">{s.icon}</div>
+                <div className="mt-2 font-semibold">{s.title}</div>
+                <p className="text-[#9db2e9] mt-1">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* TRUST & WORKFLOW CARDS */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Security card */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
-            >
-              {/* decorative background */}
-              <div aria-hidden className="absolute inset-0 -z-10">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(120% 80% at 10% 10%, rgba(37,99,235,0.18), transparent 55%)",
-                  }}
-                />
-                <div
-                  className="absolute inset-0 opacity-60"
-                  style={{
-                    background:
-                      "conic-gradient(from 270deg at 20% 30%, rgba(15,23,42,0) 0deg, rgba(30,64,175,0.35) 120deg, rgba(30,64,175,0) 240deg, rgba(30,64,175,0.35) 300deg)",
-                  }}
-                />
+            {/* Other Agencies */}
+            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-5 text-white">
+              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-white/10 to-transparent blur-2xl" />
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-white/90 font-semibold">Other Agencies</span>
+                <span className="text-[#94b8ff] text-xs border border-[#2b3f7a] px-2 py-1 rounded-full">Legacy</span>
               </div>
+              <div className="rounded-2xl border border-[#3c50a1] p-4 bg-[#0b1120]">
+                <ul className="space-y-3 text-[#c6d4f7]">
+                  {[
+                    "Slow onboarding",
+                    "High costs",
+                    "Rigid processes",
+                    "Delayed feedback",
+                    "Low transparency",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-3">
+                      <span className="text-rose-400">✕</span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-              <h4 className="text-2xl md:text-3xl font-extrabold">The Best Security</h4>
-              <p className="text-[#9db2e9] mt-2">
-                Lethimdo is a Trusted Cloud certified service.
-              </p>
-
-              {/* Floating confirmation panel */}
-              <div className="relative mt-10">
-                {/* background shadow card */}
-                <div className="absolute left-8 top-6 rotate-[-3deg] w-[92%] md:w-[420px] h-20 rounded-xl bg-[#0d1429] border border-white/5" />
-                {/* foreground card */}
-                <div className="relative w-full max-w-[480px] rounded-xl bg-[#0f162e] border border-white/10 shadow-[0_20px_60px_-20px_rgba(30,64,175,0.55)] px-4 py-3.5">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 h-8 w-8 rounded-full bg-emerald-500 grid place-items-center text-black font-bold">
-                      ✓
-                    </div>
-                    <div className="text-left">
-                      <div className="text-white font-semibold leading-tight">
-                        All connected data are safe
-                      </div>
-                      <div className="text-xs text-[#b6c5e6] mt-1">
-                        Gmail is a secure partner with Lethimdo. You can manage all of your
-                        connected accounts here.
-                      </div>
-                    </div>
+            {/* Lethimdo */}
+            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/90 backdrop-blur-xl p-5 text-white">
+              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-[#2563eb]/30 to-transparent blur-2xl" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-xl grid place-items-center bg-gradient-to-br from-[#1e40af] to-[#2563eb] text-white font-bold">
+                    L
                   </div>
+                  <span className="text-white/90 font-semibold">Lethimdo</span>
                 </div>
+                <span className="text-emerald-300 text-xs border border-emerald-800/50 px-2 py-1 rounded-full bg-emerald-500/10">
+                  Modern
+                </span>
               </div>
-            </motion.div>
-
-            {/* Loop & Branch card */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.08 }}
-              className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
-            >
-              {/* decorative background rings */}
-              <div aria-hidden className="absolute inset-0 -z-10">
-                <div
-                  className="absolute inset-0 opacity-80"
-                  style={{
-                    background:
-                      "radial-gradient(120% 90% at 80% 20%, rgba(30,64,175,0.6), transparent 65%)",
-                  }}
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(circle at 70% 30%, rgba(59,130,246,0.12) 2px, transparent 3px)",
-                    backgroundSize: "28px 28px",
-                  }}
-                />
+              <div className="rounded-2xl border border-white/10 p-4 bg-[#0b1120]">
+                <ul className="space-y-3 text-[#c6d4f7]">
+                  {[
+                    "Instant setup",
+                    "Affordable plans",
+                    "Flexible workflows",
+                    "Real‑time updates",
+                    "Full visibility",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-3">
+                      <span className="text-emerald-400">✓</span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <h4 className="text-2xl md:text-3xl font-extrabold">Loop and Branch</h4>
-              <p className="text-[#9db2e9] mt-2">
-                The workflow automation process can be improved by adding more branches.
-              </p>
-
-              {/* simple flow line with nodes */}
-              <div className="mt-10">
-                <div className="relative mx-auto md:mx-0 w-full max-w-[560px]">
-                  {/* base line */}
-                  <div className="h-[2px] w-full bg-white/15 rounded-full" />
-                  {/* nodes */}
-                  <div className="absolute -top-5 left-0 flex items-center gap-10">
-                    <div className="h-10 w-10 rounded-xl bg-[#1e3a8a]/60 border border-white/10 grid place-items-center text-[#facc15] text-xl">
-                      ↗
-                    </div>
-                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#10b981] text-xl">
-                      📄
-                    </div>
-                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#34d399] text-xl">
-                      🧮
-                    </div>
-                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#60a5fa] text-xl">
-                      📅
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -620,6 +632,7 @@ export default function Landing() {
               { title: "RAG Chatbot", desc: "Summarize & search documents instantly" },
               { title: "Google Sheets Automation", desc: "Sync, update, and analyze spreadsheets" },
               { title: "Social Media Scheduler", desc: "Automate multi-platform posting" },
+              { title: "CRM Updates", desc: "Keep contacts in sync across systems" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -642,6 +655,31 @@ export default function Landing() {
           </div>
         </section>
 
+        {/* ANALYTICS */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">See your ROI in real time</h3>
+          <p className="text-[#8fa2c9] mb-6">Track time and money saved with automation.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { title: "Workflows run over time" },
+              { title: "Workflow distribution" },
+              { title: "Hours saved per workflow" },
+            ].map((c, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="h-48 rounded-2xl border border-[#1a2a55] bg-[#0b1120]/80 p-4 text-white"
+              >
+                <div className="h-full w-full rounded-xl bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.18),transparent_55%)] grid place-items-center text-[#9db2e9]">
+                  {c.title}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         {/* PRICING */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
           <div className="flex items-center justify-center mb-6">
@@ -650,10 +688,10 @@ export default function Landing() {
             <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
           </div>
           <h3 className="text-2xl md:text-3xl font-extrabold text-white text-center">
-            The Best Pricing Plans
+            Plans and Pricing
           </h3>
           <p className="text-center text-[#8fa2c9] max-w-2xl mx-auto mt-2">
-            Find the perfect plan to streamline your workflow and unlock powerful tools designed to save time and boost productivity.
+            Find the perfect plan to streamline your content creation workflow and unlock powerful tools designed to save time and boost productivity.
           </p>
 
           {/* Cards */}
@@ -777,74 +815,27 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* COMPARISON */}
+        {/* CASE STUDIES */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
-          <div className="flex items-center justify-center mb-6">
-            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
-            <span className="mx-2 text-[#9db2e9] text-sm">Comparison</span>
-            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
-          </div>
-          <h3 className="text-2xl md:text-3xl font-extrabold text-white text-center mb-8">
-            Choosing Lethimdo Over Others
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Other Agencies */}
-            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-5 text-white">
-              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-white/10 to-transparent blur-2xl" />
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-white/90 font-semibold">Other Agencies</span>
-                <span className="text-[#94b8ff] text-xs border border-[#2b3f7a] px-2 py-1 rounded-full">Legacy</span>
-              </div>
-              <div className="rounded-2xl border border-[#3c50a1] p-4 bg-[#0b1120]">
-                <ul className="space-y-3 text-[#c6d4f7]">
-                  {[
-                    "Slow onboarding",
-                    "High costs",
-                    "Rigid processes",
-                    "Delayed feedback",
-                    "Low transparency",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-3">
-                      <span className="text-rose-400">✕</span>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Lethimdo */}
-            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-5 text-white">
-              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-[#2563eb]/30 to-transparent blur-2xl" />
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-xl grid place-items-center bg-gradient-to-br from-[#1e40af] to-[#2563eb] text-white font-bold">
-                    L
-                  </div>
-                  <span className="text-white/90 font-semibold">Lethimdo</span>
-                </div>
-                <span className="text-emerald-300 text-xs border border-emerald-800/50 px-2 py-1 rounded-full bg-emerald-500/10">
-                  Modern
-                </span>
-              </div>
-              <div className="rounded-2xl border border-white/10 p-4 bg-[#0b1120]">
-                <ul className="space-y-3 text-[#c6d4f7]">
-                  {[
-                    "Instant setup",
-                    "Affordable plans",
-                    "Flexible workflows",
-                    "Real‑time updates",
-                    "Full visibility",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-3">
-                      <span className="text-emerald-400">✓</span>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-6">See real results</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { icon: "🚀", title: "E-commerce store", result: "Saved 15 hours/week automating order updates" },
+              { icon: "🏢", title: "Consulting firm", result: "Increased leads by 30% with LinkedIn automation" },
+              { icon: "📊", title: "Startup team", result: "Reduced reporting time by 90% using Google Sheets automation" },
+            ].map((cs, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="rounded-2xl border border-[#1a2a55] bg-[#0b1120]/80 p-5 text-white"
+              >
+                <div className="text-2xl">{cs.icon}</div>
+                <div className="mt-2 font-semibold">{cs.title}</div>
+                <p className="text-[#9db2e9] mt-1">{cs.result}</p>
+              </motion.div>
+            ))}
           </div>
         </section>
 
@@ -974,6 +965,18 @@ export default function Landing() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+        </section>
+
+        {/* NEWSLETTER */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <div className="rounded-2xl border border-[#1a2a55] bg-gradient-to-b from-[#0b1120] to-[#0a0f1e] p-6 md:p-8 text-white">
+            <h3 className="text-2xl md:text-3xl font-extrabold">Stay ahead with automation tips</h3>
+            <p className="text-[#9db2e9] mt-1">Get weekly insights on AI-powered productivity.</p>
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
+              <Input placeholder="Enter your email" className="bg-[#0f1730]/70 border-white/10 text-white" />
+              <Button className="rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] text-white">Subscribe</Button>
+            </div>
+          </div>
         </section>
 
         {/* CTA */}
