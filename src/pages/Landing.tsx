@@ -120,7 +120,7 @@ export default function Landing() {
         
 
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
-        <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[800px] md:min-h-[900px]">
+        <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-12 md:pt-24 pb-12 md:pb-20 overflow-hidden rounded-2xl min-h-[620px] md:min-h-[900px]">
           {/* Hero-centered Navigation */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-full px-6 md:px-8">
             <div className="mx-auto max-w-6xl flex justify-center">
@@ -211,14 +211,14 @@ export default function Landing() {
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                className="rounded-xl px-7 py-6 text-base font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-md shadow-[0_0_24px_rgba(255,255,255,0.06)]"
+                className="w-full sm:w-auto rounded-xl px-7 py-6 text-base font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-md shadow-[0_0_24px_rgba(255,255,255,0.06)]"
               >
                 Try AI Builder — Free Trial
               </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate('/pricing')}
-                className="rounded-xl px-7 py-6 text-base font-bold border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
+                className="w-full sm:w-auto rounded-xl px-7 py-6 text-base font-bold border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
               >
                 See Pricing
               </Button>
@@ -584,7 +584,7 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="h-48 rounded-2xl border border-[#1a2a55] bg-[#0b1120]/80 p-4 text-white"
+                className="h-40 md:h-48 rounded-2xl border border-[#1a2a55] bg-[#0b1120]/80 p-4 text-white"
               >
                 <div className="h-full w-full rounded-xl bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.18),transparent_55%)] grid place-items-center text-[#9db2e9]">
                   {c.title}
