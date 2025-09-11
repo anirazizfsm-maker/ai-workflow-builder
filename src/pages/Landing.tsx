@@ -28,6 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
+import PillNav from "@/components/PillNav";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -114,17 +115,22 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      {/* Background layer WITHOUT full-page Prism */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        {/* base night backdrop */}
-        <div className="absolute inset-0 bg-[#030611]" />
-        {/* top-center deep blue glow */}
-        <div
-          className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[1200px] rounded-full blur-3xl opacity-70"
-          style={{ background: "radial-gradient(60% 60% at 50% 40%, rgba(29,78,216,0.55) 0%, rgba(3,6,17,0.0) 70%)" }}
+      {/* Add: Top navigation */}
+      <div className="sticky top-0 z-50">
+        <PillNav
+          logo="/logo.svg"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Integrations", href: "/#integrations" },
+            { label: "Pricing", href: "/pricing" },
+            { label: "Contact", href: "/#contact" },
+          ]}
+          ctaLabel="Pricing"
+          ctaHref="/pricing"
+          pillColor="#ffffff"
+          pillTextColor="#dbe7ff"
+          hoveredPillTextColor="#060010"
         />
-        {/* soft beams */}
-        <div className="absolute top-0 left-0 right-0 h-[520px] [background:conic-gradient(from_180deg_at_50%_0%,rgba(59,130,246,0.25),transparent_35%,rgba(96,165,250,0.2)_60%,transparent_85%)] blur-2xl opacity-50" />
       </div>
 
       <main className="relative z-0">
