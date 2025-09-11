@@ -28,7 +28,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
-import PillNav from "@/components/PillNav";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -115,24 +114,6 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
-      {/* Add: Top navigation */}
-      <div className="sticky top-0 z-50">
-        <PillNav
-          logo="/logo.svg"
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Integrations", href: "/#integrations" },
-            { label: "Pricing", href: "/pricing" },
-            { label: "Contact", href: "/#contact" },
-          ]}
-          ctaLabel="Pricing"
-          ctaHref="/pricing"
-          pillColor="#ffffff"
-          pillTextColor="#dbe7ff"
-          hoveredPillTextColor="#060010"
-        />
-      </div>
-
       <main className="relative z-0">
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
