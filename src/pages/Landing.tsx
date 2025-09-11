@@ -216,7 +216,7 @@ export default function Landing() {
 
           {/* Hero-centered Navigation */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-full px-6 md:px-8">
-            <div className="mx-auto max-w-6xl flex justify-center">
+            <div className="mx-auto max-w-6xl hidden md:flex justify-center">
               <GooeyNav
                 items={[
                   { label: "Home", href: "/" },
@@ -226,6 +226,46 @@ export default function Landing() {
               />
             </div>
           </div>
+
+          {/* Mobile Menu (hamburger) */}
+          <div className="absolute top-4 right-4 z-30 md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Open menu"
+                  className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white p-2.5 hover:bg-white/10"
+                >
+                  <Menu className="h-5 w-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="bg-[#0b1120] border-[#142554] text-white">
+                <SheetHeader>
+                  <SheetTitle className="text-white">Menu</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 grid gap-2">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
+                  >
+                    Home
+                  </button>
+                  <button
+                    onClick={() => navigate("/pricing")}
+                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
+                  >
+                    Pricing
+                  </button>
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
+                  >
+                    Dashboard
+                  </button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             {/* Prism background with hover interaction */}
