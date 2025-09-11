@@ -141,11 +141,11 @@ export default function Landing() {
               transparent
               suspendWhenOffscreen
               className="prism-container"
-              height={3.8}
-              baseWidth={5.6}
-              scale={3.8}
+              height={3.2}
+              baseWidth={5.0}
+              scale={3.0}
               glow={1.2}
-              noise={0.3}
+              noise={0.12}
               hueShift={0.2}
               colorFrequency={1.0}
               hoverStrength={2.2}
