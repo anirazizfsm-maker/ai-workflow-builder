@@ -27,7 +27,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
-import ScrambledText from "@/components/ScrambledText";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -219,17 +218,9 @@ export default function Landing() {
               {/* Removed hero animation video per request */}
               <h1
                 className="relative mt-6 font-extrabold leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
-                style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
                 aria-live="off"
               >
-                <ScrambledText
-                  radius={120}
-                  duration={1.0}
-                  speed={0.8}
-                  scrambleChars=".:|/\_-+=*#@%!$&?"
-                >
-                  {staticHeadline}
-                </ScrambledText>
+                {staticHeadline}
               </h1>
             </div>
 
