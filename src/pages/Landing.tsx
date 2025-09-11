@@ -28,6 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
+import LogoLoop from "@/components/LogoLoop";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -290,6 +291,30 @@ export default function Landing() {
                 <img src="/logo.png" alt="Stripe" className="h-6 w-auto" />
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* LOGO MARQUEE (auto-scrolling) */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 pt-0 pb-8">
+          <div className="rounded-2xl border border-[#18264c] bg-[#0a1327]/70 backdrop-blur-xl px-2 py-4">
+            <LogoLoop
+              logos={[
+                { src: "/logo.png", alt: "Google" },
+                { src: "/logo.png", alt: "Slack" },
+                { src: "/logo.png", alt: "Shopify" },
+                { src: "/logo.png", alt: "Notion" },
+                { src: "/logo.png", alt: "Stripe" },
+              ]}
+              speed={120}
+              direction="left"
+              gap={48}
+              logoHeight={28}
+              pauseOnHover={true}
+              fadeOut={true}
+              fadeOutColor="rgba(10,15,30,1)"
+              scaleOnHover={true}
+              ariaLabel="Trusted by logos"
+            />
           </div>
         </section>
 
