@@ -44,6 +44,26 @@ export default function Landing() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Add: mobile detection to tune Prism for small screens
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 640px)");
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsMobile(('matches' in e ? e.matches : (e as MediaQueryList).matches));
+    };
+    setIsMobile(mql.matches);
+    // Support older browsers
+    if ('addEventListener' in mql) {
+      mql.addEventListener('change', onChange as (e: MediaQueryListEvent) => void);
+      return () => mql.removeEventListener('change', onChange as (e: MediaQueryListEvent) => void);
+    } else {
+      // @ts-expect-error legacy
+      mql.addListener(onChange);
+      // @ts-expect-error legacy
+      return () => mql.removeListener(onChange);
+    }
+  }, []);
+
   // Remove typing animation state and effects; use a static headline instead
   const staticHeadline = "Supercharge your productivity and workflow with AI.";
 
@@ -91,26 +111,24 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      {/* Background video: tries your exported /assets/falling_into_space_loop.mp4 first, then falls back */}
-      {/* Removed global page background video to scope it to hero only */}
-      {/* <ChipsetBackground /> */}
-      {/* Keep chipset animation locked in the background */}
-      {/* <ChipsetBackground /> */}
-
-      {/* Replace the overlay to a deep-blue beam backdrop matching the screenshot */}
+      {/* Background layer with responsive Prism */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <Prism
           className="absolute inset-0"
           animationType="hover"
           transparent={true}
-          glow={1.2}
-          noise={0.12}
-          scale={3.2}
+          // Tuned responsively for mobile
+          scale={isMobile ? 2.2 : 3.2}
+          glow={isMobile ? 0.9 : 1.2}
+          noise={isMobile ? 0.08 : 0.12}
           hueShift={0.2}
           colorFrequency={1.2}
-          bloom={1.1}
-          timeScale={0.5}
-          suspendWhenOffscreen={false}
+          bloom={isMobile ? 0.8 : 1.1}
+          timeScale={isMobile ? 0.4 : 0.5}
+          hoverStrength={isMobile ? 1.2 : 2}
+          inertia={isMobile ? 0.1 : 0.05}
+          // Save resources when not visible
+          suspendWhenOffscreen={true}
         />
         {/* base night backdrop */}
         <div className="absolute inset-0 bg-[#030611]" />
