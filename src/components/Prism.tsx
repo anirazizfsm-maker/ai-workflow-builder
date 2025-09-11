@@ -64,24 +64,44 @@ const Prism = ({
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const renderer = new Renderer({
-      dpr,
-      alpha: transparent,
-      antialias: false,
-    });
-    const gl = renderer.gl;
+    // Safely initialize WebGL renderer; bail out if context creation fails
+    let renderer: Renderer | null = null;
+    try {
+      renderer = new Renderer({
+        dpr,
+        alpha: transparent,
+        antialias: false,
+      });
+    } catch (e) {
+      console.warn("[Prism] WebGL initialization failed (Renderer constructor). Skipping effect.", e);
+      return;
+    }
+    const gl = (renderer as any)?.gl as any;
+    if (!gl) {
+      console.warn("[Prism] WebGL context unavailable. Skipping effect.");
+      return;
+    }
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.CULL_FACE);
     gl.disable(gl.BLEND);
 
-    Object.assign(gl.canvas.style, {
-      position: "absolute",
-      inset: "0",
-      width: "100%",
-      height: "100%",
-      display: "block",
-    } as CSSStyleDeclaration);
-    container.appendChild(gl.canvas);
+    const canvasEl = (gl as any).canvas as any;
+    // Apply styles only if it's a DOM canvas
+    if (canvasEl && (canvasEl as any).style) {
+      Object.assign((canvasEl as HTMLCanvasElement).style, {
+        position: "absolute",
+        inset: "0",
+        width: "100%",
+        height: "100%",
+        display: "block",
+      } as any);
+    }
+    // Append only if it's an HTMLCanvasElement (OffscreenCanvas can't be appended)
+    if (canvasEl && typeof (canvasEl as any).getContext === "function") {
+      container.appendChild(canvasEl as HTMLCanvasElement);
+    } else {
+      // OffscreenCanvas or unknown canvas type — skip attaching to DOM
+    }
 
     const vertex = `
       attribute vec2 position;
@@ -417,7 +437,10 @@ const Prism = ({
         if (io) io.disconnect();
         delete container.__prismIO;
       }
-      if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
+      // Guard cleanup if WebGL was unavailable
+      if (gl && (gl as any).canvas && (gl as any).canvas.parentElement === container) {
+        container.removeChild((gl as any).canvas);
+      }
     };
   }, [
     height,
