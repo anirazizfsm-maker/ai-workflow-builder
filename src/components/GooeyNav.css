@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  justify-content: space-between;
 }
 
 .gooey-nav-container ul {
@@ -25,6 +26,7 @@
   background: rgba(10, 20, 41, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
+  justify-content: center;
 }
 
 .gooey-nav-container li {
