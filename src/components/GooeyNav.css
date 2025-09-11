@@ -19,10 +19,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px;
+  padding: 4px;
   margin: 0;
   list-style: none;
-  border-radius: 16px;
+  border-radius: 12px;
   background: rgba(10, 20, 41, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
@@ -39,9 +39,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 12px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
   color: #9bb1e9;
   text-decoration: none;
   font-weight: 600;
@@ -66,8 +66,8 @@
   top: 0;
   left: 0;
   width: 64px;
-  height: 38px;
-  border-radius: 12px;
+  height: 32px;
+  border-radius: 10px;
   pointer-events: none;
   transition: left 300ms ease, top 300ms ease, width 300ms ease, height 300ms ease, transform 300ms ease;
 }
@@ -112,8 +112,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   transform-origin: center;
   transform: translate(calc(var(--start-x)), calc(var(--start-y))) rotate(var(--rotate)) scale(var(--scale));
   animation: particle-move var(--time) ease-out forwards;
@@ -122,8 +122,8 @@
 
 .point {
   display: block;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 999px;
   background: var(--color);
   opacity: 0.9;
@@ -170,9 +170,9 @@
 .gooey-cta {
   display: inline-flex;
   align-items: center;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 12px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
   text-decoration: none;
   font-weight: 700;
   letter-spacing: -0.01em;
