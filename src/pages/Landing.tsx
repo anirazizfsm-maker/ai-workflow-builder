@@ -188,7 +188,7 @@ export default function Landing() {
               animationType="3drotate"
               transparent={true}
               // original feel
-              scale={3.6}
+              scale={4.4} // slightly larger background effect
               glow={1}
               // Reduce shader noise for a smoother, cleaner look
               noise={0.08}
