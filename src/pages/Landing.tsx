@@ -114,7 +114,7 @@ export default function Landing() {
       {/* Background layer WITHOUT full-page Prism */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         {/* base night backdrop */}
-        <div className="absolute inset-0 bg-[#030611]/80" />
+        <div className="absolute inset-0 bg-[#030611]" />
         {/* top-center deep blue glow */}
         <div
           className="absolute -top-24 left-1/2 -translate-x-1/2 h-[520px] w-[1200px] rounded-full blur-3xl opacity-70"
