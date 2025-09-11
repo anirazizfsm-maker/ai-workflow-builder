@@ -28,6 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
+import GooeyNav from "@/components/GooeyNav";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -115,6 +116,17 @@ export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       <main className="relative z-0">
+        {/* Top Navigation */}
+        <div className="mx-auto max-w-7xl px-6 md:px-8 pt-4">
+          <GooeyNav
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "Dashboard", href: "/dashboard" },
+            ]}
+          />
+        </div>
+
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
           {/* Hero-scoped cosmic background */}
