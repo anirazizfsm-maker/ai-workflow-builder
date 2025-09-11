@@ -119,7 +119,7 @@ export default function Landing() {
         
 
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
-        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[800px] md:min-h-[900px]">
+        <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[800px] md:min-h-[900px]">
           {/* Hero-centered Navigation */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-full px-6 md:px-8">
             <div className="mx-auto max-w-6xl flex justify-center">
