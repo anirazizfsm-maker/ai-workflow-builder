@@ -76,6 +76,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, Props>((props, ref) => {
   const interpolatedSettingsRef = useRef<string[]>([]);
   const mousePositionRef = useMousePositionRef(containerRef);
   const lastPositionRef = useRef<{ x: number | null; y: number | null }>({ x: null, y: null });
+  const smoothedPositionRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const parsedSettings = useMemo(() => {
     const parseSettings = (settingsStr: string) =>
@@ -119,11 +120,35 @@ const VariableProximity = forwardRef<HTMLSpanElement, Props>((props, ref) => {
   useAnimationFrame(() => {
     if (!containerRef?.current) return;
     const containerRect = containerRef.current.getBoundingClientRect();
-    const { x, y } = mousePositionRef.current;
-    if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
+
+    // Smooth the pointer: gently approach the actual pointer each frame
+    const targetX = mousePositionRef.current.x;
+    const targetY = mousePositionRef.current.y;
+
+    // Initialize smoothing on first run to avoid jump
+    if (lastPositionRef.current.x === null || lastPositionRef.current.y === null) {
+      smoothedPositionRef.current.x = targetX;
+      smoothedPositionRef.current.y = targetY;
+    } else {
+      // Low-pass filter (tweak alpha for more/less smoothing)
+      const alpha = 0.18;
+      smoothedPositionRef.current.x += (targetX - smoothedPositionRef.current.x) * alpha;
+      smoothedPositionRef.current.y += (targetY - smoothedPositionRef.current.y) * alpha;
+    }
+
+    const sx = smoothedPositionRef.current.x;
+    const sy = smoothedPositionRef.current.y;
+
+    // Short-circuit if movement is negligible to reduce layout thrash
+    if (
+      lastPositionRef.current.x !== null &&
+      lastPositionRef.current.y !== null &&
+      Math.abs((lastPositionRef.current.x as number) - sx) < 0.25 &&
+      Math.abs((lastPositionRef.current.y as number) - sy) < 0.25
+    ) {
       return;
     }
-    lastPositionRef.current = { x, y };
+    lastPositionRef.current = { x: sx, y: sy };
 
     letterRefs.current.forEach((letterRef, index) => {
       if (!letterRef) return;
@@ -133,8 +158,8 @@ const VariableProximity = forwardRef<HTMLSpanElement, Props>((props, ref) => {
       const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
 
       const distance = calculateDistance(
-        mousePositionRef.current.x,
-        mousePositionRef.current.y,
+        sx,
+        sy,
         letterCenterX,
         letterCenterY,
       );
