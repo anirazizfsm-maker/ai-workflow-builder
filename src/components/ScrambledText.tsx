@@ -48,8 +48,8 @@ export default function ScrambledText({
       span.className = "char";
       // Preserve spaces
       span.textContent = ch;
-      (span as any).dataset = (span as any).dataset || {};
-      (span as any).dataset.original = ch;
+      // Store original character safely via data attribute (dataset may be readonly in some envs)
+      span.setAttribute("data-original", ch);
       p.appendChild(span);
     }
 
@@ -81,7 +81,7 @@ export default function ScrambledText({
     if (state?.interval) window.clearInterval(state.interval);
     if (state?.timer) window.clearTimeout(state.timer);
 
-    const orig = (el as any).dataset?.original ?? el.textContent ?? "";
+    const orig = el.getAttribute("data-original") ?? el.textContent ?? "";
     const chars = scrambleChars;
     const pick = () => chars[Math.floor(Math.random() * chars.length)] ?? "*";
 
