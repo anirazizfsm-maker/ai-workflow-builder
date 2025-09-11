@@ -19,7 +19,10 @@
 }
 
 .gooey-nav-container ul {
-  flex: 1;
+  flex: 0 1 auto;
+  max-width: min(90vw, 720px);
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
   display: flex;
   align-items: center;
