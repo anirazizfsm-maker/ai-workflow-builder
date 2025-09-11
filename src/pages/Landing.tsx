@@ -682,6 +682,145 @@ export default function Landing() {
           </div>
         </section>
 
+        {/* COMPARISON */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <div className="flex items-center justify-center mb-6">
+            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
+            <span className="mx-2 text-[#9db2e9] text-sm">Comparison</span>
+            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
+          </div>
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white text-center mb-8">
+            Choosing Lethimdo Over Others
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Other Agencies */}
+            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-5 text-white">
+              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-white/10 to-transparent blur-2xl" />
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-white/90 font-semibold">Other Agencies</span>
+                <span className="text-[#94b8ff] text-xs border border-[#2b3f7a] px-2 py-1 rounded-full">Legacy</span>
+              </div>
+              <div className="rounded-2xl border border-[#3c50a1] p-4 bg-[#0b1120]">
+                <ul className="space-y-3 text-[#c6d4f7]">
+                  {[
+                    "Slow onboarding",
+                    "High costs",
+                    "Rigid processes",
+                    "Delayed feedback",
+                    "Low transparency",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-3">
+                      <span className="text-rose-400">✕</span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Lethimdo */}
+            <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-5 text-white">
+              <div aria-hidden className="absolute right-[-40px] top-[-40px] size-[180px] rounded-full bg-gradient-to-br from-[#2563eb]/30 to-transparent blur-2xl" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-xl grid place-items-center bg-gradient-to-br from-[#1e40af] to-[#2563eb] text-white font-bold">
+                    L
+                  </div>
+                  <span className="text-white/90 font-semibold">Lethimdo</span>
+                </div>
+                <span className="text-emerald-300 text-xs border border-emerald-800/50 px-2 py-1 rounded-full bg-emerald-500/10">
+                  Modern
+                </span>
+              </div>
+              <div className="rounded-2xl border border-white/10 p-4 bg-[#0b1120]">
+                <ul className="space-y-3 text-[#c6d4f7]">
+                  {[
+                    "Instant setup",
+                    "Affordable plans",
+                    "Flexible workflows",
+                    "Real‑time updates",
+                    "Full visibility",
+                  ].map((t) => (
+                    <li key={t} className="flex items-start gap-3">
+                      <span className="text-emerald-400">✓</span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TESTIMONIAL BANNER */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <div className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/90 backdrop-blur-xl p-6">
+            {/* subtle waves/backdrop */}
+            <div aria-hidden className="absolute inset-0 -z-10 opacity-70">
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(120% 90% at 10% 30%, rgba(30,64,175,0.35), transparent 60%)",
+                }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "conic-gradient(from 260deg at 60% 60%, rgba(59,130,246,0.15), rgba(15,23,42,0) 45%, rgba(59,130,246,0.15) 75%, rgba(15,23,42,0))",
+                }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-6 items-center">
+              {/* Quote */}
+              <div className="text-white">
+                <div className="text-[#9db2e9] text-sm mb-3">Trusted by teams</div>
+                <p className="text-xl md:text-2xl leading-relaxed text-[#d7e3ff]">
+                  "We used to spend hours juggling reports and chasing updates. After
+                  switching to Lethimdo, real‑time tracking saved us time and increased
+                  our conversion rate by 35%."
+                </p>
+                <div className="mt-4 text-[#9db2e9]">
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span key={i} className="text-amber-300">★</span>
+                    ))}
+                  </div>
+                  <div className="text-sm mt-1">Mariana, Digital Marketing Director</div>
+                </div>
+                <div className="mt-5 flex items-center gap-2">
+                  <button
+                    className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 text-white/80 hover:text-white"
+                    aria-label="Previous testimonial"
+                  >
+                    ←
+                  </button>
+                  <button
+                    className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 text-white/80 hover:text-white"
+                    aria-label="Next testimonial"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="relative">
+                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_60px_-20px_rgba(30,64,175,0.55)]">
+                  <img
+                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
+                    alt="Happy customer"
+                    className="w-full h-[260px] md:h-[300px] object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* TESTIMONIALS */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
           <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-6">What Our Customers Say</h3>
