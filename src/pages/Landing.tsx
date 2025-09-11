@@ -27,6 +27,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
+import VariableProximity from "@/components/VariableProximity";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -43,6 +44,8 @@ export default function Landing() {
   const [aiOpen, setAiOpen] = useState(false); // Floating chatbot / AI builder modal
   const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
   const [menuOpen, setMenuOpen] = useState(false);
+  // Add: ref for hero container to scope proximity effect
+  const heroRef = useRef<HTMLDivElement | null>(null);
 
   // Add: mobile detection to tune Prism for small screens
   const [isMobile, setIsMobile] = useState(false);
@@ -183,7 +186,7 @@ export default function Landing() {
         </div>
 
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
-        <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
+        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
           {/* Hero-scoped cosmic background */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             <Prism
@@ -239,7 +242,14 @@ export default function Landing() {
                 className="relative mt-6 font-extrabold leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
                 aria-live="off"
               >
-                {staticHeadline}
+                <VariableProximity
+                  label={staticHeadline}
+                  fromFontVariationSettings="'wght' 400, 'wdth' 100"
+                  toFontVariationSettings="'wght' 800, 'wdth' 85"
+                  containerRef={heroRef as any}
+                  radius={140}
+                  falloff="gaussian"
+                />
               </h1>
             </div>
 
