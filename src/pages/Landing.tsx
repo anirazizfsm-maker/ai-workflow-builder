@@ -125,7 +125,7 @@ export default function Landing() {
             <button
               onClick={() => navigate("/")}
               aria-label="Go to home"
-              className="rounded-xl bg-white/5 border border-white/10 px-3 py-1.5 backdrop-blur-md text-white hover:bg-white/10 shadow-[0_0_24px_rgba(255,255,255,0.06)]"
+              className="rounded-xl bg-white/5 px-3 py-1.5 backdrop-blur-md text-white hover:bg-white/10 shadow-[0_0_24px_rgba(255,255,255,0.06)]"
             >
               <span className="leading-none">
                 <VariableProximity
