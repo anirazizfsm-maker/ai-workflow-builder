@@ -28,6 +28,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 
+// Define a no-op local component in case any lingering <SplitText /> JSX remains.
+// This prevents "SplitText is not defined" without rendering anything.
+const SplitText = () => null;
+
 export default function Landing() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
