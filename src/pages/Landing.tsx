@@ -128,7 +128,7 @@ export default function Landing() {
         </div>
 
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
-        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
+        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[640px] md:min-h-[720px]">
           {/* Hero-scoped cosmic background */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             <Prism
@@ -136,13 +136,13 @@ export default function Landing() {
               animationType="3drotate"
               transparent={true}
               // original feel
-              scale={3.8}
-              glow={1}
+              scale={4.6}
+              glow={1.2}
               // Reduce shader noise for a smoother, cleaner look
               noise={0.08}
               hueShift={0}
               colorFrequency={1}
-              bloom={1}
+              bloom={1.2}
               timeScale={0.5}
               suspendWhenOffscreen={true}
             />
@@ -168,7 +168,7 @@ export default function Landing() {
 
           <div className="flex flex-col items-center text-center">
             {/* Customer pill */}
-            <div className="rounded-full bg-white/5 border border-white/10 backdrop-blur-xl px-3.5 py-2 flex items-center gap-3 shadow-[0_10px_32px_-12px_rgba(37,99,235,0.45)]">
+            <div className="rounded-full bg-white/5 border border-white/10 px-3.5 py-2 flex items-center gap-3 shadow-[0_10px_32px_-12px_rgba(37,99,235,0.45)]">
               <div className="flex -space-x-2">
                 <img src="/logo_bg.png" alt="a1" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
                 <img src="/logo.png" alt="a2" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
