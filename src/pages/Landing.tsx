@@ -190,7 +190,8 @@ export default function Landing() {
               // original feel
               scale={3.6}
               glow={1}
-              noise={0.5}
+              // Reduce shader noise for a smoother, cleaner look
+              noise={0.08}
               hueShift={0}
               colorFrequency={1}
               bloom={1}
