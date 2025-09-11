@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import "./ShinyText.css"
 
 const buttonVariants = cva(
   "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-[var(--neo-shadow)] hover:shadow-[var(--neo-shadow-strong)]",
@@ -47,10 +48,25 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button"
 
+  // Add shiny overlay class; pause on disabled. Allow override of speed via CSS var.
+  const shinyClasses = props.disabled ? "shiny-text disabled" : "shiny-text"
+  const mergedClassName = cn(buttonVariants({ variant, size, className }), shinyClasses)
+
+  // Default shine speed to 5s if not provided via style var
+  const providedStyle = (props as any).style as React.CSSProperties | undefined
+  const shineVarProvided =
+    !!providedStyle && (("--shine-speed" in (providedStyle as any)) || (providedStyle as any)["--shine-speed"] !== undefined)
+
+  const mergedStyle = {
+    ...(providedStyle || {}),
+    ...(!shineVarProvided ? ({ ["--shine-speed" as any]: "5s" } as React.CSSProperties) : {}),
+  }
+
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={mergedClassName}
+      style={mergedStyle}
       {...props}
     />
   )
