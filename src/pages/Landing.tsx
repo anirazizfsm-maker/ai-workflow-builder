@@ -111,25 +111,8 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark">
-      {/* Background layer with responsive Prism */}
+      {/* Background layer WITHOUT full-page Prism */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <Prism
-          className="absolute inset-0"
-          animationType="hover"
-          transparent={true}
-          // Tuned responsively for mobile
-          scale={isMobile ? 2.2 : 3.2}
-          glow={isMobile ? 0.9 : 1.2}
-          noise={isMobile ? 0.08 : 0.12}
-          hueShift={0.2}
-          colorFrequency={1.2}
-          bloom={isMobile ? 0.8 : 1.1}
-          timeScale={isMobile ? 0.4 : 0.5}
-          hoverStrength={isMobile ? 1.2 : 2}
-          inertia={isMobile ? 0.1 : 0.05}
-          // Save resources when not visible
-          suspendWhenOffscreen={true}
-        />
         {/* base night backdrop */}
         <div className="absolute inset-0 bg-[#030611]/80" />
         {/* top-center deep blue glow */}
@@ -196,10 +179,24 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* HERO (replaced content to match screenshot) */}
+        {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
-          {/* Hero-scoped cosmic background (video removed; keep overlay for readability) */}
+          {/* Hero-scoped cosmic background */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            <Prism
+              className="absolute inset-0"
+              animationType="3drotate"
+              transparent={true}
+              // original feel
+              scale={3.6}
+              glow={1}
+              noise={0.5}
+              hueShift={0}
+              colorFrequency={1}
+              bloom={1}
+              timeScale={0.5}
+              suspendWhenOffscreen={true}
+            />
             {/* Dark overlay to ensure text contrast */}
             <div className="absolute inset-0 bg-[#030611]/50" />
           </div>
@@ -617,8 +614,6 @@ export default function Landing() {
         <footer className="border-t border-[#142554]">
           <div className="mx-auto max-w-7xl px-6 md:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              {/* Removed footer logo image */}
-              {/* <img src="/logo.png" alt="logo" className="h-8 w-8" /> */}
               <span className="text-[#8fa2c9]">© {new Date().getFullYear()} Lethimdo</span>
             </div>
             <div className="flex flex-wrap items-center gap-4 text-[#8fa2c9]">
