@@ -22,7 +22,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -233,34 +233,40 @@ export default function Landing() {
               <SheetTrigger asChild>
                 <button
                   aria-label="Open menu"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white p-2.5 hover:bg-white/10"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white p-3 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/30"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0b1120] border-[#142554] text-white">
+              <SheetContent side="right" className="bg-[#0b1120]/90 backdrop-blur-xl border-[#142554] text-white w-72 sm:w-80">
                 <SheetHeader>
                   <SheetTitle className="text-white">Menu</SheetTitle>
                 </SheetHeader>
-                <div className="mt-6 grid gap-2">
-                  <button
-                    onClick={() => navigate("/")}
-                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
-                  >
-                    Home
-                  </button>
-                  <button
-                    onClick={() => navigate("/pricing")}
-                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
-                  >
-                    Pricing
-                  </button>
-                  <button
-                    onClick={() => navigate("/dashboard")}
-                    className="w-full text-left rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 hover:bg-white/10"
-                  >
-                    Dashboard
-                  </button>
+                <div className="mt-6 grid gap-2.5">
+                  <SheetClose asChild>
+                    <button
+                      onClick={() => navigate("/")}
+                      className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
+                    >
+                      Home
+                    </button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <button
+                      onClick={() => navigate("/pricing")}
+                      className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
+                    >
+                      Pricing
+                    </button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <button
+                      onClick={() => navigate("/dashboard")}
+                      className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
+                    >
+                      Dashboard
+                    </button>
+                  </SheetClose>
                 </div>
               </SheetContent>
             </Sheet>
