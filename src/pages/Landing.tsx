@@ -313,16 +313,6 @@ export default function Landing() {
           </div>
 
           <div className="flex flex-col items-center text-center">
-            {/* Customer pill */}
-            <div className="rounded-full bg-white/5 border border-white/10 px-3.5 py-2 flex items-center gap-3 shadow-[0_10px_32px_-12px_rgba(37,99,235,0.45)]">
-              <div className="flex -space-x-2">
-                <img src="/logo_bg.png" alt="a1" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
-                <img src="/logo.png" alt="a2" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
-                <img src="/logo_bg.svg" alt="a3" className="h-6 w-6 rounded-full ring-2 ring-[#0a1429]" />
-              </div>
-              <span className="text-[#cfe0ff] text-sm md:text-[15px]">Join 15,725+ other loving customers</span>
-            </div>
-
             {/* Animated Headline wrapper without video overlay */}
             <div className="relative w-full max-w-5xl mt-2 flex justify-center">
               {/* Removed hero animation video per request */}
