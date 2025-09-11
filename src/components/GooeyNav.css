@@ -1,0 +1,157 @@
+.gooey-nav-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  isolation: isolate;
+}
+
+.gooey-nav-container nav {
+  width: 100%;
+}
+
+.gooey-nav-container ul {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  border-radius: 16px;
+  background: rgba(10, 20, 41, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.gooey-nav-container li {
+  position: relative;
+  z-index: 2;
+}
+
+.gooey-nav-container a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  color: #9bb1e9;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color 200ms ease, transform 200ms ease, background-color 200ms ease;
+  outline: none;
+}
+
+.gooey-nav-container a:hover,
+.gooey-nav-container li.active a {
+  color: #ffffff;
+}
+
+.gooey-nav-container a:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+/* Moving highlight + particle layer */
+.effect.filter,
+.effect.text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 38px;
+  border-radius: 12px;
+  pointer-events: none;
+  transition: left 300ms ease, top 300ms ease, width 300ms ease, height 300ms ease, transform 300ms ease;
+}
+
+.effect.filter {
+  z-index: 1;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0.0));
+  filter: blur(10px);
+  opacity: 0.9;
+  overflow: visible;
+}
+
+.effect.text {
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  color: #e6eeff;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  mix-blend-mode: plus-lighter;
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.effect.text.active {
+  opacity: 1;
+  transition: opacity 280ms ease, transform 280ms ease;
+  transform: scale(1);
+}
+
+/* Particles */
+.particle {
+  --time: 1200ms;
+  --start-x: 0px;
+  --start-y: 0px;
+  --end-x: 0px;
+  --end-y: 0px;
+  --scale: 1;
+  --rotate: 0deg;
+  --color: white;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform-origin: center;
+  transform: translate(calc(var(--start-x)), calc(var(--start-y))) rotate(var(--rotate)) scale(var(--scale));
+  animation: particle-move var(--time) ease-out forwards;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+}
+
+.point {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color);
+  opacity: 0.9;
+}
+
+@keyframes particle-move {
+  0% {
+    opacity: 0;
+    transform: translate(calc(var(--start-x)), calc(var(--start-y))) rotate(var(--rotate)) scale(var(--scale));
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--end-x)), calc(var(--end-y))) rotate(var(--rotate)) scale(calc(var(--scale) * 0.4));
+  }
+}
+
+/* Theme colors for particles */
+:root {
+  --color-1: oklch(0.75 0.17 255);
+  --color-2: oklch(0.83 0.12 240);
+  --color-3: oklch(0.78 0.13 210);
+  --color-4: oklch(0.9 0.08 260);
+}
+
+/* Container shell (optional nice shadow) */
+.gooey-shell {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: rgba(10, 20, 41, 0.8);
+  box-shadow: 0 8px 40px -12px rgba(30, 64, 175, 0.45);
+  backdrop-filter: blur(18px);
+  padding: 10px 12px;
+}

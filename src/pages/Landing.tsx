@@ -29,6 +29,7 @@ import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
 import LogoLoop from "@/components/LogoLoop";
+import GooeyNav from "@/components/GooeyNav";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -131,19 +132,24 @@ export default function Landing() {
       <main className="relative z-0">
         {/* NEW: Pill Navbar to match screenshot */}
         <div className="mx-auto max-w-7xl px-6 md:px-8 pt-8">
-          <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] border border-white/10 bg-[#0a1429]/80 backdrop-blur-xl px-4 md:px-6 py-3.5 flex items-center justify-between gap-4 shadow-[0_8px_40px_-12px_rgba(30,64,175,0.45)]">
+          <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] gooey-shell px-4 md:px-6 py-3.5 flex items-center justify-between gap-4">
             {/* Brand */}
             <div className="flex items-center gap-3">
               <span className="text-white font-extrabold text-base sm:text-lg tracking-tight">LETHIMDO</span>
             </div>
 
-            {/* Nav */}
-            <nav className="hidden md:flex items-center gap-6 text-[15px]">
-              <button className="text-[#9bb1e9] hover:text-white transition-colors">Home</button>
-              <button className="text-[#9bb1e9] hover:text-white transition-colors">Integrations</button>
-              <button onClick={() => navigate('/pricing')} className="text-[#9bb1e9] hover:text-white transition-colors">Pricing</button>
-              <button className="text-[#9bb1e9] hover:text-white transition-colors">Contact Us</button>
-            </nav>
+            {/* Gooey Navigation with old options */}
+            <div className="flex-1 hidden md:block">
+              <GooeyNav
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Integrations", href: "/integrations" },
+                  { label: "Pricing", href: "/pricing" },
+                  { label: "Contact Us", href: "/support" },
+                ]}
+                initialActiveIndex={0}
+              />
+            </div>
 
             {/* CTA + Mobile Menu */}
             <div className="flex items-center gap-2">
@@ -154,7 +160,7 @@ export default function Landing() {
                 Subscribe ↗
               </Button>
 
-              {/* Mobile menu */}
+              {/* Mobile menu simplified: keep button to open sheet with same options */}
               <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
                 <SheetTrigger asChild>
                   <button className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-[#0d1731]/70 text-white/80 hover:text-white">
@@ -169,10 +175,10 @@ export default function Landing() {
                     <SheetTitle className="text-white">Menu</SheetTitle>
                   </SheetHeader>
                   <div className="mt-4 grid gap-2">
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Home</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Integrations</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate('/pricing'); setMenuOpen(false); }}>Pricing</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => setMenuOpen(false)}>Contact Us</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/"); setMenuOpen(false); }}>Home</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/integrations"); setMenuOpen(false); }}>Integrations</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/pricing"); setMenuOpen(false); }}>Pricing</button>
+                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/support"); setMenuOpen(false); }}>Contact Us</button>
                     <Button
                       onClick={() => { navigate(isAuthenticated ? "/dashboard" : "/auth"); setMenuOpen(false); }}
                       className="mt-3 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white"
