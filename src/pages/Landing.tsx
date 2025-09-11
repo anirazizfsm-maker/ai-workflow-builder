@@ -239,13 +239,13 @@ export default function Landing() {
             <div className="relative w-full max-w-5xl mt-2 flex justify-center">
               {/* Removed hero animation video per request */}
               <h1
-                className="relative mt-6 font-extrabold leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
+                className="relative mt-6 font-normal leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
                 aria-live="off"
               >
                 <VariableProximity
                   label={staticHeadline}
                   fromFontVariationSettings="'wght' 400, 'wdth' 100"
-                  toFontVariationSettings="'wght' 800, 'wdth' 85"
+                  toFontVariationSettings="'wght' 500, 'wdth' 85"
                   containerRef={heroRef as any}
                   radius={140}
                   falloff="gaussian"
