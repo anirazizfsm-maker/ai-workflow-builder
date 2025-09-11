@@ -199,7 +199,23 @@ export default function Landing() {
               suspendWhenOffscreen={true}
             />
             {/* Dark overlay to ensure text contrast */}
-            <div className="absolute inset-0 bg-[#030611]/50" />
+            <div
+              className="absolute inset-0 pointer-events-none"
+            >
+              {/* Soft vertical fade to keep transparency while blending into background */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#030611]/25 via-transparent to-[#030611]/25" />
+              {/* Subtle vignette for smoother edges */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  WebkitMaskImage:
+                    "radial-gradient(120% 85% at 50% 40%, rgba(0,0,0,1) 55%, rgba(0,0,0,0.65) 85%, rgba(0,0,0,0) 100%)",
+                  maskImage:
+                    "radial-gradient(120% 85% at 50% 40%, rgba(0,0,0,1) 55%, rgba(0,0,0,0.65) 85%, rgba(0,0,0,0) 100%)",
+                  backgroundColor: "rgba(3, 6, 17, 0.15)",
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col items-center text-center">
