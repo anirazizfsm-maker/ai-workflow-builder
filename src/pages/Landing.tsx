@@ -119,7 +119,7 @@ export default function Landing() {
         
 
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
-        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[640px] md:min-h-[720px]">
+        <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-16 md:pt-24 pb-16 md:pb-20 overflow-hidden rounded-2xl min-h-[800px] md:min-h-[900px]">
           {/* Hero-centered Navigation */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-full px-6 md:px-8">
             <div className="mx-auto max-w-6xl flex justify-center">
@@ -133,7 +133,7 @@ export default function Landing() {
             </div>
           </div>
           {/* Hero-scoped cosmic background */}
-          <div aria-hidden className="pointer-events-none absolute top-0 left-0 right-0 h-[320px] md:h-[380px] -z-10 overflow-hidden">
+          <div aria-hidden className="pointer-events-none absolute top-0 left-0 right-0 h-[220px] md:h-[260px] -z-10 overflow-hidden">
             <Prism
               className="absolute inset-0"
               animationType="3drotate"
