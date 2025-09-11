@@ -27,6 +27,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
+import BlurText from "@/components/BlurText";
 
 // Define a no-op local component in case any lingering <SplitText /> JSX remains.
 // This prevents "SplitText is not defined" without rendering anything.
@@ -238,28 +239,21 @@ export default function Landing() {
 
             {/* Animated Headline wrapper without video overlay */}
             <div className="relative w-full max-w-5xl mt-2 flex justify-center">
-              {/* New: Subtle animated graphic above the headline */}
-              <div className="absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 w-[70%] sm:w-[60%] md:w-[52%] lg:w-[48%] pointer-events-none select-none">
-                <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)] backdrop-blur-md">
-                  <video
-                    src="/assets/Recording_2025-09-07_050448.mp4"
-                    autoPlay
-                    muted
-                    playsInline
-                    loop
-                    poster="/logo_bg.png"
-                    className="h-20 sm:h-24 md:h-28 w-full object-cover opacity-90"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030611]/30" />
-                </div>
-              </div>
-
+              {/* Removed hero animation video per request */}
               <h1
-                className="relative mt-12 md:mt-16 font-extrabold leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
+                className="relative mt-6 font-extrabold leading-[1.08] text-white text-[28px] sm:text-[38px] md:text-[54px] lg:text-[64px] tracking-tight text-balance px-1"
                 aria-live="off"
               >
                 {staticHeadline}
               </h1>
+              <BlurText
+                text="Built for speed. Powered by AI."
+                className="mt-3 text-[#cfe0ff] text-base md:text-lg"
+                animateBy="words"
+                delay={120}
+                direction="top"
+                stepDuration={0.35}
+              />
             </div>
 
             {/* Subcopy */}
