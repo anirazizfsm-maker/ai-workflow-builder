@@ -211,9 +211,9 @@ export default function Landing() {
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                className="rounded-xl px-7 py-6 text-base font-bold text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_36px_0_rgba(37,99,235,0.35)]"
+                className="rounded-xl px-7 py-6 text-base font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-md shadow-[0_0_24px_rgba(255,255,255,0.06)]"
               >
-                🚀 Try AI Builder — Free Trial
+                Try AI Builder — Free Trial
               </Button>
               <Button
                 variant="outline"
