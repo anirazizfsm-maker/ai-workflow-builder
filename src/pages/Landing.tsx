@@ -27,6 +27,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
+import DecryptedText from "@/components/DecryptedText";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -221,7 +222,16 @@ export default function Landing() {
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
                 aria-live="off"
               >
-                {staticHeadline}
+                <DecryptedText
+                  text={staticHeadline}
+                  animateOn="both"
+                  sequential
+                  revealDirection="start"
+                  speed={35}
+                  className=""
+                  encryptedClassName="opacity-60"
+                  parentClassName=""
+                />
               </h1>
             </div>
 
