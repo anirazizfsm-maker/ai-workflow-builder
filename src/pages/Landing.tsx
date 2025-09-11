@@ -494,6 +494,122 @@ export default function Landing() {
           </div>
         </section>
 
+        {/* TRUST & WORKFLOW CARDS (new section) */}
+        <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Security card */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
+            >
+              {/* decorative background */}
+              <div aria-hidden className="absolute inset-0 -z-10">
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(120% 80% at 10% 10%, rgba(37,99,235,0.18), transparent 55%)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 opacity-60"
+                  style={{
+                    background:
+                      "conic-gradient(from 270deg at 20% 30%, rgba(15,23,42,0) 0deg, rgba(30,64,175,0.35) 120deg, rgba(30,64,175,0) 240deg, rgba(30,64,175,0.35) 300deg)",
+                  }}
+                />
+              </div>
+
+              <h4 className="text-2xl md:text-3xl font-extrabold">The Best Security</h4>
+              <p className="text-[#9db2e9] mt-2">
+                Lethimdo is a Trusted Cloud certified service.
+              </p>
+
+              {/* Floating confirmation panel */}
+              <div className="relative mt-10">
+                {/* background shadow card */}
+                <div className="absolute left-8 top-6 rotate-[-3deg] w-[92%] md:w-[420px] h-20 rounded-xl bg-[#0d1429] border border-white/5" />
+                {/* foreground card */}
+                <div className="relative w-full max-w-[480px] rounded-xl bg-[#0f162e] border border-white/10 shadow-[0_20px_60px_-20px_rgba(30,64,175,0.55)] px-4 py-3.5">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 h-8 w-8 rounded-full bg-emerald-500 grid place-items-center text-black font-bold">
+                      ✓
+                    </div>
+                    <div className="text-left">
+                      <div className="text-white font-semibold leading-tight">
+                        All connected data are safe
+                      </div>
+                      <div className="text-xs text-[#b6c5e6] mt-1">
+                        Gmail is a secure partner with Lethimdo. You can manage all of your
+                        connected accounts here.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Loop & Branch card */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.08 }}
+              className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
+            >
+              {/* decorative background rings */}
+              <div aria-hidden className="absolute inset-0 -z-10">
+                <div
+                  className="absolute inset-0 opacity-80"
+                  style={{
+                    background:
+                      "radial-gradient(120% 90% at 80% 20%, rgba(30,64,175,0.6), transparent 65%)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 70% 30%, rgba(59,130,246,0.12) 2px, transparent 3px)",
+                    backgroundSize: "28px 28px",
+                  }}
+                />
+              </div>
+
+              <h4 className="text-2xl md:text-3xl font-extrabold">Loop and Branch</h4>
+              <p className="text-[#9db2e9] mt-2">
+                The workflow automation process can be improved by adding more branches.
+              </p>
+
+              {/* simple flow line with nodes */}
+              <div className="mt-10">
+                <div className="relative mx-auto md:mx-0 w-full max-w-[560px]">
+                  {/* base line */}
+                  <div className="h-[2px] w-full bg-white/15 rounded-full" />
+                  {/* nodes */}
+                  <div className="absolute -top-5 left-0 flex items-center gap-10">
+                    <div className="h-10 w-10 rounded-xl bg-[#1e3a8a]/60 border border-white/10 grid place-items-center text-[#facc15] text-xl">
+                      ↗
+                    </div>
+                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#10b981] text-xl">
+                      📄
+                    </div>
+                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#34d399] text-xl">
+                      🧮
+                    </div>
+                    <div className="h-10 w-10 rounded-xl bg-[#0f172a]/70 border border-white/10 grid place-items-center text-[#60a5fa] text-xl">
+                      📅
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* WORKFLOW TEMPLATES */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
           <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">Prebuilt Workflow Templates</h3>
