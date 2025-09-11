@@ -26,7 +26,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
-import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
 
@@ -134,19 +133,14 @@ export default function Landing() {
           </div>
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            <Prism
-              animationType="3drotate"
-              transparent={true}
-              // original feel
-              scale={4.6}
-              glow={1.2}
-              // Reduce shader noise for a smoother, cleaner look
-              noise={0.08}
-              hueShift={0}
-              colorFrequency={1}
-              bloom={1.2}
-              timeScale={0.5}
-              suspendWhenOffscreen={true}
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              src="/assets/Recording_2025-09-07_050448.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
             />
             {/* Dark overlay to ensure text contrast */}
             <div
