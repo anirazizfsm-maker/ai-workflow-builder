@@ -7,10 +7,13 @@
 }
 
 .gooey-nav-container nav {
+  display: flex;
+  align-items: center;
   width: 100%;
 }
 
 .gooey-nav-container ul {
+  flex: 1;
   position: relative;
   display: flex;
   align-items: center;
@@ -154,4 +157,32 @@
   box-shadow: 0 8px 40px -12px rgba(30, 64, 175, 0.45);
   backdrop-filter: blur(18px);
   padding: 10px 12px;
+}
+
+/* Add: right actions container */
+.gooey-actions {
+  margin-left: 8px;
+}
+
+/* Add: subscribe CTA styling */
+.gooey-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: white;
+  background: linear-gradient(90deg, #1e40af, #2563eb);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 28px rgba(37, 99, 235, 0.25);
+  transition: filter 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.gooey-cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 0 38px rgba(37, 99, 235, 0.35);
 }

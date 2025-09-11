@@ -16,6 +16,8 @@ type GooeyNavProps = {
   colors?: number[];
   initialActiveIndex?: number;
   className?: string;
+  subscribeLabel?: string;
+  subscribeHref?: string;
 };
 
 const GooeyNav = ({
@@ -28,6 +30,8 @@ const GooeyNav = ({
   colors = [1, 2, 3, 1, 2, 3, 1, 4],
   initialActiveIndex = 0,
   className = "",
+  subscribeLabel = "Subscribe",
+  subscribeHref = "/pricing",
 }: GooeyNavProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLUListElement | null>(null);
@@ -200,6 +204,11 @@ const GooeyNav = ({
             </li>
           ))}
         </ul>
+        <div className="gooey-actions">
+          <a className="gooey-cta" href={subscribeHref} aria-label={subscribeLabel}>
+            {subscribeLabel}
+          </a>
+        </div>
       </nav>
       <span className="effect filter" ref={filterRef} />
       <span className="effect text" ref={textRef} />
