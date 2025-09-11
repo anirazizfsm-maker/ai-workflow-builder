@@ -114,7 +114,7 @@ export default function Landing() {
   }, [committedQuery, faqResults]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden dark">
+    <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       {/* Add: Top navigation */}
       <div className="sticky top-0 z-50">
         <PillNav
