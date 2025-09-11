@@ -29,7 +29,6 @@ import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
 import VariableProximity from "@/components/VariableProximity";
 import LogoLoop from "@/components/LogoLoop";
-import GooeyNav from "@/components/GooeyNav";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -130,68 +129,6 @@ export default function Landing() {
       </div>
 
       <main className="relative z-0">
-        {/* NEW: Pill Navbar to match screenshot */}
-        <div className="mx-auto max-w-7xl px-6 md:px-8 pt-8">
-          <div className="mx-auto w-full md:w-auto rounded-2xl md:rounded-[22px] gooey-shell px-4 md:px-6 py-3.5 flex items-center justify-between gap-4">
-            {/* Brand */}
-            <div className="flex items-center gap-3">
-              <span className="text-white font-extrabold text-base sm:text-lg tracking-tight">LETHIMDO</span>
-            </div>
-
-            {/* Gooey Navigation with old options */}
-            <div className="flex-1 hidden md:block">
-              <GooeyNav
-                items={[
-                  { label: "Home", href: "/" },
-                  { label: "Integrations", href: "/integrations" },
-                  { label: "Pricing", href: "/pricing" },
-                  { label: "Contact Us", href: "/support" },
-                ]}
-                initialActiveIndex={0}
-              />
-            </div>
-
-            {/* CTA + Mobile Menu */}
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
-                className="hidden md:inline-flex rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white px-5 py-5 h-10 md:h-11 font-bold shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_0_28px_rgba(37,99,235,0.35)]"
-              >
-                Subscribe ↗
-              </Button>
-
-              {/* Mobile menu simplified: keep button to open sheet with same options */}
-              <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-                <SheetTrigger asChild>
-                  <button className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-[#0d1731]/70 text-white/80 hover:text-white">
-                    <Menu className="h-5 w-5" />
-                  </button>
-                </SheetTrigger>
-                <SheetContent
-                  side="bottom"
-                  className="w-screen max-w-[100vw] h-[88dvh] sm:h-[88dvh] bg-[#0a1429] text-white border-white/10 rounded-t-2xl"
-                >
-                  <SheetHeader>
-                    <SheetTitle className="text-white">Menu</SheetTitle>
-                  </SheetHeader>
-                  <div className="mt-4 grid gap-2">
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/"); setMenuOpen(false); }}>Home</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/integrations"); setMenuOpen(false); }}>Integrations</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/pricing"); setMenuOpen(false); }}>Pricing</button>
-                    <button className="w-full text-left rounded-lg px-3 py-2 text-[#9bb1e9] hover:text-white hover:bg-white/5" onClick={() => { navigate("/support"); setMenuOpen(false); }}>Contact Us</button>
-                    <Button
-                      onClick={() => { navigate(isAuthenticated ? "/dashboard" : "/auth"); setMenuOpen(false); }}
-                      className="mt-3 rounded-xl bg-gradient-to-r from-[#2563eb] to-[#3b82f6] hover:from-[#1f4fd3] hover:to-[#2563eb] text-white"
-                    >
-                      Subscribe ↗
-                    </Button>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
-        </div>
-
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
           {/* Hero-scoped cosmic background */}
@@ -339,27 +276,6 @@ export default function Landing() {
               className="absolute top-0 left-0 right-0 h-1.5"
               style={{ background: "linear-gradient(90deg, rgba(59,130,246,0) 0%, rgba(59,130,246,0.75) 35%, rgba(147,197,253,0.9) 50%, rgba(59,130,246,0.75) 65%, rgba(59,130,246,0) 100%)" }}
             />
-            {/* App top bar */}
-            <div className="flex items-center justify-between px-4 sm:px-6 py-3">
-              <div className="flex items-center gap-3">
-                <span className="text-white/90 font-semibold tracking-tight">LETHIMDO</span>
-                <div className="hidden md:flex items-center gap-5 ml-6 text-[#9db2e9]">
-                  <span className="hover:text-white transition-colors">Dashboard</span>
-                  <span className="hover:text-white transition-colors">History</span>
-                  <span className="text-white">Workflows</span>
-                  <span className="hover:text-white transition-colors">Settings</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button className="h-8 rounded-lg bg-[#1f51ff] hover:bg-[#1b45da] text-white px-3">Upgrade now</Button>
-                <div className="hidden sm:flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-lg bg-white/5 border border-white/10" />
-                  <div className="h-8 w-8 rounded-lg bg-white/5 border border-white/10" />
-                  <div className="h-8 w-8 rounded-full bg-[url('/logo.png')] bg-cover border border-white/10" />
-                </div>
-              </div>
-            </div>
-
             {/* Main 3-column layout */}
             <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_320px] gap-0 border-t border-[#152247]">
               {/* Left sidebar */}
