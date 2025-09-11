@@ -644,41 +644,136 @@ export default function Landing() {
 
         {/* PRICING */}
         <section className="mx-auto max-w-7xl px-6 md:px-8 py-10 md:py-14">
-          <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">Plans and Pricing</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
-            {[
-              { name: "Free", price: "$0", desc: "For individuals starting out", features: ["5 workflows", "15-day trial", "Basic templates"], cta: "Start Free" },
-              { name: "Starter", price: "$29/month", desc: "For small teams", features: ["20 workflows/month", "Access to templates", "Basic dashboard"], cta: "Choose Starter" },
-              { name: "Pro", price: "$79/month", desc: "For growing businesses", features: ["100 workflows/month", "AI-customized workflows", "Auto-fix & upgrades", "Analytics dashboard", "Priority support"], cta: "Choose Pro", highlight: true },
-              { name: "Business Pack", price: "$199/month or $1999/year", desc: "For enterprises", features: ["Unlimited workflows", "AI Execution Broker", "Dedicated advisor", "Team collaboration", "White-label option"], cta: "Choose Business" },
-            ].map((plan, i) => (
-              <motion.div
-                key={plan.name}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className={`rounded-2xl border p-6 text-white ${plan.highlight ? "border-[#2563eb] bg-[#0b1120]" : "border-[#1a2a55] bg-[#0b1120]/70"} backdrop-blur-xl`}
+          <div className="flex items-center justify-center mb-6">
+            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
+            <span className="mx-2 text-[#9db2e9] text-sm">Pricing</span>
+            <div className="h-1.5 w-1.5 rounded-full bg-[#94b8ff]/70" />
+          </div>
+          <h3 className="text-2xl md:text-3xl font-extrabold text-white text-center">
+            The Best Pricing Plans
+          </h3>
+          <p className="text-center text-[#8fa2c9] max-w-2xl mx-auto mt-2">
+            Find the perfect plan to streamline your workflow and unlock powerful tools designed to save time and boost productivity.
+          </p>
+
+          {/* Cards */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Plan A */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="relative overflow-hidden rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
+            >
+              <div aria-hidden className="absolute inset-0 -z-10 opacity-70">
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(120% 90% at 20% 20%, rgba(59,130,246,0.25), transparent 60%)",
+                  }}
+                />
+              </div>
+              <div className="flex items-baseline gap-2">
+                <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-sm">💠</div>
+                <div className="text-3xl font-extrabold">$200</div>
+                <div className="text-[#9db2e9]">/month</div>
+              </div>
+              <p className="text-[#9db2e9] mt-2">
+                Perfect for growing teams needing essential tools to scale efficiently.
+              </p>
+
+              <div className="mt-5 text-[#9db2e9]">Included Benefits</div>
+              <ul className="mt-3 space-y-2 text-[#c6d4f7]">
+                {[
+                  "Streamlined task management tools",
+                  "Customizable dashboard layouts",
+                  "Access to basic analytics",
+                  "Automated reminders and alerts",
+                  "Real-time collaboration features",
+                  "24/7 support for onboarding",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <span className="text-[#3b82f6]">✔</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] text-white"
               >
-                <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-xl">{plan.name}</h4>
-                  {plan.highlight && <span className="text-xs px-2 py-1 rounded-full bg-[#2563eb] text-white">Popular</span>}
-                </div>
-                <div className="text-3xl font-extrabold mt-2">{plan.price}</div>
-                <p className="text-[#8fa2c9] mt-1">{plan.desc}</p>
-                <ul className="mt-4 space-y-2 text-[#c6d4f7]">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2"><span className="text-[#3b82f6]">•</span>{f}</li>
-                  ))}
-                </ul>
-                <Button
-                  onClick={() => navigate("/plans")}
-                  className={`mt-5 w-full rounded-xl ${plan.highlight ? "bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3]" : "bg-[#0f1730] hover:bg-[#131f3f]"} text-white`}
-                >
-                  {plan.cta}
-                </Button>
-              </motion.div>
-            ))}
+                Get Started Now
+              </Button>
+            </motion.div>
+
+            {/* Plan B */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.06 }}
+              className="relative overflow-hidden rounded-[22px] border border-[#2563eb] bg-[#0b1120]/90 backdrop-blur-xl p-6 text-white"
+            >
+              <div aria-hidden className="absolute inset-0 -z-10 opacity-70">
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(120% 90% at 80% 20%, rgba(37,99,235,0.35), transparent 60%)",
+                  }}
+                />
+              </div>
+              <div className="flex items-baseline gap-2">
+                <div className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-sm">🧰</div>
+                <div className="text-3xl font-extrabold">$350</div>
+                <div className="text-[#9db2e9]">/month</div>
+                <span className="ml-2 text-xs px-2 py-1 rounded-full bg-[#2563eb] text-white">Best Value</span>
+              </div>
+              <p className="text-[#9db2e9] mt-2">
+                Designed for businesses that demand advanced features and flexibility.
+              </p>
+
+              <div className="mt-5 text-[#9db2e9]">Included Benefits</div>
+              <ul className="mt-3 space-y-2 text-[#c6d4f7]">
+                {[
+                  "Personalized workflow templates",
+                  "Role‑based access controls",
+                  "Integration with third‑party apps",
+                  "In‑depth reporting and analytics",
+                  "Priority email support",
+                  "Seamless upgrades to paid plans",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <span className="text-[#3b82f6]">✔</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                onClick={() => navigate("/pricing")}
+                className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] text-white"
+              >
+                Get Started Now
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Bottom CTA bar */}
+          <div className="mt-6 rounded-2xl border border-[#1a2a55] bg-[#0b1120]/70 backdrop-blur-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span className="text-white/90">Your workflow upgrade starts here</span>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                onClick={() => navigate('/pricing')}
+                className="rounded-xl border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
+              >
+                Start Free Trial
+              </Button>
+            </div>
           </div>
         </section>
 
