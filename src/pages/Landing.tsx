@@ -27,11 +27,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
-import BlurText from "@/components/BlurText";
-
-// Define a no-op local component in case any lingering <SplitText /> JSX remains.
-// This prevents "SplitText is not defined" without rendering anything.
-const SplitText = () => null;
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -246,14 +241,6 @@ export default function Landing() {
               >
                 {staticHeadline}
               </h1>
-              <BlurText
-                text="Built for speed. Powered by AI."
-                className="mt-3 text-[#cfe0ff] text-base md:text-lg"
-                animateBy="words"
-                delay={120}
-                direction="top"
-                stepDuration={0.35}
-              />
             </div>
 
             {/* Subcopy */}
