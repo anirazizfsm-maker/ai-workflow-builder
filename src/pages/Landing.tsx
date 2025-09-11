@@ -26,6 +26,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
+import Prism from "@/components/Prism";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -43,68 +44,8 @@ export default function Landing() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<number | null>(null); // highlight selection
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Typing animation for hero header
-  const headlineWords = ["Supercharge", "your", "productivity", "and", "workflow", "with", "AI."] as const;
-  const [wordIndex, setWordIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentWord = headlineWords[wordIndex];
-    // Smoother speeds: slower typing, gentle delete
-    const typeSpeed = isDeleting ? 45 : 65;
-
-    const tick = () => {
-      if (!isDeleting) {
-        // typing forward
-        const next = currentWord.slice(0, displayText.length + 1);
-        setDisplayText(next);
-        if (next === currentWord) {
-          // full word typed, hold a bit longer before deleting
-          setTimeout(() => setIsDeleting(true), 900);
-          return;
-        }
-      } else {
-        // deleting
-        const next = currentWord.slice(0, displayText.length - 1);
-        setDisplayText(next);
-        if (next.length === 0) {
-          // move to next word
-          setIsDeleting(false);
-          setWordIndex((prev) => (prev + 1) % headlineWords.length);
-        }
-      }
-    };
-
-    const t = setTimeout(tick, typeSpeed);
-    return () => clearTimeout(t);
-  }, [displayText, isDeleting, wordIndex]);
-
-  // Keyboard shortcut: '/' focuses FAQ input (like many apps)
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select" || (e.ctrlKey || e.metaKey || e.altKey)) return;
-      if (e.key === "/") {
-        e.preventDefault();
-        faqInputRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
-  // Debounced search-as-you-type
-  useEffect(() => {
-    if (!faqQuery.trim()) {
-      setCommittedQuery("");
-      setIsSearching(false);
-      return;
-    }
-    setIsSearching(true);
-    const t = setTimeout(() => setCommittedQuery(faqQuery), 350);
-    return () => clearTimeout(t);
-  }, [faqQuery]);
+  // Remove typing animation state and effects; use a static headline instead
+  const staticHeadline = "Supercharge your productivity and workflow with AI.";
 
   // Data
   const faqResults =
@@ -228,7 +169,21 @@ export default function Landing() {
         <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
           {/* Hero-scoped cosmic background (video removed; keep overlay for readability) */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {/* Removed <video> background to delete asset usage */}
+            {/* Prism shader background */}
+            <Prism
+              className="absolute inset-0"
+              animationType="3drotate"
+              transparent={true}
+              glow={1.2}
+              noise={0.12}
+              scale={3.2}
+              hueShift={0.2}
+              colorFrequency={1.2}
+              bloom={1.1}
+              timeScale={0.5}
+              suspendWhenOffscreen={true}
+            />
+            {/* Dark overlay to ensure text contrast */}
             <div className="absolute inset-0 bg-[#030611]/50" />
           </div>
 
@@ -249,14 +204,9 @@ export default function Landing() {
               <h1
                 className="relative mt-6 font-extrabold leading-[1.08] text-white text-[30px] sm:text-[42px] md:text-[60px] lg:text-[72px] tracking-tight text-balance px-1"
                 style={{ fontFamily: "Space Grotesk, ui-sans-serif, system-ui", textShadow: "0 8px 40px rgba(37,99,235,0.35), 0 2px 14px rgba(15, 23, 42, 0.4)" }}
-                aria-live="polite"
+                aria-live="off"
               >
-                {displayText}
-                <span
-                  className="ml-1 inline-block align-baseline h-[0.9em] w-[0.6ch] rounded-[2px] animate-pulse"
-                  style={{ background: "linear-gradient(180deg, rgba(147,197,253,0.95), rgba(59,130,246,0.95))" }}
-                  aria-hidden
-                />
+                {staticHeadline}
               </h1>
             </div>
 
