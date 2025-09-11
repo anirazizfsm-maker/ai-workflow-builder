@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle } from "lucide-react";
+import Prism from "@/components/Prism";
 
 export default function Pricing() {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ export default function Pricing() {
   ] as const;
 
   return (
-    <div className="relative min-h-screen overflow-hidden dark">
+    <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       {/* Removed global background video; will scope to hero for visibility */}
 
       {/* Header */}
@@ -109,6 +110,19 @@ export default function Pricing() {
       {/* Hero with scoped cosmic background (video removed; keep overlay) */}
       <section className="relative px-4 pt-8 md:pt-12 overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl">
+          <Prism
+            className="absolute inset-0"
+            animationType="3drotate"
+            transparent={true}
+            scale={3.8}
+            glow={1}
+            noise={0.08}
+            hueShift={0}
+            colorFrequency={1}
+            bloom={1}
+            timeScale={0.5}
+            suspendWhenOffscreen={true}
+          />
           <div className="absolute inset-0 bg-[#030611]/50" />
         </div>
         <motion.div
