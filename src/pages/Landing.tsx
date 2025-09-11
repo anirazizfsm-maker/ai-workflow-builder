@@ -99,6 +99,19 @@ export default function Landing() {
 
       {/* Replace the overlay to a deep-blue beam backdrop matching the screenshot */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <Prism
+          className="absolute inset-0"
+          animationType="hover"
+          transparent={true}
+          glow={1.2}
+          noise={0.12}
+          scale={3.2}
+          hueShift={0.2}
+          colorFrequency={1.2}
+          bloom={1.1}
+          timeScale={0.5}
+          suspendWhenOffscreen={false}
+        />
         {/* base night backdrop */}
         <div className="absolute inset-0 bg-[#030611]" />
         {/* top-center deep blue glow */}
@@ -169,20 +182,6 @@ export default function Landing() {
         <section className="relative mx-auto max-w-7xl px-6 md:px-8 pt-14 md:pt-20 pb-10 overflow-hidden rounded-2xl">
           {/* Hero-scoped cosmic background (video removed; keep overlay for readability) */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {/* Prism shader background */}
-            <Prism
-              className="absolute inset-0"
-              animationType="3drotate"
-              transparent={true}
-              glow={1.2}
-              noise={0.12}
-              scale={3.2}
-              hueShift={0.2}
-              colorFrequency={1.2}
-              bloom={1.1}
-              timeScale={0.5}
-              suspendWhenOffscreen={true}
-            />
             {/* Dark overlay to ensure text contrast */}
             <div className="absolute inset-0 bg-[#030611]/50" />
           </div>
