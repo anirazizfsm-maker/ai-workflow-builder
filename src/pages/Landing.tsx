@@ -133,15 +133,6 @@ export default function Landing() {
           </div>
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              src="/assets/Recording_2025-09-07_050448.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
             {/* Dark overlay to ensure text contrast */}
             <div
               className="absolute inset-0 pointer-events-none"
