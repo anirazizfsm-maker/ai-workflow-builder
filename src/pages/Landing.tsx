@@ -28,6 +28,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
+import Prism from "@/components/Prism";
+import "@/components/Prism.css";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -133,6 +135,24 @@ export default function Landing() {
           </div>
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            {/* Prism background with hover interaction */}
+            <Prism
+              animationType="hover"
+              transparent
+              suspendWhenOffscreen
+              className="prism-container"
+              height={3.8}
+              baseWidth={5.6}
+              scale={3.8}
+              glow={1.2}
+              noise={0.3}
+              hueShift={0.2}
+              colorFrequency={1.0}
+              hoverStrength={2.2}
+              inertia={0.06}
+              bloom={1.1}
+              timeScale={0.8}
+            />
             {/* Dark overlay to ensure text contrast */}
             <div
               className="absolute inset-0 pointer-events-none"
