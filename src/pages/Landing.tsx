@@ -27,6 +27,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { FAQ } from "@/types/faq";
 import Prism from "@/components/Prism";
+import SplitText from "@/components/SplitText";
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -241,6 +242,26 @@ export default function Landing() {
               >
                 {staticHeadline}
               </h1>
+            </div>
+
+            {/* Insert SplitText animated line just below the headline */}
+            <div className="mt-3">
+              <SplitText
+                text="Hello, GSAP!"
+                className="text-2xl font-semibold text-center text-white/90"
+                delay={100}
+                duration={0.6}
+                ease="power3.out"
+                splitType="chars"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="center"
+                onLetterAnimationComplete={() => {
+                  console.log("All letters have animated!");
+                }}
+              />
             </div>
 
             {/* Subcopy */}
