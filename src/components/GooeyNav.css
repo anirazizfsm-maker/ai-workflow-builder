@@ -18,8 +18,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px;
+  gap: 6px;
+  padding: 2px;
   margin: 0;
   list-style: none;
   border-radius: 12px;
@@ -39,8 +39,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  padding: 0 12px;
+  height: 30px;
+  padding: 0 10px;
   border-radius: 10px;
   color: #9bb1e9;
   text-decoration: none;
@@ -65,8 +65,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 64px;
-  height: 32px;
+  width: 56px;
+  height: 30px;
   border-radius: 10px;
   pointer-events: none;
   transition: left 300ms ease, top 300ms ease, width 300ms ease, height 300ms ease, transform 300ms ease;
@@ -163,15 +163,15 @@
 
 /* Add: right actions container */
 .gooey-actions {
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 /* Add: subscribe CTA styling */
 .gooey-cta {
   display: inline-flex;
   align-items: center;
-  height: 34px;
-  padding: 0 12px;
+  height: 32px;
+  padding: 0 10px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 700;
