@@ -132,8 +132,8 @@ export default function Landing() {
               />
             </div>
           </div>
-          {/* Hero-scoped cosmic background */}
-          <div aria-hidden className="pointer-events-none absolute top-0 left-0 right-0 h-[220px] md:h-[260px] -z-10 overflow-hidden">
+          {/* Hero-scoped cosmic background sized to full hero layer */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             <Prism
               className="absolute inset-0"
               animationType="3drotate"
