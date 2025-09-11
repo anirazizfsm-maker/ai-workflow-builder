@@ -157,7 +157,7 @@ export default function Landing() {
                     <Menu className="h-5 w-5" />
                   </button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[85vw] sm:w-[360px] bg-[#0a1429] text-white border-white/10">
+                <SheetContent side="right" className="w-[95vw] sm:w-[420px] bg-[#0a1429] text-white border-white/10">
                   <SheetHeader>
                     <SheetTitle className="text-white">Menu</SheetTitle>
                   </SheetHeader>
