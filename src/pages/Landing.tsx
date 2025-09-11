@@ -118,9 +118,28 @@ export default function Landing() {
     <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       <main className="relative z-0">
         
-
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-12 md:pt-24 pb-12 md:pb-20 overflow-hidden rounded-2xl min-h-[620px] md:min-h-[900px]">
+          {/* Top-left Logo with same VariableProximity effect as headline */}
+          <div className="absolute top-4 left-4 z-30">
+            <button
+              onClick={() => navigate("/")}
+              aria-label="Go to home"
+              className="rounded-xl bg-white/5 border border-white/10 px-3 py-1.5 backdrop-blur-md text-white hover:bg-white/10 shadow-[0_0_24px_rgba(255,255,255,0.06)]"
+            >
+              <span className="leading-none">
+                <VariableProximity
+                  label="Lethimdo"
+                  fromFontVariationSettings="'wght' 400, 'wdth' 100"
+                  toFontVariationSettings="'wght' 500, 'wdth' 85"
+                  containerRef={heroRef as any}
+                  radius={120}
+                  falloff="gaussian"
+                />
+              </span>
+            </button>
+          </div>
+
           {/* Hero-centered Navigation */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-full px-6 md:px-8">
             <div className="mx-auto max-w-6xl flex justify-center">
@@ -213,14 +232,7 @@ export default function Landing() {
                 onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
                 className="w-full sm:w-auto rounded-xl px-7 py-6 text-base font-bold text-white bg-white/5 hover:bg-white/10 border border-white/15 backdrop-blur-md shadow-[0_0_24px_rgba(255,255,255,0.06)]"
               >
-                Try AI Builder — Free Trial
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate('/pricing')}
-                className="w-full sm:w-auto rounded-xl px-7 py-6 text-base font-bold border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
-              >
-                See Pricing
+                Start Free Trial
               </Button>
             </div>
           </div>
