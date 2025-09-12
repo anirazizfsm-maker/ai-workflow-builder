@@ -1,9 +1,0 @@
-{
-  "pages": {
-    "build": {
-      "command": "cd frontend && npm run build",
-      "cwd": "frontend",
-      "output_dir": "dist"
-    }
-  }
-}
