@@ -284,7 +284,7 @@ export default function Landing() {
               baseWidth={5.0}
               scale={3.0}
               glow={1.2}
-              noise={0.12}
+              noise={0.03}
               hueShift={0.2}
               colorFrequency={1.0}
               hoverStrength={2.2}

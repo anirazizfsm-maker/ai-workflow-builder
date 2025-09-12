@@ -116,7 +116,7 @@ export default function Pricing() {
             transparent={true}
             scale={3.8}
             glow={1}
-            noise={0.08}
+            noise={0.03}
             hueShift={0}
             colorFrequency={1}
             bloom={1}
