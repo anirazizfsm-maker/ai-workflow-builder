@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
-import { useAction, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,6 +35,9 @@ export default function Landing() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  // API base URL from .env
+  const API_BASE = import.meta.env.VITE_API_BASE_URL as string | undefined;
+
   // State
   const [workflowPrompt, setWorkflowPrompt] = useState("");
   const faqInputRef = useRef<HTMLInputElement | null>(null);
@@ -53,6 +54,10 @@ export default function Landing() {
 
   // Add: mobile detection to tune Prism for small screens
   const [isMobile, setIsMobile] = useState(false);
+
+  // NEW: Local FAQ results state replacing Convex useQuery
+  const [faqResults, setFaqResults] = useState<FAQ[]>([]);
+
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 640px)");
     const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
@@ -74,39 +79,56 @@ export default function Landing() {
   // Remove typing animation state and effects; use a static headline instead
   const staticHeadline = "Automation will grow your business 2x faster.";
 
-  // Data
-  const faqResults =
-    useQuery(
-      api.faqs.searchFAQs,
-      committedQuery ? { query: committedQuery } : "skip",
-    ) ?? [];
-
-  const generateWorkflowJSON = useAction(
-    api.workflowActions.generateWorkflowJSON,
-  );
-
   // Handlers
   const handleGenerateWorkflow = async () => {
     if (!workflowPrompt.trim()) return;
+    if (!API_BASE) {
+      toast("Backend URL is not set (VITE_API_BASE_URL).");
+      return;
+    }
     setIsGenerating(true);
     try {
-      const result = await generateWorkflowJSON({ prompt: workflowPrompt });
+      const res = await fetch(`${API_BASE}/workflows/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: workflowPrompt }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const result = await res.json();
       setWorkflowResult(result);
       toast("Workflow generated successfully! 🚀");
-    } catch {
+    } catch (err) {
       toast("Failed to generate workflow. Please try again.");
     }
     setIsGenerating(false);
   };
 
-  const handleFAQSearch = () => {
+  const handleFAQSearch = async () => {
     if (!faqQuery.trim()) return;
+    if (!API_BASE) {
+      toast("Backend URL is not set (VITE_API_BASE_URL).");
+      return;
+    }
     setIsSearching(true);
     setCommittedQuery(faqQuery);
+    try {
+      const res = await fetch(`${API_BASE}/faqs/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: faqQuery }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: FAQ[] = await res.json();
+      setFaqResults(Array.isArray(data) ? data : []);
+    } catch {
+      toast("FAQ search failed. Please try again.");
+      setFaqResults([]);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   // Turn off searching when results update or query changes
-  // keeps UX snappy; useQuery reactivity will trigger this
   useEffect(() => {
     if (!committedQuery) {
       setIsSearching(false);
