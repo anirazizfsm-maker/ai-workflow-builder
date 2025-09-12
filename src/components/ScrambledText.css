@@ -1,0 +1,10 @@
+.text-block {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.text-block .char {
+  display: inline-block;
+  will-change: contents;
+  transition: color 120ms linear;
+}

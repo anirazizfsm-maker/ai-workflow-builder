@@ -1,0 +1,40 @@
+/* Global shiny sweep overlay for any element (applied to all Buttons) */
+.shiny-text {
+  position: relative;
+  isolation: isolate; /* keep overlay within element bounds */
+}
+
+.shiny-text::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  pointer-events: none;
+  z-index: 1;
+  /* angled sweeping highlight */
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  transform: skewX(-20deg) translateX(-150%);
+  animation: shine var(--shine-speed, 5s) linear infinite;
+  mix-blend-mode: screen;
+  opacity: 0.35;
+}
+
+/* Pause/disable shine when disabled */
+.shiny-text.disabled::after,
+.shiny-text:disabled::after {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+@keyframes shine {
+  0% {
+    transform: skewX(-20deg) translateX(-150%);
+  }
+  100% {
+    transform: skewX(-20deg) translateX(150%);
+  }
+}

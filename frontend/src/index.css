@@ -1,0 +1,206 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* FONT IMPORTS GO HERE */
+/* Add modern fonts for the neon theme */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap");
+
+/* Load required fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+:root {
+  --radius: 0.625rem;
+  --background: 220 14% 69%;
+  --foreground: 220 14% 44%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 0%;
+  --primary: 0 0% 0%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 220 14% 24%;
+  --accent-foreground: 220 14% 54%;
+  --destructive: 0 72% 62%;
+  --border: 0 0% 0%;
+  --input: 0 0% 0%;
+  --ring: 0 0% 0%;
+  --chart-1: 220 14% 69%;
+  --chart-2: 220 14% 44%;
+  --chart-3: 220 14% 39%;
+  --chart-4: 80 67% 82%;
+  --chart-5: 70 50% 76%;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 0 0% 0%;
+  --sidebar-primary: 0 0% 0%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 96%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 0%;
+  --sidebar-ring: 0 0% 0%;
+
+  /* Neumorphism shadows (light) */
+  --neo-shadow: 8px 8px 16px rgba(0,0,0,0.18), -8px -8px 16px rgba(255,255,255,0.65);
+  --neo-shadow-strong: 10px 10px 24px rgba(0,0,0,0.22), -10px -10px 24px rgba(255,255,255,0.7);
+}
+
+.dark {
+  --background: 220 14% 14%;
+  --foreground: 220 14% 98%;
+  --card: 220 14% 20%;
+  --card-foreground: 220 14% 98%;
+  --popover: 220 14% 20%;
+  --popover-foreground: 220 14% 98%;
+
+  /* Neon cyan core */
+  --primary: 210 70% 79%;            /* bright cyan */
+  --primary-foreground: 220 14% 20%;     /* readable on cyan */
+  --accent: 205 60% 74%;             /* supporting cyan */
+  --accent-foreground: 210 14% 14%;  /* deep cyan-ink */
+
+  --secondary: 220 14% 26%;
+  --secondary-foreground: 220 14% 98%;
+  --muted: 220 14% 26%;
+  --muted-foreground: 220 14% 70%;
+
+  --destructive: 22.2 80% 70%;
+
+  /* Softer borders/inputs with cyan ring */
+  --border: 0 0% 100% / 12%;
+  --input: 0 0% 100% / 15%;
+  --ring: 210 70% 79%;               /* neon cyan ring */
+
+  --chart-1: 264.4 70% 48%;
+  --chart-2: 162.5 70% 69%;
+  --chart-3: 70.1 70% 76%;
+  --chart-4: 303.9 70% 62%;
+  --chart-5: 16.4 70% 64%;
+
+  --sidebar: 220 14% 20%;
+  --sidebar-foreground: 220 14% 98%;
+  --sidebar-primary: 210 70% 79%;
+  --sidebar-primary-foreground: 210 14% 14%;
+  --sidebar-accent: 220 14% 26%;
+  --sidebar-accent-foreground: 220 14% 98%;
+  --sidebar-border: 0 0% 100% / 10%;
+  --sidebar-ring: 210 70% 79%;
+
+  /* Neumorphism shadows (dark) */
+  --neo-shadow: 8px 8px 16px rgba(0,0,0,0.45), -8px -8px 16px rgba(255,255,255,0.04);
+  --neo-shadow-strong: 12px 12px 28px rgba(0,0,0,0.55), -12px -12px 28px rgba(255,255,255,0.05);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    letter-spacing: -0.02em;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+  }
+  .font-sans {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', Menlo, "Courier New", monospace;
+  }
+  .font-serif {
+    font-family: Georgia, Georgia, serif;
+  }
+
+  /* Headings use the same unified font */
+  h1, h2, h3 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  /* Buttons also use the unified font */
+  button,
+  [role="button"] {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+}
+
+@layer utilities {
+  @keyframes glitch {
+    0%, 100% { transform: translate(0, 0); }
+    5% { transform: translate(-1px, 1px); }
+    10% { transform: translate(1px, -1px); }
+    15% { transform: translate(-2px, 0); }
+    20% { transform: translate(2px, 1px); }
+    25% { transform: translate(-1px, -2px); }
+    30% { transform: translate(3px, 0); }
+    35% { transform: translate(-2px, 2px); }
+    40% { transform: translate(1px, -3px); }
+    45% { transform: translate(-1px, 1px); }
+    50% { transform: translate(0, 0); }
+    55% { transform: translate(2px, -1px); }
+    60% { transform: translate(-3px, 1px); }
+    65% { transform: translate(2px, 3px); }
+    70% { transform: translate(-2px, -1px); }
+    75% { transform: translate(1px, 2px); }
+    80% { transform: translate(-1px, -3px); }
+    85% { transform: translate(3px, 1px); }
+    90% { transform: translate(-2px, 2px); }
+    95% { transform: translate(1px, -1px); }
+  }
+  @keyframes flow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -2400; }
+  }
+  .flow-line {
+    stroke-linecap: round;
+    stroke-dasharray: 2400;
+    animation: flow 12s linear infinite;
+    filter: drop-shadow(0 0 6px oklch(0.69 0.22 26));
+  }
+  .flow-line-mid {
+    stroke-linecap: round;
+    stroke-dasharray: 2000;
+    animation: flow 7.5s linear infinite;
+    filter: drop-shadow(0 0 7px oklch(0.69 0.22 26));
+    opacity: 0.85;
+  }
+  .flow-line-fast {
+    stroke-linecap: round;
+    stroke-dasharray: 1800;
+    animation: flow 4.5s linear infinite;
+    filter: drop-shadow(0 0 8px oklch(0.69 0.22 26));
+    opacity: 0.9;
+  }
+}
+
+/* Add vignette mask for the chipset canvas background */
+.chipset-vignette {
+  /* Fade edges using a radial mask for wide browser support */
+  -webkit-mask-image: radial-gradient(
+    120% 90% at 50% 40%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0.7) 75%,
+    rgba(0,0,0,0) 100%
+  );
+  mask-image: radial-gradient(
+    120% 90% at 50% 40%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0.7) 75%,
+    rgba(0,0,0,0) 100%
+  );
+}
+
+/* Hide scrollbars utility */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

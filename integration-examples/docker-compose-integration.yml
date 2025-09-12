@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Your existing website
+  my-website:
+    build: ./my-website
+    ports:
+      - "3000:3000"
+    environment:
+      - LETHIMDO_API_URL=http://lethimdo-api:3001
+    depends_on:
+      - lethimdo-api
+    networks:
+      - app-network
+
+  # Lethimdo API service
+  lethimdo-api:
+    build: ./lethimdo/backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - FRONTEND_URL=http://localhost:3000
+    networks:
+      - app-network
+
+  # Lethimdo Frontend (optional, if you want the standalone UI)
+  lethimdo-frontend:
+    build: ./lethimdo/frontend
+    ports:
+      - "5174:5174"
+    environment:
+      - VITE_API_URL=http://localhost:3001
+    depends_on:
+      - lethimdo-api
+    networks:
+      - app-network
+
+  # Optional: Database for storing connections
+  database:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=integrations
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
+# Usage:
+# 1. Copy this file to your project root
+# 2. Update the build paths to match your structure
+# 3. Run: docker-compose up -d
+# 4. Your website can now call: http://lethimdo-api:3001/api/integrations

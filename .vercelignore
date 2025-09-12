@@ -1,0 +1,19 @@
+# Ignore backend directory
+backend/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore build files
+*.log
+.env*
+
+# Ignore docs and scripts
+docs/
+scripts/
+integration-examples/
+legal/
+shared/
+
+# Keep only frontend for Vercel
+!frontend/
