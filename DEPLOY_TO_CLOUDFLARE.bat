@@ -53,6 +53,14 @@ if exist "build-frontend.cjs" (
     exit /b 1
 )
 
+if exist "build-frontend.sh" (
+    echo [OK] build-frontend.sh found
+) else (
+    echo [ERROR] build-frontend.sh not found
+    pause
+    exit /b 1
+)
+
 if exist "frontend/dist" (
     echo [OK] dist directory found
 ) else (
@@ -67,7 +75,7 @@ echo 1. Go to https://dash.cloudflare.com/
 echo 2. Navigate to Pages ^> Create a project
 echo 3. Connect to your Git repository
 echo 4. Use these build settings:
-echo    - Build command: node ../build-frontend.cjs
+echo    - Build command: bash build-frontend.sh
 echo    - Build output directory: frontend/dist
 echo 5. Add environment variables:
 echo    - VITE_API_BASE_URL=https://lethimdo-backend.onrender.com
@@ -75,14 +83,14 @@ echo    - VITE_APP_NAME=Lethimdo
 echo 6. Click "Save and Deploy"
 echo.
 
-echo For detailed instructions, see CLOUDFLARE_DEPLOYMENT_GUIDE.md
+echo For detailed instructions, see CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md
 echo.
 
 echo Press any key to open the deployment guide...
 pause >nul
 
-if exist "CLOUDFLARE_DEPLOYMENT_GUIDE.md" (
-    start "" "CLOUDFLARE_DEPLOYMENT_GUIDE.md"
+if exist "CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md" (
+    start "" "CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md"
 )
 
 echo.

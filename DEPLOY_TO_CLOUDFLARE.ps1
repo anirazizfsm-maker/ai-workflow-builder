@@ -44,6 +44,14 @@ if (Test-Path "build-frontend.cjs") {
     exit 1
 }
 
+if (Test-Path "build-frontend.sh") {
+    Write-Host "[OK] build-frontend.sh found" -ForegroundColor Green
+} else {
+    Write-Host "[ERROR] build-frontend.sh not found" -ForegroundColor Red
+    Read-Host "Press Enter to exit..."
+    exit 1
+}
+
 if (Test-Path "frontend/dist") {
     Write-Host "[OK] dist directory found" -ForegroundColor Green
 } else {
@@ -58,7 +66,7 @@ Write-Host "1. Go to https://dash.cloudflare.com/" -ForegroundColor Cyan
 Write-Host "2. Navigate to Pages > Create a project" -ForegroundColor Cyan
 Write-Host "3. Connect to your Git repository" -ForegroundColor Cyan
 Write-Host "4. Use these build settings:" -ForegroundColor Cyan
-Write-Host "   - Build command: node ../build-frontend.cjs" -ForegroundColor Cyan
+Write-Host "   - Build command: bash build-frontend.sh" -ForegroundColor Cyan
 Write-Host "   - Build output directory: frontend/dist" -ForegroundColor Cyan
 Write-Host "5. Add environment variables:" -ForegroundColor Cyan
 Write-Host "   - VITE_API_BASE_URL=https://lethimdo-backend.onrender.com" -ForegroundColor Cyan
@@ -66,14 +74,14 @@ Write-Host "   - VITE_APP_NAME=Lethimdo" -ForegroundColor Cyan
 Write-Host "6. Click `"Save and Deploy`"" -ForegroundColor Cyan
 Write-Host ""
 
-Write-Host "For detailed instructions, see CLOUDFLARE_DEPLOYMENT_GUIDE.md" -ForegroundColor Yellow
+Write-Host "For detailed instructions, see CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md" -ForegroundColor Yellow
 Write-Host ""
 
 Write-Host "Press any key to open the deployment guide..." -ForegroundColor Yellow
 $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
-if (Test-Path "CLOUDFLARE_DEPLOYMENT_GUIDE.md") {
-    Start-Process "CLOUDFLARE_DEPLOYMENT_GUIDE.md"
+if (Test-Path "CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md") {
+    Start-Process "CLOUDFLARE_DEPLOYMENT_TRIGGER_GUIDE.md"
 }
 
 Write-Host ""
