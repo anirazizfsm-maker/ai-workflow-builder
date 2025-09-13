@@ -1,7 +1,7 @@
 {
   "pages": {
     "build": {
-      "command": "node ./build-frontend.cjs",
+      "command": "bash build-frontend.sh",
       "cwd": ".",
       "output_dir": "frontend/dist"
     }
