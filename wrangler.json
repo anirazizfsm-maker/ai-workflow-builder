@@ -1,9 +1,9 @@
 {
   "pages": {
     "build": {
-      "command": "cd frontend && npm run build",
-      "cwd": "frontend",
-      "output_dir": "dist"
+      "command": "node ./build-frontend.cjs",
+      "cwd": ".",
+      "output_dir": "frontend/dist"
     }
   }
 }

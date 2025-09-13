@@ -23,7 +23,7 @@
 In the "Set up builds and deployments" section:
 
 - **Framework preset**: None (or Vite if available)
-- **Build command**: `node ../build-frontend.cjs`
+- **Build command**: `node ./build-frontend.cjs`
 - **Build output directory**: `frontend/dist`
 - **Root directory**: Leave empty (should be the root of your repository)
 
