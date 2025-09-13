@@ -54,6 +54,8 @@ export default function Landing() {
 
   // Add: mobile detection to tune Prism for small screens
   const [isMobile, setIsMobile] = useState(false);
+  // NEW: Safely enable Prism only when supported
+  const [canRenderPrism, setCanRenderPrism] = useState(false);
 
   // NEW: Local FAQ results state replacing Convex useQuery
   const [faqResults, setFaqResults] = useState<FAQ[]>([]);
@@ -61,18 +63,44 @@ export default function Landing() {
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 640px)");
     const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      setIsMobile(('matches' in e ? e.matches : (e as MediaQueryList).matches));
+      setIsMobile("matches" in e ? e.matches : (e as MediaQueryList).matches);
     };
     setIsMobile(mql.matches);
     // Support older browsers
-    if ('addEventListener' in mql) {
-      mql.addEventListener('change', onChange as (e: MediaQueryListEvent) => void);
-      return () => mql.removeEventListener('change', onChange as (e: MediaQueryListEvent) => void);
+    if ("addEventListener" in mql) {
+      mql.addEventListener("change", onChange as (e: MediaQueryListEvent) => void);
+      return () => mql.removeEventListener("change", onChange as (e: MediaQueryListEvent) => void);
     } else {
       // @ts-expect-error legacy
       mql.addListener(onChange);
       // @ts-expect-error legacy
       return () => mql.removeListener(onChange);
+    }
+  }, []);
+
+  // ADD: Detect WebGL support + reduced motion preference and enable Prism safely
+  useEffect(() => {
+    try {
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)")?.matches;
+
+      if (prefersReducedMotion) {
+        setCanRenderPrism(false);
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+      const gl =
+        (canvas.getContext("webgl2") ||
+          canvas.getContext("webgl") ||
+          // @ts-ignore - "experimental-webgl" exists in some browsers but isn't typed
+          (canvas.getContext as any)("experimental-webgl")) as WebGLRenderingContext | null;
+
+      setCanRenderPrism(!!gl);
+    } catch {
+      setCanRenderPrism(false);
     }
   }, []);
 
@@ -296,24 +324,26 @@ export default function Landing() {
 
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {/* Prism background with hover interaction */}
-            <Prism
-              animationType="hover"
-              transparent
-              suspendWhenOffscreen
-              className="prism-container"
-              height={3.2}
-              baseWidth={5.0}
-              scale={3.0}
-              glow={1.2}
-              noise={0.03}
-              hueShift={0.2}
-              colorFrequency={1.0}
-              hoverStrength={2.2}
-              inertia={0.06}
-              bloom={1.1}
-              timeScale={0.8}
-            />
+            {/* Prism background with hover interaction (render only if supported) */}
+            {canRenderPrism && (
+              <Prism
+                animationType="hover"
+                transparent
+                suspendWhenOffscreen
+                className="prism-container"
+                height={3.2}
+                baseWidth={5.0}
+                scale={3.0}
+                glow={1.2}
+                noise={0.03}
+                hueShift={0.2}
+                colorFrequency={1.0}
+                hoverStrength={2.2}
+                inertia={0.06}
+                bloom={1.1}
+                timeScale={0.8}
+              />
+            )}
             {/* Dark overlay to ensure text contrast */}
             <div
               className="absolute inset-0 pointer-events-none"
