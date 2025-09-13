@@ -614,7 +614,13 @@ export default function Landing() {
             className="rounded-[22px] border border-[#1a2a55] bg-[#0b1120]/80 backdrop-blur-xl p-6 text-white"
           >
             <div className="flex items-start gap-4">
-              <img src="/logo.png" alt="AI Advisor" className="h-12 w-12 rounded-full border border-white/10" />
+              {/* Replace image logo with text wordmark 'Lethimdo' */}
+              <div className="flex items-center gap-2">
+                <div className="h-10 w-10 rounded-xl grid place-items-center bg-gradient-to-br from-[#1e40af] to-[#2563eb] text-white font-bold">
+                  L
+                </div>
+                <span className="text-white font-extrabold text-xl tracking-tight">Lethimdo</span>
+              </div>
               <div>
                 <h3 className="text-2xl md:text-3xl font-extrabold">Your AI business assistant</h3>
                 <p className="text-[#9db2e9] mt-1">Lethimdo learns your business and suggests automations to help you grow faster.</p>
