@@ -102,7 +102,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, Props>((props, ref) => {
   }, [fromFontVariationSettings, toFontVariationSettings]);
 
   const calculateDistance = (x1: number, y1: number, x2: number, y2: number) =>
-    Math.hypot(x2 - x1, y2 - y1);
+    Math.hypot(x2 - x1, y2 - y2);
 
   const calculateFalloff = (distance: number) => {
     const norm = Math.min(Math.max(1 - distance / radius, 0), 1);
@@ -131,7 +131,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, Props>((props, ref) => {
       smoothedPositionRef.current.y = targetY;
     } else {
       // Low-pass filter (tweak alpha for more/less smoothing)
-      const alpha = 0.18;
+      const alpha = 0.1; // smoother follow for cleaner animation
       smoothedPositionRef.current.x += (targetX - smoothedPositionRef.current.x) * alpha;
       smoothedPositionRef.current.y += (targetY - smoothedPositionRef.current.y) * alpha;
     }

@@ -260,7 +260,7 @@ export default function Landing() {
                   fromFontVariationSettings="'wght' 400, 'wdth' 100"
                   toFontVariationSettings="'wght' 500, 'wdth' 85"
                   containerRef={heroRef as any}
-                  radius={120}
+                  radius={160}
                   falloff="gaussian"
                 />
               </span>
@@ -337,15 +337,15 @@ export default function Landing() {
                   className="prism-container"
                   height={3.2}
                   baseWidth={5.0}
-                  scale={3.0}
-                  glow={1.2}
-                  noise={0.03}
-                  hueShift={0.2}
-                  colorFrequency={1.0}
-                  hoverStrength={2.2}
-                  inertia={0.06}
-                  bloom={1.1}
-                  timeScale={0.8}
+                  scale={2.9}
+                  glow={0.6}
+                  noise={0.008}
+                  hueShift={0}
+                  colorFrequency={0.85}
+                  hoverStrength={1.6}
+                  inertia={0.08}
+                  bloom={0.7}
+                  timeScale={0.65}
                 />
               </Suspense>
             )}
@@ -382,7 +382,7 @@ export default function Landing() {
                   fromFontVariationSettings="'wght' 400, 'wdth' 100"
                   toFontVariationSettings="'wght' 500, 'wdth' 85"
                   containerRef={heroRef as any}
-                  radius={140}
+                  radius={160}
                   falloff="gaussian"
                 />
               </h1>
