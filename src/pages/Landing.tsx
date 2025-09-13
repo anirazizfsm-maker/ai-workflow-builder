@@ -338,12 +338,12 @@ export default function Landing() {
                   height={3.5}
                   baseWidth={5.5}
                   scale={3.6}
-                  glow={1}
-                  noise={0.5}
+                  glow={1.12}
+                  noise={0}
                   hueShift={0}
-                  colorFrequency={1}
-                  bloom={1}
-                  timeScale={0.5}
+                  colorFrequency={1.25}
+                  bloom={1.15}
+                  timeScale={0.42}
                 />
               </Suspense>
             )}
