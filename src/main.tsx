@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { InstrumentationProvider } from "@/instrumentation.tsx";
 import AuthPage from "@/pages/Auth.tsx";
 import * as ConvexAuthReact from "@convex-dev/auth/react";
-import { ConvexReactClient } from "convex/react";
+import { ConvexReactClient, ConvexProvider } from "convex/react";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -30,15 +30,13 @@ function SafeConvexProvider({ children }: { children: React.ReactNode }) {
 
   const convex = new ConvexReactClient(convexUrl);
   const Any: any = ConvexAuthReact as any;
+  // Ensure we always have a valid provider; fall back to ConvexProvider from convex/react
   const Provider =
     Any.ConvexProviderWithAuth ??
     Any.ConvexAuthProvider ??
     Any.ConvexProvider ??
-    Any.Provider;
-
-  if (!Provider) {
-    return <>{children}</>;
-  }
+    Any.Provider ??
+    ConvexProvider;
 
   return <Provider client={convex}>{children}</Provider>;
 }
