@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lethimdo Deployment Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .step {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .links {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-success {
+            background-color: #27ae60;
+        }
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+        }
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        .important {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .config {
+            background-color: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lethimdo Cloudflare Deployment Dashboard</h1>
+        
+        <div class="important">
+            <h3>⚠️ Important Notice</h3>
+            <p>Since you're already logged into Cloudflare with your aniraziz47@.com account in Chrome, 
+            this deployment process should be much smoother. Just click the links below to navigate 
+            to the necessary pages.</p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 1: Verify Repository Status</h3>
+            <p>Make sure your GitHub repository is up to date with the latest changes.</p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 2: Access Cloudflare Dashboard</h3>
+            <p>Click the button below to open your Cloudflare Dashboard. You should already be logged in.</p>
+            <div class="links">
+                <a href="https://dash.cloudflare.com/" class="btn" target="_blank">Open Cloudflare Dashboard</a>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>Step 3: Cloudflare Pages Configuration</h3>
+            <p>In your Cloudflare Dashboard:</p>
+            <ol>
+                <li>Click on "Pages" in the left sidebar</li>
+                <li>Click "Create a project" or select your existing project</li>
+                <li>Connect to your GitHub repository if not already connected</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3>Step 4: Build Settings</h3>
+            <p>Configure these build settings in Cloudflare Pages:</p>
+            <div class="config">
+                Build command: node ../build-frontend.cjs<br>
+                Build output directory: frontend/dist<br>
+                Root directory: (leave empty)
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>Step 5: Environment Variables</h3>
+            <p>Add these environment variables in the Cloudflare Pages settings:</p>
+            <div class="config">
+                VITE_API_BASE_URL = https://lethimdo-backend.onrender.com<br>
+                VITE_APP_NAME = Lethimdo
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>Step 6: Deploy</h3>
+            <p>Click "Save and Deploy" to start the deployment process.</p>
+        </div>
+        
+        <div class="links">
+            <a href="https://github.com/anirazizfsm-maker/ai-workflow-builder" class="btn btn-success" target="_blank">GitHub Repository</a>
+            <a href="https://developers.cloudflare.com/pages/" class="btn btn-warning" target="_blank">Cloudflare Pages Docs</a>
+        </div>
+        
+        <div class="important">
+            <h3>📦 Deployment Package Ready</h3>
+            <p>Your deployment package has been created at: <strong>lethimdo-deployment-package.zip</strong></p>
+        </div>
+    </div>
+</body>
+</html>
