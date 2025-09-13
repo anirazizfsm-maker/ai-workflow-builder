@@ -1073,9 +1073,10 @@ export default function Landing() {
         <GradualBlur
           preset="page-footer"
           animated="scroll"
-          divCount={8}
-          strength={2.2}
-          opacity={0.9}
+          height="3.5rem"
+          divCount={6}
+          strength={1.4}
+          opacity={0.7}
           curve="bezier"
           className="pointer-events-none"
           style={{ zIndex: 20 }}
