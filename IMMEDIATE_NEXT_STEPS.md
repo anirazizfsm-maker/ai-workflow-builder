@@ -34,9 +34,27 @@ Option A (Recommended): Keep using Cloudflare for DNS management
 Option B: Move DNS management to Hostinger
 - Follow the migration steps in the conflict resolution guide
 
-## Priority 3: Set Up Custom Domains
+## Priority 3: Fix Cloudflare Pages DNS Configuration
 
-### 6. Configure www.lethimdo.com
+### 6. Check Your Cloudflare Pages Setup
+- Run [check-cloudflare-pages-setup.bat](file:///C:/Users/user/lethimdo/check-cloudflare-pages-setup.bat) to verify your Pages project
+- Review [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md) for detailed instructions
+
+### 7. Fix Missing WWW Subdomain
+Based on our DNS check, your www.lethimdo.com is not configured. You need to:
+1. Login to Cloudflare Dashboard
+2. Go to your Pages project
+3. Add www.lethimdo.com as a custom domain
+4. Add the required CNAME record in the DNS tab
+
+### 8. Configure Root Domain (lethimdo.com)
+Ensure your root domain points to your Cloudflare Pages site:
+1. Add an A record pointing to 192.0.2.1 (Cloudflare Pages IP for apex domains)
+2. Or use CNAME flattening if available
+
+## Priority 4: Set Up Custom Domains
+
+### 9. Configure www.lethimdo.com
 Follow these steps:
 1. In Cloudflare Pages dashboard:
    - Go to your project settings
@@ -44,7 +62,7 @@ Follow these steps:
    - Add `www.lethimdo.com`
    - Follow Cloudflare's instructions for DNS configuration
 
-### 7. Set Up Apex Domain (lethimdo.com)
+### 10. Set Up Apex Domain (lethimdo.com)
 Option A (Recommended for full control):
 1. Transfer your domain's nameservers to Cloudflare
 2. In Cloudflare Pages, add `lethimdo.com` as a custom domain
@@ -53,42 +71,42 @@ Option A (Recommended for full control):
 Option B (Simpler alternative):
 1. At your registrar (Hostinger), set up a URL redirect from `lethimdo.com` to `https://www.lethimdo.com`
 
-## Priority 4: Implement Monitoring and Analytics
+## Priority 5: Implement Monitoring and Analytics
 
-### 8. Set Up Analytics
+### 11. Set Up Analytics
 Choose one analytics platform:
 - Google Analytics (free, comprehensive)
 - Plausible Analytics (privacy-focused)
 - Simple Analytics (another privacy-focused option)
 
-### 9. Configure Error Tracking
+### 12. Configure Error Tracking
 Set up error tracking with:
 - Sentry for JavaScript
 - Rollbar
 - Bugsnag
 
-## Priority 5: For Your Bangladesh Freelance Agency
+## Priority 6: For Your Bangladesh Freelance Agency
 
-### 10. Business Development Preparation
+### 13. Business Development Preparation
 - Create a client intake form
 - Develop service packages and pricing
 - Prepare contracts and agreements
 - Set up payment processing (PayPal, Stripe, local options)
 
-### 11. Marketing Preparation
+### 14. Marketing Preparation
 - Create a portfolio showcasing Lethimdo capabilities
 - Develop case studies of your work
 - Prepare outreach messages for potential clients
 
-## Priority 6: Security and Compliance
+## Priority 7: Security and Compliance
 
-### 12. Security Check
+### 15. Security Check
 - Verify SSL certificate is properly installed
 - Check that CORS settings are correctly configured
 - Review authentication implementation
 - Ensure sensitive data is not exposed in client-side code
 
-### 13. Compliance for Bangladesh Operations
+### 16. Compliance for Bangladesh Operations
 - Research and comply with local data protection regulations
 - Consider international compliance standards (GDPR if serving EU customers)
 - Establish clear terms of service and privacy policy
@@ -97,9 +115,10 @@ Set up error tracking with:
 
 1. For deployment verification: [POST_DEPLOYMENT_CHECKLIST.md](file:///C:/Users/user/lethimdo/POST_DEPLOYMENT_CHECKLIST.md)
 2. For DNS conflict resolution: [HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md](file:///C:/Users/user/lethimdo/HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md)
-3. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
-4. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
-5. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
+3. For Cloudflare Pages setup: [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md)
+4. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
+5. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
+6. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
 
 ## Quick Start Commands
 
