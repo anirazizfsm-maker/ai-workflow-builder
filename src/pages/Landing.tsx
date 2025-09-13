@@ -331,7 +331,7 @@ export default function Landing() {
             {canRenderPrism && (
               <Suspense fallback={null}>
                 <LazyPrism
-                  animationType="3drotate"
+                  animationType="hover"
                   transparent
                   suspendWhenOffscreen
                   className="prism-container"
@@ -344,6 +344,8 @@ export default function Landing() {
                   colorFrequency={1.25}
                   bloom={1.15}
                   timeScale={0.42}
+                  hoverStrength={1.15}
+                  inertia={0.08}
                 />
               </Suspense>
             )}
