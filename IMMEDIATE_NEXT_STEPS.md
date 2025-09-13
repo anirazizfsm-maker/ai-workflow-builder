@@ -24,16 +24,29 @@ Congratulations again on your successful deployment! Here's what you should do n
 - Review [CLOUDFLARE_PAGES_CONTENT_SUMMARY.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_CONTENT_SUMMARY.md) to understand what content is provided
 - Test your content at the temporary pages.dev URL
 
-## Priority 3: Resolve Hostinger-Cloudflare DNS Conflict
+## Priority 3: Fix Your DNS Configuration
 
-### 4. Understand the DNS Conflict
+### 4. Identify DNS Issues
+Based on your DNS records, there are several issues:
+- WWW CNAME record points to `lethimdo.com` instead of your Cloudflare Pages domain
+- Root domain A record points to Netlify IP instead of Cloudflare Pages
+- NS records point to parking servers instead of proper nameservers
+
+### 5. Fix DNS Configuration
+- Run [fix-dns-configuration.bat](file:///C:/Users/user/lethimdo/fix-dns-configuration.bat) to guide you through the process
+- Follow the steps in [FIX_DNS_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_DNS_CONFIGURATION.md) for detailed instructions
+- Choose whether to manage DNS through Hostinger or Cloudflare
+
+## Priority 4: Resolve Hostinger-Cloudflare DNS Conflict
+
+### 6. Understand the DNS Conflict
 You're seeing a message from Hostinger saying your domain is not pointing to Hostinger because you're currently using Cloudflare for DNS management. This is normal and expected.
 
-### 5. Check Your Current Configuration
+### 7. Check Your Current Configuration
 - Run [check-current-dns-configuration.bat](file:///C:/Users/user/lethimdo/check-current-dns-configuration.bat) to see your current DNS setup
 - Review [HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md](file:///C:/Users/user/lethimdo/HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md) for detailed guidance
 
-### 6. Decide on Your DNS Strategy
+### 8. Decide on Your DNS Strategy
 Option A (Recommended): Keep using Cloudflare for DNS management
 - Ignore Hostinger's notification - this is normal
 - Verify your DNS records in Cloudflare are correctly configured
@@ -41,25 +54,25 @@ Option A (Recommended): Keep using Cloudflare for DNS management
 Option B: Move DNS management to Hostinger
 - Follow the migration steps in the conflict resolution guide
 
-## Priority 4: Fix Cloudflare Pages DNS Configuration
+## Priority 5: Fix Cloudflare Pages DNS Configuration
 
-### 7. Check Your Cloudflare Pages Setup
+### 9. Check Your Cloudflare Pages Setup
 - Run [check-cloudflare-pages-setup.bat](file:///C:/Users/user/lethimdo/check-cloudflare-pages-setup.bat) to verify your Pages project
 - Review [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md) for detailed instructions
 
-### 8. Configure WWW Subdomain (www.lethimdo.com)
-Based on our DNS check, your www.lethimdo.com is not configured. You need to:
+### 10. Configure WWW Subdomain (www.lethimdo.com)
+Based on our DNS check, your www.lethimdo.com is not configured correctly. You need to:
 - Run [CONFIGURE_WWW_SUBDOMAIN.bat](file:///C:/Users/user/lethimdo/CONFIGURE_WWW_SUBDOMAIN.bat) to guide you through the process
 - Follow the steps in [WWW_SUBDOMAIN_CONFIGURATION_CHECKLIST.md](file:///C:/Users/user/lethimdo/WWW_SUBDOMAIN_CONFIGURATION_CHECKLIST.md)
 - Use [FIX_WWW_SUBDOMAIN_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_WWW_SUBDOMAIN_CONFIGURATION.md) for detailed instructions
 
-### 9. Verify Your Configuration
+### 11. Verify Your Configuration
 - Run [VERIFY_WWW_CONFIGURATION.bat](file:///C:/Users/user/lethimdo/VERIFY_WWW_CONFIGURATION.bat) to check if your configuration is working
 - Both https://lethimdo.com and https://www.lethimdo.com should work
 
-## Priority 5: Set Up Custom Domains
+## Priority 6: Set Up Custom Domains
 
-### 10. Configure www.lethimdo.com
+### 12. Configure www.lethimdo.com
 Follow these steps:
 1. In Cloudflare Pages dashboard:
    - Go to your project settings
@@ -67,7 +80,7 @@ Follow these steps:
    - Add `www.lethimdo.com`
    - Follow Cloudflare's instructions for DNS configuration
 
-### 11. Set Up Apex Domain (lethimdo.com)
+### 13. Set Up Apex Domain (lethimdo.com)
 Option A (Recommended for full control):
 1. Transfer your domain's nameservers to Cloudflare
 2. In Cloudflare Pages, add `lethimdo.com` as a custom domain
@@ -76,42 +89,42 @@ Option A (Recommended for full control):
 Option B (Simpler alternative):
 1. At your registrar (Hostinger), set up a URL redirect from `lethimdo.com` to `https://www.lethimdo.com`
 
-## Priority 6: Implement Monitoring and Analytics
+## Priority 7: Implement Monitoring and Analytics
 
-### 12. Set Up Analytics
+### 14. Set Up Analytics
 Choose one analytics platform:
 - Google Analytics (free, comprehensive)
 - Plausible Analytics (privacy-focused)
 - Simple Analytics (another privacy-focused option)
 
-### 13. Configure Error Tracking
+### 15. Configure Error Tracking
 Set up error tracking with:
 - Sentry for JavaScript
 - Rollbar
 - Bugsnag
 
-## Priority 7: For Your Bangladesh Freelance Agency
+## Priority 8: For Your Bangladesh Freelance Agency
 
-### 14. Business Development Preparation
+### 16. Business Development Preparation
 - Create a client intake form
 - Develop service packages and pricing
 - Prepare contracts and agreements
 - Set up payment processing (PayPal, Stripe, local options)
 
-### 15. Marketing Preparation
+### 17. Marketing Preparation
 - Create a portfolio showcasing Lethimdo capabilities
 - Develop case studies of your work
 - Prepare outreach messages for potential clients
 
-## Priority 8: Security and Compliance
+## Priority 9: Security and Compliance
 
-### 16. Security Check
+### 18. Security Check
 - Verify SSL certificate is properly installed
 - Check that CORS settings are correctly configured
 - Review authentication implementation
 - Ensure sensitive data is not exposed in client-side code
 
-### 17. Compliance for Bangladesh Operations
+### 19. Compliance for Bangladesh Operations
 - Research and comply with local data protection regulations
 - Consider international compliance standards (GDPR if serving EU customers)
 - Establish clear terms of service and privacy policy
@@ -120,12 +133,13 @@ Set up error tracking with:
 
 1. For deployment verification: [POST_DEPLOYMENT_CHECKLIST.md](file:///C:/Users/user/lethimdo/POST_DEPLOYMENT_CHECKLIST.md)
 2. For Cloudflare Pages content: [CLOUDFLARE_PAGES_CONTENT_SUMMARY.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_CONTENT_SUMMARY.md)
-3. For DNS conflict resolution: [HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md](file:///C:/Users/user/lethimdo/HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md)
-4. For Cloudflare Pages setup: [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md)
-5. For WWW subdomain configuration: [FIX_WWW_SUBDOMAIN_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_WWW_SUBDOMAIN_CONFIGURATION.md)
-6. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
-7. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
-8. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
+3. For DNS configuration fix: [FIX_DNS_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_DNS_CONFIGURATION.md)
+4. For DNS conflict resolution: [HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md](file:///C:/Users/user/lethimdo/HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md)
+5. For Cloudflare Pages setup: [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md)
+6. For WWW subdomain configuration: [FIX_WWW_SUBDOMAIN_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_WWW_SUBDOMAIN_CONFIGURATION.md)
+7. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
+8. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
+9. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
 
 ## Quick Start Commands
 
