@@ -208,14 +208,14 @@ export function InstrumentationProvider({
 
         if (import.meta.env.VITE_VLY_APP_ID) {
           await reportErrorToVly({
-            error: event.reason.message,
-            stackTrace: event.reason.stack,
+            error: event.reason?.message ?? String(event.reason),
+            stackTrace: event.reason?.stack,
           });
         }
 
         setError({
-          error: event.reason.message,
-          stack: event.reason.stack,
+          error: event.reason?.message ?? String(event.reason),
+          stack: event.reason?.stack ?? "",
         });
       } catch (error) {
         console.error("Error in handleRejection:", error);
@@ -231,16 +231,6 @@ export function InstrumentationProvider({
     };
   }, []);
 
-  // In production: don't block UI with error overlays; report silently.
-  if (isProd) {
-    return <>{children}</>;
-  }
-
-  // In development: keep ErrorBoundary + dialog to debug quickly.
-  return (
-    <>
-      <ErrorBoundary>{children}</ErrorBoundary>
-      {error && <ErrorDialog error={error} setError={setError} />}
-    </>
-  );
+  // Always render the app UI; do not block with error overlays in any env.
+  return <>{children}</>;
 }
