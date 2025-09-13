@@ -243,6 +243,33 @@ export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       <main className="relative z-0">
+        {/* Simple sticky header to ensure visible UI and quick navigation */}
+        <div className="sticky top-0 z-50 w-full backdrop-blur bg-[#0b1120]/70 border-b border-[#142554]">
+          <div className="mx-auto max-w-7xl px-4 md:px-8 h-12 flex items-center justify-between">
+            <button
+              onClick={() => navigate("/")}
+              className="text-white/90 hover:text-white text-sm font-semibold"
+              aria-label="Go home"
+            >
+              Lethimdo
+            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/pricing")}
+                className="text-[#9db2e9] hover:text-white text-sm"
+              >
+                Pricing
+              </button>
+              <Button
+                onClick={() => navigate(isAuthenticated ? "/dashboard" : "/auth")}
+                className="h-8 rounded-md px-3 text-xs font-bold bg-[#1f51ff] hover:bg-[#1b45da] text-white"
+              >
+                {isAuthenticated ? "Dashboard" : "Sign in"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-12 md:pt-24 pb-12 md:pb-20 overflow-hidden rounded-2xl min-h-[620px] md:min-h-[900px]">
           {/* Top-left Logo with same VariableProximity effect as headline */}
