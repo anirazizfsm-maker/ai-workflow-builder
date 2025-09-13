@@ -40,17 +40,15 @@ Option B: Move DNS management to Hostinger
 - Run [check-cloudflare-pages-setup.bat](file:///C:/Users/user/lethimdo/check-cloudflare-pages-setup.bat) to verify your Pages project
 - Review [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md) for detailed instructions
 
-### 7. Fix Missing WWW Subdomain
+### 7. Configure WWW Subdomain (www.lethimdo.com)
 Based on our DNS check, your www.lethimdo.com is not configured. You need to:
-1. Login to Cloudflare Dashboard
-2. Go to your Pages project
-3. Add www.lethimdo.com as a custom domain
-4. Add the required CNAME record in the DNS tab
+- Run [CONFIGURE_WWW_SUBDOMAIN.bat](file:///C:/Users/user/lethimdo/CONFIGURE_WWW_SUBDOMAIN.bat) to guide you through the process
+- Follow the steps in [WWW_SUBDOMAIN_CONFIGURATION_CHECKLIST.md](file:///C:/Users/user/lethimdo/WWW_SUBDOMAIN_CONFIGURATION_CHECKLIST.md)
+- Use [FIX_WWW_SUBDOMAIN_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_WWW_SUBDOMAIN_CONFIGURATION.md) for detailed instructions
 
-### 8. Configure Root Domain (lethimdo.com)
-Ensure your root domain points to your Cloudflare Pages site:
-1. Add an A record pointing to 192.0.2.1 (Cloudflare Pages IP for apex domains)
-2. Or use CNAME flattening if available
+### 8. Verify Your Configuration
+- Run [VERIFY_WWW_CONFIGURATION.bat](file:///C:/Users/user/lethimdo/VERIFY_WWW_CONFIGURATION.bat) to check if your configuration is working
+- Both https://lethimdo.com and https://www.lethimdo.com should work
 
 ## Priority 4: Set Up Custom Domains
 
@@ -116,9 +114,10 @@ Set up error tracking with:
 1. For deployment verification: [POST_DEPLOYMENT_CHECKLIST.md](file:///C:/Users/user/lethimdo/POST_DEPLOYMENT_CHECKLIST.md)
 2. For DNS conflict resolution: [HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md](file:///C:/Users/user/lethimdo/HOSTINGER_CLOUDFLARE_DNS_CONFLICT_RESOLUTION.md)
 3. For Cloudflare Pages setup: [CLOUDFLARE_PAGES_SETUP_CHECK.md](file:///C:/Users/user/lethimdo/CLOUDFLARE_PAGES_SETUP_CHECK.md)
-4. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
-5. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
-6. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
+4. For WWW subdomain configuration: [FIX_WWW_SUBDOMAIN_CONFIGURATION.md](file:///C:/Users/user/lethimdo/FIX_WWW_SUBDOMAIN_CONFIGURATION.md)
+5. For custom domain setup: [CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md](file:///C:/Users/user/lethimdo/CUSTOM-DOMAIN-CONFIGURATION-GUIDE.md)
+6. For business development: [BANGLADESH-AGENCY-CHECKLIST.md](file:///C:/Users/user/lethimdo/BANGLADESH-AGENCY-CHECKLIST.md)
+7. For ongoing development: [NEXT_STEPS_GUIDE.md](file:///C:/Users/user/lethimdo/NEXT_STEPS_GUIDE.md)
 
 ## Quick Start Commands
 
