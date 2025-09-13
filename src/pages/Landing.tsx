@@ -243,7 +243,46 @@ export default function Landing() {
   return (
     <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
       <main className="relative z-0">
-        
+        {/* Basic UI: Always-visible top bar */}
+        <div className="sticky top-0 z-[100] w-full border-b border-white/10 bg-[#0b1120]/90 backdrop-blur supports-[backdrop-filter]:bg-[#0b1120]/65">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button onClick={() => navigate("/")} className="text-white font-bold tracking-tight">
+              Lethimdo
+            </button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" className="border-white/20 text-white bg-transparent hover:bg-white/10" onClick={() => navigate("/")}>
+                Home
+              </Button>
+              <Button variant="outline" className="border-white/20 text-white bg-transparent hover:bg-white/10" onClick={() => navigate("/pricing")}>
+                Pricing
+              </Button>
+              <Button className="bg-[#1f51ff] hover:bg-[#1b45da] text-white" onClick={() => navigate("/dashboard")}>
+                Dashboard
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Basic UI: Quick status block */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 pt-6">
+          <div className="rounded-xl border border-white/10 bg-[#0b1120]/80 p-4 text-white">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-sm text-white/90">Site is running</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" className="border-white/20 text-white bg-transparent hover:bg-white/10" onClick={() => navigate("/auth")}>
+                  Sign In
+                </Button>
+                <Button className="bg-[#1f51ff] hover:bg-[#1b45da] text-white" onClick={() => navigate("/dashboard")}>
+                  Open Dashboard
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* HERO (restore Prism to hero-scoped background with original 3drotate) */}
         <section ref={heroRef} className="relative mx-auto max-w-[100rem] px-6 md:px-8 pt-12 md:pt-24 pb-12 md:pb-20 overflow-hidden rounded-2xl min-h-[620px] md:min-h-[900px]">
           {/* Top-left Logo with same VariableProximity effect as headline */}
