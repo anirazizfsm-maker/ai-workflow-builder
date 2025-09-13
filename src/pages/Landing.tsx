@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -30,6 +30,8 @@ import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
 import Prism from "@/components/Prism";
 import "@/components/Prism.css";
+
+const LazyPrism = lazy(() => import("@/components/Prism"));
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -326,23 +328,25 @@ export default function Landing() {
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             {/* Prism background with hover interaction (render only if supported) */}
             {canRenderPrism && (
-              <Prism
-                animationType="hover"
-                transparent
-                suspendWhenOffscreen
-                className="prism-container"
-                height={3.2}
-                baseWidth={5.0}
-                scale={3.0}
-                glow={1.2}
-                noise={0.03}
-                hueShift={0.2}
-                colorFrequency={1.0}
-                hoverStrength={2.2}
-                inertia={0.06}
-                bloom={1.1}
-                timeScale={0.8}
-              />
+              <Suspense fallback={null}>
+                <LazyPrism
+                  animationType="hover"
+                  transparent
+                  suspendWhenOffscreen
+                  className="prism-container"
+                  height={3.2}
+                  baseWidth={5.0}
+                  scale={3.0}
+                  glow={1.2}
+                  noise={0.03}
+                  hueShift={0.2}
+                  colorFrequency={1.0}
+                  hoverStrength={2.2}
+                  inertia={0.06}
+                  bloom={1.1}
+                  timeScale={0.8}
+                />
+              </Suspense>
             )}
             {/* Dark overlay to ensure text contrast */}
             <div
