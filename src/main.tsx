@@ -15,9 +15,17 @@ import "./types/global.d.ts";
 import Plans from "./pages/Plans.tsx";
 import Pricing from "./pages/Pricing.tsx";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+function SafeConvexProvider({ children }: { children: React.ReactNode }) {
+  const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
 
+  if (!convexUrl) {
+    // Render children without Convex so the SPA still loads.
+    return <>{children}</>;
+  }
 
+  const convex = new ConvexReactClient(convexUrl);
+  return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>;
+}
 
 function RouteSyncer() {
   const location = useLocation();
@@ -42,12 +50,11 @@ function RouteSyncer() {
   return null;
 }
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <VlyToolbar />
     <InstrumentationProvider>
-      <ConvexAuthProvider client={convex}>
+      <SafeConvexProvider>
         <BrowserRouter>
           <RouteSyncer />
           <Routes>
@@ -60,7 +67,7 @@ createRoot(document.getElementById("root")!).render(
           </Routes>
         </BrowserRouter>
         <Toaster />
-      </ConvexAuthProvider>
+      </SafeConvexProvider>
     </InstrumentationProvider>
   </StrictMode>,
 );
