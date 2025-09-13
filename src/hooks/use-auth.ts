@@ -1,5 +1,4 @@
 import { api } from "@/convex/_generated/api";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery } from "convex/react";
 
 import { useEffect, useState } from "react";
@@ -7,7 +6,6 @@ import { useEffect, useState } from "react";
 export function useAuth() {
   const { isLoading: isAuthLoading, isAuthenticated } = useConvexAuth();
   const user = useQuery(api.users.currentUser);
-  const { signIn, signOut } = useAuthActions();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -18,6 +16,15 @@ export function useAuth() {
       setIsLoading(false);
     }
   }, [isAuthLoading, user]);
+
+  // Provide safe no-op auth actions when an auth provider isn't mounted.
+  // This avoids runtime crashes on pages that consume useAuth without a provider present.
+  const signIn = async (..._args: any[]) => {
+    throw new Error("Auth actions are unavailable: no auth provider mounted.");
+  };
+  const signOut = async (..._args: any[]) => {
+    // no-op
+  };
 
   return {
     isLoading,
