@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { InstrumentationProvider } from "@/instrumentation.tsx";
 import AuthPage from "@/pages/Auth.tsx";
-import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import * as ConvexAuthReact from "@convex-dev/auth/react";
 import { ConvexReactClient } from "convex/react";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
@@ -25,12 +25,22 @@ function SafeConvexProvider({ children }: { children: React.ReactNode }) {
   const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
 
   if (!convexUrl) {
-    // Render children without Convex so the SPA still loads.
     return <>{children}</>;
   }
 
   const convex = new ConvexReactClient(convexUrl);
-  return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>;
+  const Any: any = ConvexAuthReact as any;
+  const Provider =
+    Any.ConvexProviderWithAuth ??
+    Any.ConvexAuthProvider ??
+    Any.ConvexProvider ??
+    Any.Provider;
+
+  if (!Provider) {
+    return <>{children}</>;
+  }
+
+  return <Provider client={convex}>{children}</Provider>;
 }
 
 function RouteSyncer() {
@@ -67,7 +77,17 @@ function RootLayout() {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route element={<RootLayout />}>
+    <Route
+      element={<RootLayout />}
+      errorElement={
+        <div className="p-6 text-white">
+          <h1 className="text-xl font-bold">Something went wrong</h1>
+          <p className="text-sm opacity-75 mt-2">
+            Please refresh the page. If this continues, try an incognito window or disable extensions.
+          </p>
+        </div>
+      }
+    >
       <Route path="/" element={<Landing />} />
       <Route path="/auth" element={<AuthPage redirectAfterAuth="/dashboard" />} />
       <Route path="/dashboard" element={<Dashboard />} />
