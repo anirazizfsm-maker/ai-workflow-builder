@@ -173,6 +173,7 @@ export function InstrumentationProvider({
   children: React.ReactNode;
 }) {
   const [error, setError] = useState<GenericError | null>(null);
+  const isProd = import.meta.env.PROD;
 
   useEffect(() => {
     const handleError = async (event: ErrorEvent) => {
@@ -229,6 +230,13 @@ export function InstrumentationProvider({
       window.removeEventListener("unhandledrejection", handleRejection);
     };
   }, []);
+
+  // In production: don't block UI with error overlays; report silently.
+  if (isProd) {
+    return <>{children}</>;
+  }
+
+  // In development: keep ErrorBoundary + dialog to debug quickly.
   return (
     <>
       <ErrorBoundary>{children}</ErrorBoundary>
