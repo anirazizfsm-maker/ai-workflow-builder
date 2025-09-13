@@ -144,6 +144,7 @@ const useIntersectionObserver = (
 function GradualBlur(props: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
 
   const config = useMemo<Config>(() => {
     const presetConfig = props.preset && PRESETS[props.preset] ? PRESETS[props.preset] : {};
@@ -213,7 +214,7 @@ function GradualBlur(props: Props) {
     const baseStyle: React.CSSProperties = {
       position: isPageTarget ? 'fixed' : 'absolute',
       pointerEvents: config.hoverIntensity ? 'auto' : 'none',
-      opacity: isVisible ? 1 : 0,
+      opacity: isVisible && !atBottom ? 1 : 0,
       transition: config.animated ? `opacity ${config.duration ?? '0.3s'} ${config.easing ?? 'ease-out'}` : undefined,
       zIndex: isPageTarget ? (config.zIndex ?? 1000) + 100 : (config.zIndex ?? 1000),
       ...config.style,
@@ -234,7 +235,7 @@ function GradualBlur(props: Props) {
     }
 
     return baseStyle;
-  }, [config, responsiveHeight, responsiveWidth, isVisible]);
+  }, [config, responsiveHeight, responsiveWidth, isVisible, atBottom]);
 
   const { hoverIntensity, animated, onAnimationComplete, duration } = config;
 
@@ -245,6 +246,35 @@ function GradualBlur(props: Props) {
       return () => clearTimeout(t);
     }
   }, [isVisible, animated, onAnimationComplete, duration]);
+
+  useEffect(() => {
+    if (config.target !== 'page' || (config.position ?? 'bottom') !== 'bottom') return;
+
+    const checkBottom = () => {
+      const doc = document.documentElement;
+      const body = document.body;
+      const scrollTop = window.scrollY || doc.scrollTop;
+      const viewport = window.innerHeight || doc.clientHeight;
+      const fullHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        doc.clientHeight,
+        doc.scrollHeight,
+        doc.offsetHeight
+      );
+      // Small threshold to account for sub-pixel rounding
+      const threshold = 2;
+      setAtBottom(scrollTop + viewport >= fullHeight - threshold);
+    };
+
+    checkBottom();
+    window.addEventListener('scroll', checkBottom, { passive: true });
+    window.addEventListener('resize', checkBottom);
+    return () => {
+      window.removeEventListener('scroll', checkBottom);
+      window.removeEventListener('resize', checkBottom);
+    };
+  }, [config.target, config.position]);
 
   return (
     <div
