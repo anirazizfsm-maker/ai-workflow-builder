@@ -30,6 +30,7 @@ import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
 import Prism from "@/components/Prism";
 import "@/components/Prism.css";
+import GradualBlur from "@/components/GradualBlur";
 
 const LazyPrism = lazy(() => import("@/components/Prism"));
 
@@ -1067,6 +1068,18 @@ export default function Landing() {
             </div>
           </div>
         </footer>
+
+        {/* Fixed page footer blur overlay for a soft edge while scrolling */}
+        <GradualBlur
+          preset="page-footer"
+          animated="scroll"
+          divCount={8}
+          strength={2.2}
+          opacity={0.9}
+          curve="bezier"
+          className="pointer-events-none"
+          style={{ zIndex: 20 }}
+        />
       </main>
     </div>
   );
