@@ -332,7 +332,7 @@ export default function Landing() {
             {canRenderPrism && (
               <Suspense fallback={null}>
                 <LazyPrism
-                  animationType="hover"
+                  animationType="hoverRotate"
                   transparent
                   suspendWhenOffscreen
                   className="prism-container"

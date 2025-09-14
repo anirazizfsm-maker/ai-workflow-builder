@@ -4,7 +4,7 @@ import { Renderer, Triangle, Program, Mesh } from "ogl";
 type PrismProps = {
   height?: number;
   baseWidth?: number;
-  animationType?: "rotate" | "hover" | "3drotate";
+  animationType?: "rotate" | "hover" | "3drotate" | "hoverRotate";
   glow?: number;
   offset?: { x?: number; y?: number };
   noise?: number;
@@ -356,6 +356,15 @@ const Prism = ({
       window.addEventListener("mouseleave", onLeave);
       window.addEventListener("blur", onBlur);
       (program.uniforms.uUseBaseWobble as any).value = 0;
+    } else if (animationType === "hoverRotate") {
+      onPointerMove = (e: PointerEvent) => {
+        onMove(e);
+        startRAF();
+      };
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("mouseleave", onLeave);
+      window.addEventListener("blur", onBlur);
+      (program.uniforms.uUseBaseWobble as any).value = 0;
     } else if (animationType === "3drotate") {
       (program.uniforms.uUseBaseWobble as any).value = 0;
     } else {
@@ -386,6 +395,28 @@ const Prism = ({
             Math.abs(yaw - targetYaw) < 1e-4 && Math.abs(pitch - targetPitch) < 1e-4 && Math.abs(roll) < 1e-4;
           if (settled) continueRAF = false;
         }
+      } else if (animationType === "hoverRotate") {
+        const tScaled = time * TS;
+        const baseYaw = tScaled * wY + 0.5;        // steady spin + slight yaw bias to show corners
+        const basePitch = Math.sin(tScaled * wX + phX) * 0.6 + 0.35; // gentle up/down + tilt up
+        const baseRoll = Math.sin(tScaled * wZ + phZ) * 0.4 - 0.3;   // slight left tilt
+
+        const maxPitch = 0.5 * HOVSTR;
+        const maxYaw = 0.5 * HOVSTR;
+        const targetDYaw = (pointer.inside ? -pointer.x : 0) * maxYaw;
+        const targetDPitch = (pointer.inside ? pointer.y : 0) * maxPitch;
+
+        const prevYaw = yaw;
+        const prevPitch = pitch;
+        const prevRoll = roll;
+
+        yaw = lerp(prevYaw, targetDYaw, INERT);
+        pitch = lerp(prevPitch, targetDPitch, INERT);
+        roll = lerp(prevRoll, 0, 0.12);
+
+        (program.uniforms.uRot as any).value = setMat3FromEuler(baseYaw + yaw, basePitch + pitch, baseRoll + roll, rotBuf);
+
+        if (TS < 1e-6 && NOISE_IS_ZERO && !pointer.inside) continueRAF = false;
       } else if (animationType === "3drotate") {
         const tScaled = time * TS;
         yaw = tScaled * wY;
@@ -425,7 +456,7 @@ const Prism = ({
     return () => {
       stopRAF();
       ro.disconnect();
-      if (animationType === "hover") {
+      if (animationType === "hover" || animationType === "hoverRotate") {
         if (onPointerMove) window.removeEventListener("pointermove", onPointerMove);
         window.removeEventListener("mouseleave", onLeave);
         window.removeEventListener("blur", onBlur);
@@ -435,7 +466,6 @@ const Prism = ({
         if (io) io.disconnect();
         delete container.__prismIO;
       }
-      // Guard cleanup if WebGL was unavailable
       if (gl && (gl as any).canvas && (gl as any).canvas.parentElement === container) {
         container.removeChild((gl as any).canvas);
       }
