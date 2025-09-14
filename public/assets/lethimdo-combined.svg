@@ -1,0 +1,32 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <radialGradient id="c2" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="rgba(147,197,253,0.85)"/>
+      <stop offset="100%" stop-color="rgba(37,99,235,0)"/>
+    </radialGradient>
+    <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="360" rx="24" fill="#0b1120"/>
+  <circle cx="180" cy="180" r="150" fill="url(#c2)" opacity="0.3"/>
+  <g filter="url(#glow2)">
+    <path d="M84 96h192a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H144v72h96a16 16 0 0 1 16 16v36a16 16 0 0 1-16 16H84a16 16 0 0 1-16-16V112a16 16 0 0 1 16-16z"
+      fill="url(#c1)"/>
+  </g>
+  <g>
+    <text x="360" y="210" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'" 
+          font-size="120" font-weight="800" letter-spacing="1" fill="url(#c1)">
+      Lethimdo
+    </text>
+    <rect x="360" y="228" width="240" height="7" rx="3.5" fill="#2563eb" opacity="0.5"/>
+  </g>
+</svg>
