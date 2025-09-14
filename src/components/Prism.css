@@ -1,7 +1,110 @@
+/* Prism container and visual styling */
 .prism-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none; /* keep UI above clickable */
+
+  /* Tunable theme variables */
+  --prism-saturation: 1.15;
+  --prism-contrast: 1.05;
+  --prism-brightness: 1.0;
+
+  --prism-vignette-opacity: 0.35;
+  --prism-vignette-radius: 120% 85%;
+
+  --prism-glow-opacity: 0.18;
+  --prism-glow-color-1: rgba(37, 99, 235, 0.55);  /* tailwind blue-600 */
+  --prism-glow-color-2: rgba(147, 197, 253, 0.5); /* tailwind blue-300 */
+
+  --prism-scan-opacity: 0.08;
+  --prism-scan-speed: 22s;
+}
+
+/* Style the underlying WebGL canvas for a vivid look */
+.prism-container > canvas {
+  filter:
+    saturate(var(--prism-saturation))
+    contrast(var(--prism-contrast))
+    brightness(var(--prism-brightness));
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+/* Soft vignette for better text contrast */
+.prism-container::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      var(--prism-vignette-radius) at 50% 40%,
+      rgba(0,0,0,0) 55%,
+      rgba(3,6,17,0.35) 85%,
+      rgba(3,6,17,0.7) 100%
+    );
+  opacity: var(--prism-vignette-opacity);
+}
+
+/* Gentle colored glow with a slow rotation */
+.prism-container::after {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 35% 35%, var(--prism-glow-color-1), transparent 60%),
+    radial-gradient(60% 45% at 75% 55%, var(--prism-glow-color-2), transparent 70%);
+  opacity: var(--prism-glow-opacity);
+  filter: blur(20px);
+  animation: prism-rotate var(--prism-scan-speed) linear infinite;
+}
+
+/* Subtle scanlines over the whole layer to add texture (very low opacity) */
+.prism-container .prism-scanlines {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.10) 0 1px,
+      transparent 1px 3px
+    );
+  opacity: var(--prism-scan-opacity);
+  mix-blend-mode: soft-light;
+  animation: prism-scan var(--prism-scan-speed) linear infinite;
+}
+
+/* Keyframes */
+@keyframes prism-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes prism-scan {
+  from { transform: translateY(-10%); }
+  to   { transform: translateY(10%); }
+}
+
+/* Respect user preferences and reduce effects on small screens */
+@media (prefers-reduced-motion: reduce) {
+  .prism-container::after,
+  .prism-container .prism-scanlines {
+    animation: none;
+  }
+}
+@media (max-width: 640px) {
+  .prism-container {
+    --prism-saturation: 1.08;
+    --prism-contrast: 1.03;
+    --prism-vignette-opacity: 0.3;
+    --prism-glow-opacity: 0.12;
+    --prism-scan-opacity: 0.05;
+  }
 }
