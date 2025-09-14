@@ -338,7 +338,7 @@ export default function Landing() {
                   className="prism-container"
                   height={3.5}
                   baseWidth={5.5}
-                  scale={2.4}
+                  scale={1.2}
                   glow={1.25}
                   noise={0}
                   hueShift={0.2}
