@@ -144,16 +144,14 @@ const Prism = ({
         return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453123);
       }
 
-      float sdOctaAnisoInv(vec3 p){
+      float sdCubeAnisoInv(vec3 p){
         vec3 q = vec3(abs(p.x) * uInvBaseHalf, abs(p.y) * uInvHeight, abs(p.z) * uInvBaseHalf);
-        float m = q.x + q.y + q.z - 1.0;
-        return m * uMinAxis * 0.5773502691896258;
+        float m = max(max(q.x, q.y), q.z) - 1.0;
+        return m * uMinAxis;
       }
 
-      float sdPyramidUpInv(vec3 p){
-        float oct = sdOctaAnisoInv(p);
-        float halfSpace = -p.y;
-        return max(oct, halfSpace);
+      float sdCubeInv(vec3 p){
+        return sdCubeAnisoInv(p);
       }
 
       mat3 hueRotation(float a){
@@ -204,7 +202,7 @@ const Prism = ({
           p = uRot * p;
           vec3 q = p;
           q.y += centerShift;
-          d = 0.1 + 0.2 * abs(sdPyramidUpInv(q));
+          d = 0.1 + 0.2 * abs(sdCubeInv(q));
           z -= d;
           o += (sin((p.y + z) * cf + vec4(0.0, 1.0, 2.0, 3.0)) + 1.0) / d;
         }
