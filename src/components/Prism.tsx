@@ -317,9 +317,9 @@ const Prism = ({
     };
 
     const rnd = () => Math.random();
-    const wX = (0.3 + rnd() * 0.6) * RSX;
-    const wY = (0.2 + rnd() * 0.7) * RSY;
-    const wZ = (0.1 + rnd() * 0.5) * RSZ;
+    const wX = (0.2 + rnd() * 0.4) * RSX;
+    const wY = (0.15 + rnd() * 0.3) * RSY;
+    const wZ = (0.1 + rnd() * 0.2) * RSZ;
     const phX = rnd() * Math.PI * 2;
     const phZ = rnd() * Math.PI * 2;
 
@@ -397,31 +397,31 @@ const Prism = ({
         }
       } else if (animationType === "hoverRotate") {
         const tScaled = time * TS;
-        const baseYaw = tScaled * wY + 0.5;        // steady spin + slight yaw bias to show corners
-        const basePitch = Math.sin(tScaled * wX + phX) * 0.6 + 0.35; // gentle up/down + tilt up
-        const baseRoll = Math.sin(tScaled * wZ + phZ) * 0.4 - 0.3;   // slight left tilt
+        const baseYaw = tScaled * wY + 0.3;        // gentle planetary spin
+        const basePitch = Math.sin(tScaled * wX + phX) * 0.4 + 0.2; // subtle up/down
+        const baseRoll = Math.sin(tScaled * wZ + phZ) * 0.3 - 0.15;   // slight tilt
 
-        const maxPitch = 0.5 * HOVSTR;
-        const maxYaw = 0.5 * HOVSTR;
-        const targetDYaw = (pointer.inside ? -pointer.x : 0) * maxYaw;
-        const targetDPitch = (pointer.inside ? pointer.y : 0) * maxPitch;
+        const maxPitch = 0.4 * HOVSTR;
+        const maxYaw = 0.4 * HOVSTR;
+        const targetDYaw = (pointer.inside ? -pointer.x * 0.7 : 0) * maxYaw;
+        const targetDPitch = (pointer.inside ? pointer.y * 0.7 : 0) * maxPitch;
 
         const prevYaw = yaw;
         const prevPitch = pitch;
         const prevRoll = roll;
 
-        yaw = lerp(prevYaw, targetDYaw, INERT);
-        pitch = lerp(prevPitch, targetDPitch, INERT);
-        roll = lerp(prevRoll, 0, 0.12);
+        yaw = lerp(prevYaw, targetDYaw, INERT * 0.8);
+        pitch = lerp(prevPitch, targetDPitch, INERT * 0.8);
+        roll = lerp(prevRoll, 0, 0.08);
 
         (program.uniforms.uRot as any).value = setMat3FromEuler(baseYaw + yaw, basePitch + pitch, baseRoll + roll, rotBuf);
 
         if (TS < 1e-6 && NOISE_IS_ZERO && !pointer.inside) continueRAF = false;
       } else if (animationType === "3drotate") {
         const tScaled = time * TS;
-        yaw = tScaled * wY;
-        pitch = Math.sin(tScaled * wX + phX) * 0.6;
-        roll = Math.sin(tScaled * wZ + phZ) * 0.5;
+        yaw = tScaled * wY * 0.8;
+        pitch = Math.sin(tScaled * wX + phX) * 0.5;
+        roll = Math.sin(tScaled * wZ + phZ) * 0.4;
         (program.uniforms.uRot as any).value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
         if (TS < 1e-6) continueRAF = false;
       } else {
