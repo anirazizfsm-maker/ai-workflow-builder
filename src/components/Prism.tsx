@@ -305,6 +305,10 @@ const Prism = ({
       return out;
     };
 
+    const applyRotation = (yawY: number, pitchX: number, rollZ: number) => {
+      (program.uniforms.uRot as any).value = setMat3FromEuler(yawY, pitchX, rollZ, rotBuf);
+    };
+
     const NOISE_IS_ZERO = NOISE < 1e-6;
     let raf = 0 as number;
 
@@ -350,7 +354,10 @@ const Prism = ({
     };
 
     let onPointerMove: ((e: PointerEvent) => void) | null = null;
-    if (animationType === "hover") {
+    (program.uniforms.uUseBaseWobble as any).value = animationType === "rotate" ? 1 : 0;
+    let removePointerListeners: (() => void) | null = null;
+
+    if (animationType === "hover" || animationType === "hoverRotate") {
       onPointerMove = (e: PointerEvent) => {
         onMove(e);
         startRAF();
@@ -358,16 +365,12 @@ const Prism = ({
       window.addEventListener("pointermove", onPointerMove, { passive: true });
       window.addEventListener("mouseleave", onLeave);
       window.addEventListener("blur", onBlur);
-      (program.uniforms.uUseBaseWobble as any).value = 0;
-    } else if (animationType === "hoverRotate") {
-      onPointerMove = (e: PointerEvent) => {
-        onMove(e);
-        startRAF();
+
+      removePointerListeners = () => {
+        if (onPointerMove) window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("mouseleave", onLeave);
+        window.removeEventListener("blur", onBlur);
       };
-      window.addEventListener("pointermove", onPointerMove, { passive: true });
-      window.addEventListener("mouseleave", onLeave);
-      window.addEventListener("blur", onBlur);
-      (program.uniforms.uUseBaseWobble as any).value = 0;
     } else if (animationType === "3drotate") {
       (program.uniforms.uUseBaseWobble as any).value = 0;
     } else {
@@ -391,7 +394,7 @@ const Prism = ({
         yaw = lerp(prevYaw, targetYaw, INERT);
         pitch = lerp(prevPitch, targetPitch, INERT);
         roll = lerp(prevRoll, 0, 0.1);
-        (program.uniforms.uRot as any).value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
+        applyRotation(yaw, pitch, roll);
 
         if (NOISE_IS_ZERO) {
           const settled =
@@ -417,7 +420,7 @@ const Prism = ({
         pitch = lerp(prevPitch, targetDPitch, INERT * 0.8);
         roll = lerp(prevRoll, 0, 0.08);
 
-        (program.uniforms.uRot as any).value = setMat3FromEuler(baseYaw + yaw, basePitch + pitch, baseRoll + roll, rotBuf);
+        applyRotation(baseYaw + yaw, basePitch + pitch, baseRoll + roll);
 
         if (TS < 1e-6 && NOISE_IS_ZERO && !pointer.inside) continueRAF = false;
       } else if (animationType === "3drotate") {
@@ -425,7 +428,7 @@ const Prism = ({
         yaw = tScaled * wY * 0.8;
         pitch = Math.sin(tScaled * wX + phX) * 0.5;
         roll = Math.sin(tScaled * wZ + phZ) * 0.4;
-        (program.uniforms.uRot as any).value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
+        applyRotation(yaw, pitch, roll);
         if (TS < 1e-6) continueRAF = false;
       } else {
         rotBuf[0] = 1; rotBuf[1] = 0; rotBuf[2] = 0;
@@ -459,11 +462,7 @@ const Prism = ({
     return () => {
       stopRAF();
       ro.disconnect();
-      if (animationType === "hover" || animationType === "hoverRotate") {
-        if (onPointerMove) window.removeEventListener("pointermove", onPointerMove);
-        window.removeEventListener("mouseleave", onLeave);
-        window.removeEventListener("blur", onBlur);
-      }
+      removePointerListeners?.();
       if (suspendWhenOffscreen) {
         const io = container.__prismIO;
         if (io) io.disconnect();
