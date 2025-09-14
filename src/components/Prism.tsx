@@ -66,7 +66,8 @@ const Prism = ({
     const isMobile =
       typeof window !== "undefined" &&
       !!(window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
-    const dpr = isMobile ? 1 : Math.min(1.5, window.devicePixelRatio || 1);
+    // Force DPR to 1 across devices for smoother performance
+    const dpr = 1;
     // Safely initialize WebGL renderer; bail out if context creation fails
     let renderer: Renderer | null = null;
     try {
@@ -198,7 +199,7 @@ const Prism = ({
           wob = mat2(c0, c1, c2, c0);
         }
 
-        const int STEPS = 64;
+        const int STEPS = 48;
         for (int i = 0; i < STEPS; i++) {
           p = vec3(f, z);
           p.xz = p.xz * wob;
@@ -207,6 +208,8 @@ const Prism = ({
           q.y += centerShift;
           d = 0.1 + 0.2 * abs(sdCubeInv(q));
           z -= d;
+          // Early exit once the ray has sufficiently traversed the shape
+          if (z < -3.0) { break; }
           o += (sin((p.y + z) * cf + vec4(0.0, 1.0, 2.0, 3.0)) + 1.0) / d;
         }
 
@@ -377,6 +380,15 @@ const Prism = ({
       (program.uniforms.uUseBaseWobble as any).value = 1;
     }
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stopRAF();
+      } else {
+        startRAF();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     const render = (t: number) => {
       const time = (t - t0) * 0.001;
       (program.uniforms.iTime as any).value = time;
@@ -468,6 +480,7 @@ const Prism = ({
         if (io) io.disconnect();
         delete container.__prismIO;
       }
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       if (gl && (gl as any).canvas && (gl as any).canvas.parentElement === container) {
         container.removeChild((gl as any).canvas);
       }
