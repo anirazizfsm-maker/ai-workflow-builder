@@ -1,5 +1,45 @@
 import { v } from "convex/values";
-import { action, query } from "./_generated/server";
+import { query, mutation, action } from "./_generated/server";
+
+// List all AI templates
+export const listTemplates = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("aiTemplates").collect();
+  },
+});
+
+// Create or update a template
+export const upsertTemplate = mutation({
+  args: {
+    id: v.optional(v.id("aiTemplates")),
+    slug: v.optional(v.string()),
+    name: v.string(),
+    description: v.string(),
+    category: v.optional(v.string()),
+    jsonSchema: v.optional(v.string()),
+    minPlan: v.optional(v.string()),
+    isActive: v.optional(v.boolean()),
+    tags: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    const { id, ...rest } = args;
+    if (id) {
+      await ctx.db.patch(id, rest);
+      return id;
+    }
+    return await ctx.db.insert("aiTemplates", rest);
+  },
+});
+
+// Delete a template
+export const deleteTemplate = mutation({
+  args: { id: v.id("aiTemplates") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
+    return { success: true };
+  },
+});
 
 // AI Builder endpoint: POST /v1/ai-builder/parse
 // Input: { org_id, text } where text = user's natural language request
