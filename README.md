@@ -17,6 +17,24 @@ All relevant files live in the 'src' directory.
 
 Use pnpm for the package manager.
 
+## 🚀 ACCESS YOUR LETHIMDO PLATFORM
+
+### Quick Access:
+1. **Double-click**: `ACCESS-ALL-COMPONENTS.bat`
+2. **Deploy Website**: Choose option [5] in the access menu
+3. **Visit**: https://www.lethimdo.com (after DNS setup)
+
+### Platform Components:
+- **Live Website**: https://www.lethimdo.com (after deployment)
+- **Backend API**: https://lethimdo-backend.onrender.com
+- **Source Code**: `C:\Users\user\lethimdo\`
+- **GitHub**: https://github.com/anirazizfsm-maker/ai-workflow-builder
+
+### Documentation:
+- **Complete Access Guide**: [COMPLETE-ACCESS-GUIDE.md](COMPLETE-ACCESS-GUIDE.md)
+- **API Documentation**: [backend/API_DOCUMENTATION.md](backend/API_DOCUMENTATION.md)
+- **Deployment Guide**: [backend/DEPLOYMENT_SCRIPTS.md](backend/DEPLOYMENT_SCRIPTS.md)
+
 ## Setup
 
 This project is set up already and running on a cloud environment, as well as a convex development in the sandbox.
