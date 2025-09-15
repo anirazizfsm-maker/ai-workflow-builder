@@ -1,4 +1,13 @@
+import * as ConvexAuth from "@convex-dev/auth/react";
+
 export function useAuth() {
+  const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+
+  if (convexUrl && (ConvexAuth as any)?.useAuth) {
+    // Delegate to @convex-dev/auth when backend URL is available
+    return (ConvexAuth as any).useAuth();
+  }
+
   return {
     isLoading: false,
     isAuthenticated: false,

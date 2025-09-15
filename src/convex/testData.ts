@@ -1,4 +1,4 @@
-import { internalMutation } from "./_generated/server";
+import { internalMutation, action } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
@@ -164,5 +164,21 @@ export const seedWorkflowRuns = internalMutation({
     }
 
     return { success: true, count };
+  },
+});
+
+export const seedAll = action({
+  args: {},
+  handler: async (ctx) => {
+    // Ensure org + settings
+    await ctx.runMutation(internal.testData.seedTestOrg, {});
+    // FAQs
+    await ctx.runMutation(internal.testData.seedFAQs, {});
+    // AI Templates
+    await ctx.runMutation(internal.testData.seedAITemplates, {});
+    // Runs for demo org
+    await ctx.runMutation(internal.testData.seedWorkflowRuns, { orgId: "demo-org" });
+
+    return { success: true };
   },
 });
