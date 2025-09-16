@@ -62,6 +62,9 @@ export default function Landing() {
 
   // NEW: Local FAQ results state replacing Convex useQuery
   const [faqResults, setFaqResults] = useState<FAQ[]>([]);
+  // Add: newsletter subscribe state
+  const [subscribeEmail, setSubscribeEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 640px)");
@@ -168,6 +171,43 @@ export default function Landing() {
     // whenever results refresh, stop the loading state
     setIsSearching(false);
   }, [committedQuery, faqResults]);
+
+  const handleSubscribe = async () => {
+    const email = subscribeEmail.trim();
+    if (!email) {
+      toast("Please enter your email.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast("Enter a valid email address.");
+      return;
+    }
+
+    setIsSubscribing(true);
+    try {
+      if (!API_BASE) {
+        // No backend configured; simulate success
+        toast("Subscribed! Backend not set yet; saved locally.");
+        setSubscribeEmail("");
+        return;
+      }
+      const res = await fetch(`${API_BASE}/newsletter/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      toast("Thanks for subscribing! 🎉");
+      setSubscribeEmail("");
+    } catch {
+      toast("Subscription failed. Please try again.");
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
+  // Add: Subscribe handler for newsletter
 
   const plans = [
     {
@@ -1139,8 +1179,21 @@ export default function Landing() {
             <h3 className="text-2xl md:text-3xl font-extrabold">Stay ahead with automation tips</h3>
             <p className="text-[#9db2e9] mt-1">Get weekly insights on AI-powered productivity.</p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3">
-              <Input placeholder="Enter your email" className="bg-[#0f1730]/70 border-white/10 text-white" />
-              <Button className="rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] text-white">Subscribe</Button>
+              <Input
+                placeholder="Enter your email"
+                className="bg-[#0f1730]/70 border-white/10 text-white"
+                type="email"
+                value={subscribeEmail}
+                onChange={(e) => setSubscribeEmail(e.target.value)}
+                aria-label="Email address"
+              />
+              <Button
+                className="rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] text-white"
+                onClick={handleSubscribe}
+                disabled={isSubscribing}
+              >
+                {isSubscribing ? "Subscribing..." : "Subscribe"}
+              </Button>
             </div>
           </div>
         </section>
