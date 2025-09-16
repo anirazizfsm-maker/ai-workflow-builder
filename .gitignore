@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local development directories
+lethimdo-clone-test/
+lethimdo-fresh-clone/
+lethimdo-shallow-clone/
+vly-ai-design/
