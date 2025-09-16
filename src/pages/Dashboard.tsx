@@ -111,6 +111,36 @@ function ConvexDashboard() {
   const upsertTemplate = useMutation(api.aiBuilder.upsertTemplate);
   const removeTemplate = useMutation(api.aiBuilder.deleteTemplate);
 
+  const createWorkflow = useMutation(api.workflows.createWorkflow);
+const [isCreateOpen, setCreateOpen] = useState(false);
+const [wfForm, setWfForm] = useState<{ title: string; description: string; category: string; prompt: string; jsonConfig: string }>({
+  title: "",
+  description: "",
+  category: "",
+  prompt: "",
+  jsonConfig: "{}",
+});
+
+// Add AI Template editor state
+const [isTplOpen, setTplOpen] = useState(false);
+const [tplForm, setTplForm] = useState<any>(null);
+
+// Handler: open a fresh template editor
+const openNewTemplate = () => {
+  setTplForm({
+    id: undefined,
+    slug: "",
+    name: "",
+    description: "",
+    category: "",
+    jsonSchema: "",
+    minPlan: "free",
+    isActive: true,
+    tags: [],
+  });
+  setTplOpen(true);
+};
+
   const todayCount = runs.length ? runs[runs.length - 1].count : 0;
   const activeCount = myWorkflows.filter((w) => w.status === "active").length;
   const hourlyRate = settings?.hourlyRate ?? 25;
@@ -128,23 +158,39 @@ function ConvexDashboard() {
     toast(`${w.title} deleted.`);
   };
 
-  // Local state for template editor
-  const [isTplOpen, setTplOpen] = useState(false);
-  const [tplForm, setTplForm] = useState<any>(null);
-
-  const openNewTemplate = () => {
-    setTplForm({
-      id: undefined,
-      slug: "",
-      name: "",
+  const openCreateWorkflow = () => {
+    if (!isAuthenticated) {
+      navigate("/auth");
+      return;
+    }
+    setWfForm({
+      title: "",
       description: "",
       category: "",
-      jsonSchema: "",
-      minPlan: "free",
-      isActive: true,
-      tags: [],
+      prompt: "",
+      jsonConfig: "{}",
     });
-    setTplOpen(true);
+    setCreateOpen(true);
+  };
+
+  const saveWorkflow = async () => {
+    if (!wfForm.title || !wfForm.description) {
+      toast("Title and description are required");
+      return;
+    }
+    try {
+      await createWorkflow({
+        title: wfForm.title,
+        description: wfForm.description,
+        prompt: wfForm.prompt || wfForm.description,
+        jsonConfig: wfForm.jsonConfig || "{}",
+        category: wfForm.category || "general",
+      });
+      toast("Workflow created");
+      setCreateOpen(false);
+    } catch (e: any) {
+      toast(e?.message || "Failed to create workflow");
+    }
   };
 
   const openEditTemplate = (t: any) => {
@@ -222,10 +268,19 @@ function ConvexDashboard() {
           </div>
         </Section>
 
-        <Section title="My Workflows" action={<Button size="sm" onClick={() => toast("Use the AI Builder to create workflows from prompts.")}>New</Button>}>
+        <Section
+          title="My Workflows"
+          action={
+            <Button size="sm" onClick={openCreateWorkflow}>
+              New
+            </Button>
+          }
+        >
           <div className="space-y-3">
             {myWorkflows.length === 0 && (
-              <p className="text-sm text-muted-foreground">No workflows yet. Create one to get started.</p>
+              <p className="text-sm text-muted-foreground">
+                {isAuthenticated ? "No workflows yet. Create one to get started." : "Sign in to create and manage workflows."}
+              </p>
             )}
             {myWorkflows.map((w) => (
               <div key={w._id} className="flex items-center justify-between border rounded-md p-3">
@@ -245,6 +300,62 @@ function ConvexDashboard() {
               </div>
             ))}
           </div>
+
+          <Dialog open={isCreateOpen} onOpenChange={setCreateOpen}>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle>New Workflow</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3">
+                <div className="grid gap-1.5">
+                  <Label>Title</Label>
+                  <Input
+                    value={wfForm.title}
+                    onChange={(e) => setWfForm({ ...wfForm, title: e.target.value })}
+                    placeholder="Welcome Email Automation"
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label>Description</Label>
+                  <Textarea
+                    value={wfForm.description}
+                    onChange={(e) => setWfForm({ ...wfForm, description: e.target.value })}
+                    placeholder="Sends a welcome email when a user signs up"
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label>Category</Label>
+                  <Input
+                    value={wfForm.category}
+                    onChange={(e) => setWfForm({ ...wfForm, category: e.target.value })}
+                    placeholder="email | data | social | automation"
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label>Prompt (optional)</Label>
+                  <Textarea
+                    value={wfForm.prompt}
+                    onChange={(e) => setWfForm({ ...wfForm, prompt: e.target.value })}
+                    placeholder="In natural language, describe the workflow steps"
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label>JSON Config (optional)</Label>
+                  <Textarea
+                    className="font-mono"
+                    value={wfForm.jsonConfig}
+                    onChange={(e) => setWfForm({ ...wfForm, jsonConfig: e.target.value })}
+                    placeholder='{"steps":[...]}' />
+                </div>
+              </div>
+              <DialogFooter className="mt-4">
+                <Button variant="ghost" onClick={() => setCreateOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={saveWorkflow}>Create</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </Section>
 
         <Section title="Notifications" action={<Button size="icon" variant="ghost"><Bell className="h-4 w-4" /></Button>}>

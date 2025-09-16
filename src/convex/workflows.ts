@@ -6,7 +6,8 @@ export const getUserWorkflows = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error("Not authenticated");
+    // Return empty when not authenticated to avoid UI query errors
+    if (!userId) return [];
 
     return await ctx.db
       .query("workflows")
