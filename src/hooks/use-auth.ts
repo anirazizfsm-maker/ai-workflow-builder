@@ -10,7 +10,10 @@ function getConvexUrl(): string | undefined {
       ? new URLSearchParams(window.location.search).get("convex") || undefined
       : undefined;
 
-  const url = envUrl || globalUrl || queryUrl || localUrl;
+  // Final fallback to ensure auth always has a Convex URL
+  const DEFAULT_CONVEX_URL = "https://giddy-condor-405.convex.cloud";
+  const url = envUrl || globalUrl || queryUrl || localUrl || DEFAULT_CONVEX_URL;
+
   // Persist from query for subsequent visits
   if (queryUrl && typeof localStorage !== "undefined") {
     localStorage.setItem("convex_url", queryUrl);

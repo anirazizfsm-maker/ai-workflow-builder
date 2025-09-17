@@ -34,7 +34,9 @@ function SafeConvexProvider({ children }: { children: React.ReactNode }) {
       ? localStorage.getItem("convex_url") || undefined
       : undefined;
 
-  const convexUrl = envUrl || globalUrl || queryUrl || localUrl;
+  // Add a final, safe default fallback so auth works even if envs aren't injected
+  const DEFAULT_CONVEX_URL = "https://giddy-condor-405.convex.cloud";
+  const convexUrl = envUrl || globalUrl || queryUrl || localUrl || DEFAULT_CONVEX_URL;
 
   // Persist from query for future reloads
   if (queryUrl && typeof localStorage !== "undefined") {
