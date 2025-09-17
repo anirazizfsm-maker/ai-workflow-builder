@@ -22,7 +22,24 @@ import Plans from "./pages/Plans.tsx";
 import Pricing from "./pages/Pricing.tsx";
 
 function SafeConvexProvider({ children }: { children: React.ReactNode }) {
-  const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+  // Robust convex URL resolution: env -> global -> query -> localStorage
+  const envUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+  const globalUrl = (globalThis as any).__CONVEX_URL as string | undefined;
+  const queryUrl =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("convex") || undefined
+      : undefined;
+  const localUrl =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("convex_url") || undefined
+      : undefined;
+
+  const convexUrl = envUrl || globalUrl || queryUrl || localUrl;
+
+  // Persist from query for future reloads
+  if (queryUrl && typeof localStorage !== "undefined") {
+    localStorage.setItem("convex_url", queryUrl);
+  }
 
   if (!convexUrl) {
     return <>{children}</>;

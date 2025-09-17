@@ -1,7 +1,26 @@
 import * as ConvexAuth from "@convex-dev/auth/react";
 
+// Read Convex URL with robust fallbacks: env -> global -> localStorage -> query param
+function getConvexUrl(): string | undefined {
+  const envUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+  const globalUrl = (globalThis as any).__CONVEX_URL as string | undefined;
+  const localUrl = typeof localStorage !== "undefined" ? localStorage.getItem("convex_url") || undefined : undefined;
+  const queryUrl =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("convex") || undefined
+      : undefined;
+
+  const url = envUrl || globalUrl || queryUrl || localUrl;
+  // Persist from query for subsequent visits
+  if (queryUrl && typeof localStorage !== "undefined") {
+    localStorage.setItem("convex_url", queryUrl);
+  }
+  return url;
+}
+
 export function useAuth() {
-  const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
+  // Replace direct env read with robust getter
+  const convexUrl = getConvexUrl();
 
   if (convexUrl && (ConvexAuth as any)?.useAuth) {
     // Delegate to @convex-dev/auth when backend URL is available
@@ -14,7 +33,7 @@ export function useAuth() {
     user: undefined as any,
     signIn: async (..._args: any[]) => {
       throw new Error(
-        "Authentication is not configured. Set VITE_CONVEX_URL to enable auth."
+        "Authentication is not configured. Set VITE_CONVEX_URL (or use ?convex=YOUR_URL) to enable auth."
       );
     },
     signOut: async (..._args: any[]) => {
