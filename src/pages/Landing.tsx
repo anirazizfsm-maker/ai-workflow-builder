@@ -371,15 +371,17 @@ export default function Landing() {
               className="absolute inset-0"
               baseColor="#1e40af"
               activeColor="#2563eb"
-              dotSize={10}
-              gap={26}
-              proximity={140}
-              speedTrigger={120}
-              shockRadius={240}
-              shockStrength={6}
-              maxSpeed={4500}
+              // Smaller, more responsive dots and spacing
+              dotSize={isMobile ? 5 : 7}
+              gap={isMobile ? 14 : 20}
+              // Tighter proximity and tuned interactions for mobile
+              proximity={isMobile ? 100 : 130}
+              speedTrigger={isMobile ? 140 : 120}
+              shockRadius={isMobile ? 180 : 220}
+              shockStrength={5}
+              maxSpeed={4000}
               resistance={700}
-              returnDuration={1.4}
+              returnDuration={1.2}
             />
             {/* Dark overlay to ensure text contrast */}
             <div
