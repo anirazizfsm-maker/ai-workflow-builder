@@ -155,6 +155,10 @@ const DotGrid = ({
         const dsq = dx * dx + dy * dy;
 
         let style = baseColor;
+        // Add: stronger glow near pointer, subtle glow otherwise
+        let glowBlur = 6;
+        let glowColor = baseColor;
+
         if (dsq <= proxSq) {
           const dist = Math.sqrt(dsq);
           const t = 1 - dist / proximity;
@@ -162,11 +166,18 @@ const DotGrid = ({
           const g = Math.round(baseRgb.g + (activeRgb.g - baseRgb.g) * t);
           const b = Math.round(baseRgb.b + (activeRgb.b - baseRgb.b) * t);
           style = `rgb(${r},${g},${b})`;
+
+          // Increase glow based on proximity
+          glowBlur = 14 + t * 18; // peak ~32
+          glowColor = style;
         }
 
         ctx.save();
         ctx.translate(ox, oy);
         ctx.fillStyle = style;
+        // Set glow
+        ctx.shadowBlur = glowBlur;
+        ctx.shadowColor = glowColor;
         ctx.fill(circlePath);
         ctx.restore();
       }
@@ -229,9 +240,9 @@ const DotGrid = ({
         if (speed > speedTrigger && dist < proximity && !dot._inertiaApplied) {
           dot._inertiaApplied = true;
           gsap.killTweensOf(dot);
-          const pushX = dot.cx - pr.x + vx * 0.005;
-          const pushY = dot.cy - pr.y + vy * 0.005;
-          // Animate offset out with easing, then return back elastically
+          // Reduce movement amplitude (bounce less)
+          const pushX = dot.cx - pr.x + vx * 0.002;
+          const pushY = dot.cy - pr.y + vy * 0.002;
           gsap.to(dot, {
             xOffset: pushX,
             yOffset: pushY,
@@ -265,9 +276,10 @@ const DotGrid = ({
           dot._inertiaApplied = true;
           gsap.killTweensOf(dot);
           const falloff = Math.max(0, 1 - dist / shockRadius);
-          const pushX = (dot.cx - cx) * shockStrength * falloff;
-          const pushY = (dot.cy - cy) * shockStrength * falloff;
-          // Animate shock push, then return back elastically
+          // Reduce shock push strength globally (bounce less)
+          const attenuation = 0.6;
+          const pushX = (dot.cx - cx) * shockStrength * falloff * attenuation;
+          const pushY = (dot.cy - cy) * shockStrength * falloff * attenuation;
           gsap.to(dot, {
             xOffset: pushX,
             yOffset: pushY,
