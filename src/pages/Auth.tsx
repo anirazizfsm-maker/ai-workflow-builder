@@ -166,13 +166,13 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <>
               <CardHeader className="text-center">
               <div className="flex justify-center">
-                    <img
-                      src="/assets/lethimdo-wordmark.svg"
-                      alt="LETHIMDO"
-                      className="block h-8 w-auto select-none mb-1 cursor-pointer"
-                      onClick={() => navigate("/")}
-                    />
-                  </div>
+                     <img
+                       src="/assets/lethimdo-wordmark.svg"
+                       alt="LETHIMDO"
+                       className="block h-8 w-auto select-none mb-1 cursor-pointer mx-auto"
+                       onClick={() => navigate("/")}
+                     />
+                   </div>
                 <CardTitle className="text-xl text-white">Get Started</CardTitle>
                 <CardDescription className="text-[#9bb1e9]">
                   Enter your email to log in or sign up
