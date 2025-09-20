@@ -12,10 +12,10 @@ export function useAuth() {
     isLoading: false,
     isAuthenticated: false,
     user: undefined as any,
+    // Make signIn a no-op in demo mode instead of throwing
     signIn: async (..._args: any[]) => {
-      throw new Error(
-        "Authentication is not configured. Set VITE_CONVEX_URL to enable auth."
-      );
+      console.warn("Auth is not configured (VITE_CONVEX_URL missing). Running in demo mode; signIn is a no-op.");
+      return;
     },
     signOut: async (..._args: any[]) => {
       // no-op
