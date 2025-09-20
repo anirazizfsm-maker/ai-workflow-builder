@@ -92,13 +92,13 @@ export default function Pricing() {
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
+              className="rounded-xl border border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
               onClick={() => navigate("/")}
             >
               Back
             </Button>
             <Button
-              className="rounded-xl border border-white/20 bg-white/10 backdrop-blur-md text-foreground hover:bg-white/15"
+              className="rounded-xl px-5 py-2.5 text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_24px_rgba(37,99,235,0.25)]"
               onClick={() => navigate("/auth")}
             >
               Get Started
@@ -129,7 +129,7 @@ export default function Pricing() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-3xl text-center rounded-2xl border border-white/10 bg-[#0a1429]/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
+          className="mx-auto max-w-3xl text-center rounded-2xl border border-[#1a2a55] bg-[#0a1429]/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
         >
           <div className="mb-2 text-xs font-semibold tracking-wide text-[#9bb1e9]">
             ✦ Pricing ✦
@@ -155,7 +155,7 @@ export default function Pricing() {
               return (
                 <li
                   key={f}
-                  className="flex items-start gap-2 rounded-md border border-white/10 bg-[#0b1120]/60 px-2 py-2"
+                  className="flex items-start gap-2 rounded-md border border-[#1a2a55] bg-[#0b1120]/60 px-2 py-2"
                 >
                   {isGood ? (
                     <CheckCircle2 className="mt-0.5 h-4 w-4 text-[#60a5fa]" />
@@ -176,8 +176,8 @@ export default function Pricing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className={`rounded-2xl border bg-gradient-to-b from-[#0e1a38] to-[#0b142b] backdrop-blur-xl shadow-[0_18px_60px_-20px_rgba(37,99,235,0.45)] ${
-                  plan.accent ? "ring-1 ring-[color:var(--ring)]/40" : "border-white/10"
+                className={`rounded-2xl border bg-gradient-to-b from-[#0e1a38] to-[#0b142b] backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(59,130,246,0.35)] ${
+                  plan.accent ? "ring-1 ring-[color:var(--ring)]/40" : "border-[#1a2a55]"
                 }`}
               >
                 <Card className="border-0 bg-transparent shadow-none">
@@ -210,7 +210,7 @@ export default function Pricing() {
                     <div className="text-xs text-[#8fa2c9]">{plan.bestFor}</div>
                     <Button
                       onClick={plan.cta}
-                      className="w-full rounded-xl py-2.5 font-bold bg-[#1f51ff] hover:bg-[#1b45da] text-white"
+                      className="w-full rounded-xl py-2.5 font-bold text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_24px_rgba(37,99,235,0.25)]"
                     >
                       {plan.ctaLabel}
                     </Button>
@@ -229,14 +229,14 @@ export default function Pricing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-7xl rounded-2xl border border-white/10 bg-[#0a1429]/70 backdrop-blur-xl p-5 md:p-6 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
+          className="mx-auto max-w-7xl rounded-2xl border border-[#1a2a55] bg-[#0a1429]/70 backdrop-blur-xl p-5 md:p-6 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
         >
           <div className="flex flex-col gap-3 items-center justify-between text-center md:flex-row">
             <p className="text-white font-semibold">Your workflow upgrade starts here</p>
             <div className="flex items-center gap-3">
               <Button
                 onClick={() => navigate("/auth")}
-                className="rounded-xl bg-[#1f51ff] hover:bg-[#1b45da] text-white"
+                className="rounded-xl text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3]"
               >
                 Start Free Trial
               </Button>
@@ -247,21 +247,21 @@ export default function Pricing() {
 
       {/* Footer */}
       <footer className="px-4 pb-10">
-        <div className="mx-auto max-w-7xl rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 md:p-6 text-center text-foreground shadow-sm">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-[#142554] bg-[#0b1120]/90 backdrop-blur-xl p-4 md:p-6 text-center text-white">
           <p className="font-semibold">
             Powered by{" "}
             <a
               href="https://vly.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline decoration-muted-foreground/40 underline-offset-4 hover:text-foreground"
+              className="underline decoration-white/30 underline-offset-4 hover:text-white"
             >
               vly.ai
             </a>
           </p>
-          <p className="mt-2 text-muted-foreground text-sm">
+          <p className="mt-2 text-[#9bb1e9] text-sm">
             Questions?{" "}
-            <a href="mailto:support@lethimdo.com" className="underline hover:text-foreground">
+            <a href="mailto:support@lethimdo.com" className="underline hover:text-white">
               support@lethimdo.com
             </a>
           </p>
