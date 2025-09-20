@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -28,11 +28,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
-import Prism from "@/components/Prism";
+import DotGrid from "@/components/DotGrid";
 import "@/components/Prism.css";
 import GradualBlur from "@/components/GradualBlur";
-
-const LazyPrism = lazy(() => import("@/components/Prism"));
 
 export default function Landing() {
   const { isAuthenticated } = useAuth();
@@ -369,7 +367,7 @@ export default function Landing() {
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             {/* Prism background with hover interaction (render only if supported) */}
-            {canRenderPrism && (
+            {false && canRenderPrism && (
               <Suspense fallback={null}>
                 <LazyPrism
                   animationType="hoverRotate"
@@ -390,6 +388,21 @@ export default function Landing() {
                 />
               </Suspense>
             )}
+            {/* New DotGrid background */}
+            <DotGrid
+              className="absolute inset-0"
+              baseColor="#1e40af"
+              activeColor="#2563eb"
+              dotSize={10}
+              gap={26}
+              proximity={140}
+              speedTrigger={120}
+              shockRadius={240}
+              shockStrength={6}
+              maxSpeed={4500}
+              resistance={700}
+              returnDuration={1.4}
+            />
             {/* Dark overlay to ensure text contrast */}
             <div
               className="absolute inset-0 pointer-events-none"
