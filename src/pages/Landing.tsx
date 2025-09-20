@@ -366,28 +366,6 @@ export default function Landing() {
 
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {/* Prism background with hover interaction (render only if supported) */}
-            {false && canRenderPrism && (
-              <Suspense fallback={null}>
-                <LazyPrism
-                  animationType="hoverRotate"
-                  transparent
-                  suspendWhenOffscreen
-                  className="prism-container"
-                  height={3.5}
-                  baseWidth={5.5}
-                  scale={1.5}
-                  glow={1.25}
-                  noise={0}
-                  hueShift={0.2}
-                  colorFrequency={1.35}
-                  bloom={1.25}
-                  timeScale={0.42}
-                  hoverStrength={1.15}
-                  inertia={0.08}
-                />
-              </Suspense>
-            )}
             {/* New DotGrid background */}
             <DotGrid
               className="absolute inset-0"
