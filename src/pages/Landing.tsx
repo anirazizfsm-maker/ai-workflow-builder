@@ -28,7 +28,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { FAQ } from "@/types/faq";
 import VariableProximity from "@/components/VariableProximity";
 import GooeyNav from "@/components/GooeyNav";
-import DotGrid from "@/components/DotGrid";
+import LightRays from "@/components/LightRays";
+import "@/components/LightRays.css";
 import "@/components/Prism.css";
 import GradualBlur from "@/components/GradualBlur";
 
@@ -366,22 +367,21 @@ export default function Landing() {
 
           {/* Hero-scoped cosmic background sized to full hero layer */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {/* New DotGrid background */}
-            <DotGrid
+            {/* LightRays WebGL background */}
+            <LightRays
               className="absolute inset-0"
-              baseColor="#1e40af"
-              activeColor="#2563eb"
-              // Smaller, more responsive dots and spacing
-              dotSize={isMobile ? 5 : 7}
-              gap={isMobile ? 14 : 20}
-              // Tighter proximity and tuned interactions for mobile
-              proximity={isMobile ? 100 : 130}
-              speedTrigger={isMobile ? 140 : 120}
-              shockRadius={isMobile ? 180 : 220}
-              shockStrength={5}
-              maxSpeed={4000}
-              resistance={700}
-              returnDuration={1.2}
+              raysOrigin="top-center"
+              raysColor="#2563eb"
+              raysSpeed={1}
+              lightSpread={1}
+              rayLength={2}
+              pulsating={false}
+              fadeDistance={1.0}
+              saturation={1.0}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0.0}
+              distortion={0.1}
             />
             {/* Dark overlay to ensure text contrast */}
             <div
