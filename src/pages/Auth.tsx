@@ -161,7 +161,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
       {/* Auth Content */}
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="flex items-center justify-center h-full flex-col">
-        <Card className="min-w[350px] pb-0 border-[#1a2a55] bg-gradient-to-b from-[#0e1a38] to-[#0b142b] text-white backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(59,130,246,0.35)] rounded-2xl">
+        <Card className="min-w-[350px] pb-0 border-[#1a2a55] bg-gradient-to-b from-[#0e1a38] to-[#0b142b] text-white backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(59,130,246,0.35)] rounded-2xl">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
@@ -169,9 +169,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <img
                       src="/assets/lethimdo-wordmark.svg"
                       alt="LETHIMDO"
-                      width={160}
-                      height={40}
-                      className="mb-2 mt-4 cursor-pointer"
+                      className="block h-8 w-auto select-none mb-1 cursor-pointer"
                       onClick={() => navigate("/")}
                     />
                   </div>
