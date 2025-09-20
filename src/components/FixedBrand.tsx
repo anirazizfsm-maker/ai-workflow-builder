@@ -13,6 +13,11 @@ export default function FixedBrand() {
       transition={{ type: "spring", stiffness: 260, damping: 18 }}
       aria-label="Go to home"
     >
+      <img
+        src="/assets/lethimdo-mark.svg"
+        alt="LETHIMDO"
+        className="h-5 w-5"
+      />
       <span className="font-extrabold tracking-tight">LETHIMDO</span>
     </motion.button>
   );

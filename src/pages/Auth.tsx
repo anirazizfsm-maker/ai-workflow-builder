@@ -156,27 +156,27 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#0b1120] text-white">
       <FixedBrand />
       {/* Auth Content */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center px-4">
         <div className="flex items-center justify-center h-full flex-col">
-        <Card className="min-w[350px] pb-0 border shadow-md">
+        <Card className="min-w[350px] pb-0 border-[#1a2a55] bg-gradient-to-b from-[#0e1a38] to-[#0b142b] text-white backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(59,130,246,0.35)] rounded-2xl">
           {step === "signIn" ? (
             <>
               <CardHeader className="text-center">
               <div className="flex justify-center">
                     <img
-                      src="/logo.svg"
-                      alt="Lock Icon"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
+                      src="/assets/lethimdo-wordmark.svg"
+                      alt="LETHIMDO"
+                      width={160}
+                      height={40}
+                      className="mb-2 mt-4 cursor-pointer"
                       onClick={() => navigate("/")}
                     />
                   </div>
-                <CardTitle className="text-xl">Get Started</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl text-white">Get Started</CardTitle>
+                <CardDescription className="text-[#9bb1e9]">
                   Enter your email to log in or sign up
                 </CardDescription>
               </CardHeader>
@@ -185,12 +185,12 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   
                   <div className="relative flex items-center gap-2">
                     <div className="relative flex-1">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-[#9bb1e9]" />
                       <Input
                         name="email"
                         placeholder="name@example.com"
                         type="email"
-                        className="pl-9"
+                        className="pl-9 bg-[#0b1120]/60 border-[#1a2a55] text-white placeholder:text-[#9bb1e9]"
                         disabled={isLoading}
                         required
                         value={email}
@@ -217,7 +217,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                         aria-describedby={emailError ? "email-error" : undefined}
                       />
                       {emailError && (
-                        <p id="email-error" className="mt-2 text-xs text-red-500">
+                        <p id="email-error" className="mt-2 text-xs text-red-400">
                           {emailError}
                         </p>
                       )}
@@ -226,6 +226,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       type="submit"
                       variant="outline"
                       size="icon"
+                      className="border-[#1a2a55] bg-[#0b1120]/60 text-white hover:bg-[#0f1730]/70"
                       disabled={isLoading || !isEmailValid}
                     >
                       {isLoading ? (
@@ -236,16 +237,16 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </Button>
                   </div>
                   {error && (
-                    <p className="mt-2 text-sm text-red-500">{error}</p>
+                    <p className="mt-2 text-sm text-red-400">{error}</p>
                   )}
                   
                   <div className="mt-4">
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
+                        <span className="w-full border-t border-[#1a2a55]" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
+                        <span className="bg-transparent px-2 text-[#9bb1e9]">
                           Or
                         </span>
                       </div>
@@ -254,7 +255,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full mt-4"
+                      className="w-full mt-4 border-[#1a2a55] bg-[#0b1120]/60 text-white hover:bg-[#0f1730]/70"
                       onClick={handleGuestLogin}
                       disabled={isLoading}
                     >
@@ -268,8 +269,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
           ) : (
             <>
               <CardHeader className="text-center mt-4">
-                <CardTitle>Check your email</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Check your email</CardTitle>
+                <CardDescription className="text-[#9bb1e9]">
                   We've sent a code to {step.email}
                 </CardDescription>
               </CardHeader>
@@ -320,24 +321,24 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </InputOTP>
                   </div>
                   {otpError && (
-                    <p className="mt-2 text-sm text-red-500 text-center">
+                    <p className="mt-2 text-sm text-red-400 text-center">
                       {otpError}
                     </p>
                   )}
                   {error && (
-                    <p className="mt-2 text-sm text-red-500 text-center">
+                    <p className="mt-2 text-sm text-red-400 text-center">
                       {error}
                     </p>
                   )}
 
                   <div className="mt-4 flex items-center justify-center gap-2 text-sm">
-                    <span className="text-muted-foreground">
+                    <span className="text-[#9bb1e9]">
                       Didn't receive a code?
                     </span>
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto"
+                      className="p-0 h-auto text-[#9bb1e9] hover:text-white"
                       onClick={handleResendCode}
                       disabled={isLoading || resendSeconds > 0}
                     >
@@ -345,11 +346,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     </Button>
                   </div>
 
-                  <p className="text-sm text-muted-foreground text-center mt-2">
+                  <p className="text-sm text-[#9bb1e9] text-center mt-2">
                     Wrong email?{" "}
                     <Button
                       variant="link"
-                      className="p-0 h-auto"
+                      className="p-0 h-auto text-[#9bb1e9] hover:text-white"
                       onClick={() => {
                         setStep("signIn");
                         setOtp("");
@@ -364,7 +365,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <CardFooter className="flex-col gap-2">
                   <Button
                     type="submit"
-                    className="w-full"
+                    className="w-full rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] text-white border border-white/10"
                     disabled={isLoading || !isValidOtp(otp)}
                   >
                     {isLoading ? (
@@ -384,7 +385,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     variant="ghost"
                     onClick={() => setStep("signIn")}
                     disabled={isLoading}
-                    className="w-full"
+                    className="w-full text-white hover:bg-white/5"
                   >
                     Use different email
                   </Button>
@@ -392,18 +393,6 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
               </form>
             </>
           )}
-
-          <div className="py-4 px-6 text-xs text-center text-muted-foreground bg-muted border-t rounded-b-lg">
-            Secured by{" "}
-            <a
-              href="https://vly.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-primary transition-colors"
-            >
-              vly.ai
-            </a>
-          </div>
         </Card>
         </div>
       </div>
