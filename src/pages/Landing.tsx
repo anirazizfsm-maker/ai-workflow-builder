@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import Hero from "./landing/Hero";
 import Showcase from "./landing/Showcase";
 import MarketingSections from "./landing/MarketingSections";
