@@ -8,6 +8,7 @@ import "@/components/LightRays.css";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   const { isAuthenticated } = useAuth();
@@ -51,43 +52,58 @@ export default function Hero() {
       <div className="absolute top-4 right-4 z-30 md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <button
+            <motion.button
+              whileTap={{ scale: 0.96 }}
               aria-label="Open menu"
               className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white p-3 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/30"
             >
               <Menu className="h-5 w-5" />
-            </button>
+            </motion.button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-[#0b1120]/90 backdrop-blur-xl border-[#142554] text-white w-72 sm:w-80">
             <SheetHeader>
               <SheetTitle className="text-white">Menu</SheetTitle>
             </SheetHeader>
-            <div className="mt-6 grid gap-2.5">
+            <motion.div
+              className="mt-6 grid gap-2.5"
+              initial="hidden"
+              animate="show"
+              variants={{
+                hidden: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
+                show: { transition: { staggerChildren: 0.06, delayChildren: 0.08 } },
+              }}
+            >
               <SheetClose asChild>
-                <button
+                <motion.button
+                  variants={{ hidden: { opacity: 0, x: 12 }, show: { opacity: 1, x: 0 } }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigate("/")}
                   className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Home
-                </button>
+                </motion.button>
               </SheetClose>
               <SheetClose asChild>
-                <button
+                <motion.button
+                  variants={{ hidden: { opacity: 0, x: 12 }, show: { opacity: 1, x: 0 } }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigate("/pricing")}
                   className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Pricing
-                </button>
+                </motion.button>
               </SheetClose>
               <SheetClose asChild>
-                <button
+                <motion.button
+                  variants={{ hidden: { opacity: 0, x: 12 }, show: { opacity: 1, x: 0 } }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigate("/dashboard")}
                   className="w-full text-left rounded-xl border border-white/15 bg-white/[0.06] px-4 py-3 text-base hover:bg-white/[0.12] focus:outline-none focus:ring-2 focus:ring-white/20"
                 >
                   Dashboard
-                </button>
+                </motion.button>
               </SheetClose>
-            </div>
+            </motion.div>
           </SheetContent>
         </Sheet>
       </div>
