@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound.tsx";
 import "./types/global.d.ts";
 import Plans from "./pages/Plans.tsx";
 import Pricing from "./pages/Pricing.tsx";
+import Profile from "./pages/Profile.tsx";
 
 function SafeConvexProvider({ children }: { children: React.ReactNode }) {
   const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
@@ -89,6 +90,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Landing />} />
       <Route path="/auth" element={<AuthPage redirectAfterAuth="/dashboard" />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/plans" element={<Plans />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="*" element={<NotFound />} />
