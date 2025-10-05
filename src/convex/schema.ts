@@ -24,6 +24,18 @@ export default defineSchema({
     isActive: v.boolean(),
   }).index("by_email", ["email"]),
 
+  credentials: defineTable({
+    userId: v.optional(v.id("users")),
+    provider: v.optional(v.string()),
+    data: v.optional(v.string()), // encrypted JSON string
+    label: v.optional(v.string()),
+    // Legacy fields for backward compatibility
+    key: v.optional(v.string()),
+    orgId: v.optional(v.string()),
+    value: v.optional(v.string()),
+  }).index("by_user", ["userId"])
+    .index("by_user_and_provider", ["userId", "provider"]),
+
   workflows: defineTable({
     userId: v.id("users"),
     title: v.string(),
@@ -148,7 +160,9 @@ export default defineSchema({
     positionX: v.number(),
     positionY: v.number(),
     config: v.string(),
-  }).index("by_workflow", ["workflowId"]),
+    credentialsId: v.optional(v.id("credentials")),
+  }).index("by_workflow", ["workflowId"])
+    .index("by_workflow_and_node", ["workflowId", "nodeId"]),
 
   workflowEdges: defineTable({
     workflowId: v.id("workflows"),

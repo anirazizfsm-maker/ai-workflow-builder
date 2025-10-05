@@ -1,2 +1,1 @@
-   npx convex run testData:seedAll
-   
+npx convex run migrations:cleanupLegacyCredentials
