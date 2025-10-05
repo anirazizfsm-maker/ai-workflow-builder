@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
@@ -13,6 +13,7 @@ import { WorkflowList } from "@/components/dashboard/WorkflowList";
 import { NotificationPanel } from "@/components/dashboard/NotificationPanel";
 import { TemplateManager } from "@/components/dashboard/TemplateManager";
 import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
+import { OnboardingTooltip } from "@/components/OnboardingTooltip";
 
 // Simple section wrapper
 function Section({ title, children, action }: { title: string; children: React.ReactNode; action?: React.ReactNode }) {
@@ -72,6 +73,26 @@ function ConvexDashboard() {
   const myWorkflows = useQuery(api.workflows.getUserWorkflows, {}) ?? [];
   const templates = useQuery(api.aiBuilder.listTemplates, {}) ?? [];
 
+  // Onboarding state
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    // Check if this is the user's first login
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    if (isAuthenticated && !hasSeenOnboarding) {
+      // Show onboarding after a short delay
+      const timer = setTimeout(() => {
+        setShowOnboarding(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
+
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem("hasSeenOnboarding", "true");
+  };
+
   const todayCount = runs.length ? runs[runs.length - 1].count : 0;
   const activeCount = myWorkflows.filter((w) => w.status === "active").length;
   const hourlyRate = settings?.hourlyRate ?? 25;
@@ -108,7 +129,19 @@ function ConvexDashboard() {
           <AnalyticsChart data={runs} />
         </Section>
 
-        <Section title="My Workflows">
+        <Section title="My Workflows" action={
+          <div className="relative">
+            <Button size="sm" onClick={() => !isAuthenticated ? navigate("/auth") : null}>
+              New
+            </Button>
+            <OnboardingTooltip
+              show={showOnboarding}
+              onClose={handleCloseOnboarding}
+              message="Click here to create your first workflow! Our AI will help you build it step by step."
+              position="bottom"
+            />
+          </div>
+        }>
           <WorkflowList workflows={myWorkflows} />
         </Section>
 
