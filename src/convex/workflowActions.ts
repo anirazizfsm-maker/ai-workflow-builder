@@ -3,6 +3,7 @@
 import { action, internalAction } from "./_generated/server";
 import { v } from "convex/values";
 import { internal, api } from "./_generated/api";
+import OpenAI from "openai";
 
 type WorkflowNode = {
   id: string;
@@ -21,42 +22,118 @@ export const generateWorkflowJSON = action({
     prompt: v.string(),
   },
   handler: async (ctx, args) => {
-    // Simulate AI generation - in production, call OpenAI/OpenRouter
-    const categories = ["automation", "email", "data", "social", "reporting"];
-    const category = categories[Math.floor(Math.random() * categories.length)];
+    const apiKey = process.env.OPENROUTER_API_KEY;
     
-    const workflowJSON = {
-      nodes: [
-        {
-          id: "trigger",
-          type: "trigger",
-          name: "Manual Trigger",
-          parameters: {}
-        },
-        {
-          id: "action1", 
-          type: "action",
-          name: "Process Data",
-          parameters: {
-            input: args.prompt
+    if (!apiKey) {
+      // Fallback to mock generation if no API key
+      const categories = ["automation", "email", "data", "social", "reporting"];
+      const category = categories[Math.floor(Math.random() * categories.length)];
+      
+      const workflowJSON = {
+        nodes: [
+          {
+            id: "trigger",
+            type: "trigger",
+            name: "Manual Trigger",
+            parameters: {}
+          },
+          {
+            id: "action1", 
+            type: "action",
+            name: "Process Data",
+            parameters: {
+              input: args.prompt
+            }
           }
-        }
-      ],
-      connections: [
-        {
-          source: "trigger",
-          target: "action1"
-        }
-      ]
-    };
+        ],
+        connections: [
+          {
+            source: "trigger",
+            target: "action1"
+          }
+        ]
+      };
 
-    return {
-      success: true,
-      title: `AI Generated: ${args.prompt.slice(0, 50)}...`,
-      description: `Automated workflow for: ${args.prompt}`,
-      workflowJSON,
-      category
-    };
+      return {
+        success: true,
+        title: `AI Generated: ${args.prompt.slice(0, 50)}...`,
+        description: `Automated workflow for: ${args.prompt}`,
+        workflowJSON,
+        category
+      };
+    }
+
+    // Use OpenRouter for AI generation
+    const openai = new OpenAI({
+      apiKey,
+      baseURL: "https://openrouter.ai/api/v1",
+    });
+
+    const systemPrompt = `You are a workflow automation expert. Generate a JSON workflow structure based on user prompts.
+    
+Return a JSON object with this exact structure:
+{
+  "nodes": [
+    {"id": "1", "type": "trigger", "name": "Trigger Name", "parameters": {}},
+    {"id": "2", "type": "action", "name": "Action Name", "parameters": {}}
+  ],
+  "connections": [
+    {"source": "1", "target": "2"}
+  ]
+}
+
+Node types: trigger, action, condition
+Common triggers: Google Form, Webhook, Schedule, Email Received
+Common actions: Send Email, Update Sheet, Create Calendar Event, Send Slack Message, HTTP Request`;
+
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "anthropic/claude-3-haiku",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: args.prompt }
+        ],
+        max_tokens: 1000,
+      });
+
+      const response = completion.choices[0].message.content;
+      if (!response) {
+        throw new Error("No response from AI");
+      }
+
+      // Extract JSON from response
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error("No JSON found in response");
+      }
+
+      const workflowJSON = JSON.parse(jsonMatch[0]);
+
+      return {
+        success: true,
+        title: `AI Generated: ${args.prompt.slice(0, 50)}`,
+        description: `Automated workflow for: ${args.prompt}`,
+        workflowJSON,
+        category: "automation"
+      };
+    } catch (error) {
+      console.error("OpenRouter error:", error);
+      
+      // Fallback to simple generation
+      return {
+        success: true,
+        title: `Workflow: ${args.prompt.slice(0, 50)}`,
+        description: args.prompt,
+        workflowJSON: {
+          nodes: [
+            { id: "1", type: "trigger", name: "Start", parameters: {} },
+            { id: "2", type: "action", name: "Process", parameters: { prompt: args.prompt } }
+          ],
+          connections: [{ source: "1", target: "2" }]
+        },
+        category: "automation"
+      };
+    }
   },
 });
 

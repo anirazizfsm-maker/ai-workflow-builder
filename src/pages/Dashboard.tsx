@@ -186,7 +186,7 @@ function ConvexDashboard() {
 
         <Section title="My Workflows" action={
           <div className="relative">
-            <Button size="sm" onClick={() => !isAuthenticated ? navigate("/auth") : null}>
+            <Button size="sm" onClick={() => !isAuthenticated ? navigate("/auth") : navigate("/workflow/new")}>
               New
             </Button>
             <OnboardingTooltip
