@@ -62,6 +62,7 @@ export default defineSchema({
     durationSec: v.number(),
     costCents: v.optional(v.number()),
     error: v.optional(v.string()),
+    startedAt: v.optional(v.number()),
   }).index("by_workflow", ["workflowId"])
     .index("by_org", ["orgId"])
     .index("by_org_and_status", ["orgId", "status"])

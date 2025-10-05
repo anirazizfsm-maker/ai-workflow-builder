@@ -31,6 +31,8 @@ import type * as subscriptions from "../subscriptions.js";
 import type * as testData from "../testData.js";
 import type * as users from "../users.js";
 import type * as workflowActions from "../workflowActions.js";
+import type * as workflowRunner from "../workflowRunner.js";
+import type * as workflowRunnerHelpers from "../workflowRunnerHelpers.js";
 import type * as workflows from "../workflows.js";
 import type * as workflowsHttp from "../workflowsHttp.js";
 
@@ -61,6 +63,8 @@ declare const fullApi: ApiFromModules<{
   testData: typeof testData;
   users: typeof users;
   workflowActions: typeof workflowActions;
+  workflowRunner: typeof workflowRunner;
+  workflowRunnerHelpers: typeof workflowRunnerHelpers;
   workflows: typeof workflows;
   workflowsHttp: typeof workflowsHttp;
 }>;

@@ -283,7 +283,7 @@ http.route({
         days: 30,
       });
       
-      const totalRuns = runs.reduce((sum, day) => sum + day.count, 0);
+      const totalRuns = runs.reduce((sum: number, day: any) => sum + day.count, 0);
       const avgRunsPerDay = Math.round(totalRuns / 30 * 100) / 100;
       
       const settings = await ctx.runQuery(api.workflows.getSettings, {
@@ -295,8 +295,8 @@ http.route({
         month: monthStart,
       });
       
-      const totalHoursSaved = savings.reduce((sum, s) => sum + s.hours, 0);
-      const totalDollarsSaved = savings.reduce((sum, s) => sum + s.dollars, 0);
+      const totalHoursSaved = savings.reduce((sum: number, s: any) => sum + s.hours, 0);
+      const totalDollarsSaved = savings.reduce((sum: number, s: any) => sum + s.dollars, 0);
       const roi = Math.round((totalDollarsSaved / (settings.planPriceCents / 100)) * 100) / 100;
 
       const reportContent = `
@@ -320,7 +320,7 @@ Total Money Saved: $${Math.round(totalDollarsSaved)}
 
 TOP PERFORMING WORKFLOWS
 ------------------------
-${savings.slice(0, 5).map((s, i) => 
+${savings.slice(0, 5).map((s: any, i: number) => 
   `${i + 1}. ${s.title}: ${Math.round(s.hours)}h saved ($${Math.round(s.dollars)})`
 ).join('\n')}
 

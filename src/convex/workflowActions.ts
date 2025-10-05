@@ -248,3 +248,26 @@ export const getBusinessSuggestions = action({
     return suggestions.slice(0, 4);
   },
 });
+
+export const executeWorkflow = action({
+  args: {
+    workflowId: v.id("workflows"),
+  },
+  handler: async (ctx, args): Promise<{ success: boolean; runId: string }> => {
+    // Get current user
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    
+    // Get user ID from identity
+    const user = await ctx.runQuery(api.users.currentUser);
+    if (!user) throw new Error("User not found");
+
+    // Execute the workflow via internal action
+    const result = await ctx.runAction(internal.workflowRunner.executeWorkflow, {
+      workflowId: args.workflowId,
+      userId: user._id,
+    }) as { success: boolean; runId: string };
+
+    return result;
+  },
+});

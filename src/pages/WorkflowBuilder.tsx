@@ -45,6 +45,7 @@ export default function WorkflowBuilder() {
 
   const generateWorkflow = useAction(api.workflowActions.generateWorkflowJSON);
   const createWorkflow = useMutation(api.workflows.createWorkflow);
+  const executeWorkflow = useAction(api.workflowActions.executeWorkflow);
 
   // Load existing workflow if editing
   const existingWorkflow = useQuery(
@@ -152,15 +153,50 @@ export default function WorkflowBuilder() {
     }
   };
 
-  const handleRunTest = () => {
+  const handleRunTest = async () => {
+    if (!isAuthenticated) {
+      toast.error("Please sign in to test workflows");
+      navigate("/auth");
+      return;
+    }
+
+    if (nodes.length === 0) {
+      toast.error("Add some nodes to your workflow first");
+      return;
+    }
+
     toast.loading("Running test workflow...", { id: "test-run" });
     
-    setTimeout(() => {
+    try {
+      // Save workflow first if it doesn't exist
+      let workflowId = id;
+      
+      if (!workflowId) {
+        const config = { nodes, edges };
+        workflowId = await createWorkflow({
+          title: workflowName,
+          description: prompt || "Test workflow",
+          prompt: prompt,
+          jsonConfig: JSON.stringify(config),
+          category: "automation",
+        });
+      }
+
+      // Execute the workflow
+      const result = await executeWorkflow({
+        workflowId: workflowId as any,
+      });
+
       toast.success("Test completed successfully! ✅", {
         id: "test-run",
         description: "All nodes executed without errors",
       });
-    }, 2000);
+    } catch (error: any) {
+      toast.error("Test failed", {
+        id: "test-run",
+        description: error.message || "Check your workflow configuration",
+      });
+    }
   };
 
   const onNodeClick = useCallback((_event: any, node: Node) => {
