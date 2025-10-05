@@ -11,7 +11,8 @@ export const emailOtp = Email({
   },
   async sendVerificationRequest({ identifier: email, provider, token }) {
     try {
-      await axios.post(
+      console.log(`[OTP] Sending verification email to: ${email}`);
+      const response = await axios.post(
         "https://email.vly.ai/send_otp",
         {
           to: email,
@@ -24,7 +25,9 @@ export const emailOtp = Email({
           },
         },
       );
+      console.log(`[OTP] Email sent successfully:`, response.data);
     } catch (error) {
+      console.error(`[OTP] Failed to send email:`, error);
       throw new Error(JSON.stringify(error));
     }
   },
