@@ -79,7 +79,7 @@ function ConvexDashboard() {
   const dollarsSaved = Math.round(hoursSaved * hourlyRate);
 
   return (
-    <div className="min-h-screen px-4 md:px-8 py-6 max-w-6xl mx-auto">
+    <div className="min-h-screen dark bg-[#0b1120] px-4 md:px-8 py-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="flex items-center gap-2">
@@ -132,9 +132,9 @@ function DemoDashboard() {
   const { runsPerDay, workflows, notifications, stats } = useDemoData();
 
   return (
-    <div className="min-h-screen px-4 md:px-8 py-6 max-w-6xl mx-auto">
+    <div className="min-h-screen dark bg-[#0b1120] px-4 md:px-8 py-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Dashboard (Demo)</h1>
+        <h1 className="text-2xl font-semibold text-white">Dashboard (Demo)</h1>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => navigate("/auth")}>
             Sign in
