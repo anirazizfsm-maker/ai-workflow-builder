@@ -42,6 +42,38 @@ http.route({
   }),
 });
 
+// Newsletter subscription endpoint
+http.route({
+  path: "/api/newsletter/subscribe",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json();
+      const { email } = body;
+
+      if (!email) {
+        return new Response(
+          JSON.stringify({ error: "Email is required" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      const result = await ctx.runAction(api.newsletter.subscribe, { email });
+
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      return new Response(
+        JSON.stringify({ error: "Subscription failed" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+  }),
+});
+
 // Workflow management routes
 http.route({
   path: "/v1/workflows",

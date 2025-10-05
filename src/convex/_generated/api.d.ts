@@ -23,6 +23,8 @@ import type * as chatHttp from "../chatHttp.js";
 import type * as executionBroker from "../executionBroker.js";
 import type * as faqs from "../faqs.js";
 import type * as http from "../http.js";
+import type * as newsletter from "../newsletter.js";
+import type * as newsletterHelpers from "../newsletterHelpers.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as testData from "../testData.js";
 import type * as users from "../users.js";
@@ -49,6 +51,8 @@ declare const fullApi: ApiFromModules<{
   executionBroker: typeof executionBroker;
   faqs: typeof faqs;
   http: typeof http;
+  newsletter: typeof newsletter;
+  newsletterHelpers: typeof newsletterHelpers;
   subscriptions: typeof subscriptions;
   testData: typeof testData;
   users: typeof users;

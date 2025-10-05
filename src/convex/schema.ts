@@ -18,6 +18,12 @@ export default defineSchema({
       filterFields: ["category", "isActive"],
     }),
 
+  subscribers: defineTable({
+    email: v.string(),
+    subscribedAt: v.number(),
+    isActive: v.boolean(),
+  }).index("by_email", ["email"]),
+
   workflows: defineTable({
     userId: v.id("users"),
     title: v.string(),

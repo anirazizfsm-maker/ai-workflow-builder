@@ -2,41 +2,50 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function Newsletter() {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL as string | undefined;
   const [subscribeEmail, setSubscribeEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
 
   const handleSubscribe = async () => {
     const email = subscribeEmail.trim();
     if (!email) {
-      toast("Please enter your email.");
+      toast.error("Please enter your email.");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      toast("Enter a valid email address.");
+      toast.error("Enter a valid email address.");
       return;
     }
 
     setIsSubscribing(true);
     try {
-      if (!API_BASE) {
-        toast("Subscribed! Backend not set yet; saved locally.");
+      const convexUrl = import.meta.env.VITE_CONVEX_URL;
+      if (!convexUrl) {
+        toast.success("Subscribed! (Demo mode - backend not configured)");
         setSubscribeEmail("");
         return;
       }
-      const res = await fetch(`${API_BASE}/newsletter/subscribe`, {
+
+      const response = await fetch(`${convexUrl}/api/newsletter/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      toast("Thanks for subscribing! 🎉");
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Subscription failed");
+      }
+
+      toast.success("Thanks for subscribing! Check your email for a welcome message. 🎉");
       setSubscribeEmail("");
-    } catch {
-      toast("Subscription failed. Please try again.");
+    } catch (error: any) {
+      toast.error(error.message || "Subscription failed. Please try again.");
     } finally {
       setIsSubscribing(false);
     }
@@ -54,6 +63,7 @@ export default function Newsletter() {
             type="email"
             value={subscribeEmail}
             onChange={(e) => setSubscribeEmail(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
             aria-label="Email address"
           />
           <Button
