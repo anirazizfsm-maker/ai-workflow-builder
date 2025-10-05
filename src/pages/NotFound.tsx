@@ -1,7 +1,12 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
 import FixedBrand from "@/components/FixedBrand";
 
 export default function NotFound() {
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -16,7 +21,14 @@ export default function NotFound() {
           <div className="flex items-center justify-center min-h-[200px]">
             <div className="text-center">
               <h1 className="text-4xl font-bold text-white mb-4">404</h1>
-              <p className="text-lg text-[#9bb1e9]">Page Not Found</p>
+              <p className="text-lg text-[#9bb1e9] mb-6">Page Not Found</p>
+              <Button
+                onClick={() => navigate("/")}
+                className="rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] text-white"
+              >
+                <Home className="mr-2 h-4 w-4" />
+                Go back home
+              </Button>
             </div>
           </div>
         </div>

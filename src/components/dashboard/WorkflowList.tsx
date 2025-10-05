@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Play, Pause, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
+import { useSubscriptionStatus } from "@/hooks/use-subscription";
 import type { Id } from "@/convex/_generated/dataModel";
 
 interface Workflow {
@@ -27,6 +28,7 @@ interface WorkflowListProps {
 export function WorkflowList({ workflows }: WorkflowListProps) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { canCreateWorkflows, workflowLimit, currentWorkflowCount } = useSubscriptionStatus();
   const updateStatus = useMutation(api.workflows.updateWorkflowStatus);
   const deleteWorkflow = useMutation(api.workflows.deleteWorkflow);
   const createWorkflow = useMutation(api.workflows.createWorkflow);
@@ -72,6 +74,18 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
       navigate("/auth");
       return;
     }
+    
+    if (!canCreateWorkflows) {
+      toast.error("Workflow limit reached", {
+        description: `You've reached your plan limit of ${workflowLimit} workflows. Upgrade to create more.`,
+        action: {
+          label: "Upgrade",
+          onClick: () => navigate("/pricing"),
+        },
+      });
+      return;
+    }
+    
     setWfForm({
       title: "",
       description: "",
@@ -190,9 +204,16 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
         </DialogContent>
       </Dialog>
 
-      <Button className="w-full mt-3" onClick={openCreateWorkflow}>
-        New Workflow
-      </Button>
+      <div className="mt-3">
+        <Button className="w-full" onClick={openCreateWorkflow}>
+          New Workflow
+        </Button>
+        {isAuthenticated && (
+          <p className="text-xs text-center text-muted-foreground mt-2">
+            {currentWorkflowCount} / {workflowLimit === Infinity ? "∞" : workflowLimit} workflows used
+          </p>
+        )}
+      </div>
     </>
   );
 }
