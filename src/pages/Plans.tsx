@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import PlansPlanList from "./PlansPlanList";
 import PlansBillingForm from "./PlansBillingForm";
 
 export default function Plans() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedPlan, isYearly } = location.state || { selectedPlan: "Starter", isYearly: false };
 
   return (
     <div className="relative min-h-screen dark bg-[#0b1120]">
@@ -35,6 +37,20 @@ export default function Plans() {
           </div>
         </div>
       </header>
+
+      {/* Free Trial Banner */}
+      <div className="px-4 pt-4">
+        <div className="mx-auto max-w-7xl">
+          <div className="bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/30 rounded-xl p-4 text-center">
+            <p className="text-white font-semibold">
+              🎉 Start your 7-day free trial today
+            </p>
+            <p className="text-sm text-[#9bb1e9] mt-1">
+              Try any plan free for 7 days. Cancel anytime. No credit card required for trial.
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
       <main className="px-4 py-8 md:py-12">

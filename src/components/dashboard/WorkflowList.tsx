@@ -42,13 +42,29 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
 
   const onToggle = async (w: Workflow) => {
     const next = w.status === "active" ? "paused" : "active";
-    await updateStatus({ workflowId: w._id, status: next });
-    toast(`${w.title} ${next === "active" ? "activated" : "paused"}.`);
+    try {
+      await updateStatus({ workflowId: w._id, status: next });
+      toast.success(`${w.title} ${next === "active" ? "activated" : "paused"} ✅`, {
+        description: next === "active" ? "Workflow is now running" : "Workflow has been paused",
+      });
+    } catch (e: any) {
+      toast.error("Failed to update workflow", {
+        description: e?.message || "Please try again",
+      });
+    }
   };
 
   const onDelete = async (w: Workflow) => {
-    await deleteWorkflow({ workflowId: w._id });
-    toast(`${w.title} deleted.`);
+    try {
+      await deleteWorkflow({ workflowId: w._id });
+      toast.success(`${w.title} deleted ✅`, {
+        description: "Workflow has been removed",
+      });
+    } catch (e: any) {
+      toast.error("Failed to delete workflow", {
+        description: e?.message || "Please try again",
+      });
+    }
   };
 
   const openCreateWorkflow = () => {
@@ -79,10 +95,14 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
         jsonConfig: wfForm.jsonConfig || "{}",
         category: wfForm.category || "general",
       });
-      toast("Workflow created");
+      toast.success("Workflow created successfully ✅", {
+        description: "You can now activate and run your workflow",
+      });
       setCreateOpen(false);
     } catch (e: any) {
-      toast(e?.message || "Failed to create workflow");
+      toast.error("Failed to create workflow", {
+        description: e?.message || "Please try again",
+      });
     }
   };
 

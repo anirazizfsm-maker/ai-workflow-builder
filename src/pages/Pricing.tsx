@@ -1,272 +1,239 @@
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle } from "lucide-react";
-import Prism from "@/components/Prism";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Check } from "lucide-react";
+import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
 
 export default function Pricing() {
   const navigate = useNavigate();
+  const [isYearly, setIsYearly] = useState(false);
 
   const plans = [
     {
       name: "Free",
-      price: "$0",
-      cadence: "Trial",
-      highlight: "5 workflows, 15 days",
+      monthlyPrice: 0,
+      yearlyPrice: 0,
+      description: "Perfect for trying out the platform",
       features: [
-        "✅ 5 workflows max.",
-        "✅ Run for 15 days (trial).",
-        "❌ No auto-fix or advanced agent support.",
-        "❌ Limited to 2 connected apps.",
+        "3 workflows",
+        "100 runs per month",
+        "Basic templates",
+        "Email support",
       ],
-      bestFor: "Best for trying Lethimdo risk-free.",
-      cta: () => navigate("/auth"),
-      ctaLabel: "Start Free",
-      accent: false,
+      cta: "Get Started",
+      popular: false,
     },
     {
-      name: "Starter Pack",
-      price: "$19",
-      cadence: "/month",
-      highlight: "For freelancers/startups",
+      name: "Starter",
+      monthlyPrice: 9,
+      yearlyPrice: 86.4, // 20% off
+      description: "For individuals getting started",
       features: [
-        "✅ Up to 20 workflows.",
-        "✅ Run for 30 days rolling.",
-        "✅ Basic AI Builder support.",
-        "✅ Email reporting.",
+        "10 workflows",
+        "1,000 runs per month",
+        "All templates",
+        "Priority email support",
+        "Basic analytics",
       ],
-      bestFor: "Best for freelancers/startups.",
-      cta: () => navigate("/plans"),
-      ctaLabel: "Choose Starter",
-      accent: true,
+      cta: "Start 7-Day Free Trial",
+      popular: false,
+      trial: true,
     },
     {
-      name: "Pro Pack",
-      price: "$49",
-      cadence: "/month",
-      highlight: "Scale & reliability",
+      name: "Pro",
+      monthlyPrice: 29,
+      yearlyPrice: 278.4, // 20% off
+      description: "For teams that need more power",
       features: [
-        "✅ Up to 100 workflows.",
-        "✅ Daily execution (cron-style).",
-        "✅ Custom workflow creation by AI.",
-        "✅ Auto-fix failed workflows.",
-        "✅ Multi-app integration (Google, Slack, Airtable, Notion, Pinecone, etc.).",
-        "✅ Time & cost saving reports.",
+        "Unlimited workflows",
+        "10,000 runs per month",
+        "All templates + custom",
+        "Priority support",
+        "Advanced analytics",
+        "Team collaboration",
+        "API access",
       ],
-      bestFor: "Best for service-based companies.",
-      cta: () => navigate("/plans"),
-      ctaLabel: "Choose Pro",
-      accent: true,
+      cta: "Start 7-Day Free Trial",
+      popular: true,
+      trial: true,
     },
     {
-      name: "Business Pack",
-      price: "$199",
-      cadence: "/month",
-      highlight: "Unlimited & concierge",
+      name: "Enterprise",
+      monthlyPrice: 99,
+      yearlyPrice: 950.4, // 20% off
+      description: "Advanced needs & dedicated support",
       features: [
-        "✅ Unlimited workflows.",
-        "✅ Full AI Builder (autonomous upgrades & personalized workflows).",
-        "✅ Workflow concierge: \"Just describe business, we automate.\"",
-        "✅ Full analytics dashboard (savings, usage, logs).",
-        "✅ Premium integrations (enterprise tools, CRMs).",
-        "✅ Priority support.",
-        "✅ 1 year subscription.",
+        "Unlimited everything",
+        "Dedicated support",
+        "Custom integrations",
+        "SLA guarantee",
+        "Advanced security",
+        "Onboarding assistance",
       ],
-      bestFor: "Best for SMBs and enterprises.",
-      cta: () => navigate("/plans"),
-      ctaLabel: "Contact Sales",
-      accent: false,
+      cta: "Contact Sales",
+      popular: false,
     },
-  ] as const;
+  ];
+
+  const getPrice = (plan: typeof plans[0]) => {
+    if (plan.monthlyPrice === 0) return "Free";
+    const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice;
+    const period = isYearly ? "yr" : "mo";
+    return `$${price}/${period}`;
+  };
+
+  const getSavings = (plan: typeof plans[0]) => {
+    if (plan.monthlyPrice === 0) return null;
+    const yearlyCost = plan.monthlyPrice * 12;
+    const savings = yearlyCost - plan.yearlyPrice;
+    return Math.round(savings);
+  };
 
   return (
-    <div className="relative min-h-screen overflow-hidden dark bg-[#0b1120]">
-      {/* Removed global background video; will scope to hero for visibility */}
-
+    <div className="min-h-screen dark bg-[#0b1120]">
       {/* Header */}
-      <header className="sticky top-0 z-40">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6 pt-[env(safe-area-inset-top)]">
-          <div />
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              className="rounded-xl border border-white/15 text-white bg-[#0b1020]/60 hover:bg-[#0f1730]/70"
-              onClick={() => navigate("/")}
-            >
-              Back
-            </Button>
-            <Button
-              className="rounded-xl px-5 py-2.5 text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_24px_rgba(37,99,235,0.25)]"
-              onClick={() => navigate("/auth")}
-            >
-              Get Started
-            </Button>
-          </div>
+      <header className="sticky top-0 z-40 backdrop-blur-sm bg-[#0b1120]/80">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:p-6">
+          <button
+            onClick={() => navigate("/")}
+            className="text-white font-extrabold tracking-tight text-xl md:text-2xl hover:opacity-90 transition"
+          >
+            LETHIMDO
+          </button>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/")}
+            className="border-[#1a2a55] bg-[#0b1120]/60 text-white hover:bg-[#0f1730]/70"
+          >
+            Back
+          </Button>
         </div>
       </header>
 
-      {/* Hero with scoped cosmic background (video removed; keep overlay) */}
-      <section className="relative px-4 pt-8 md:pt-12 overflow-hidden">
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl">
-          <Prism
-            className="absolute inset-0"
-            animationType="3drotate"
-            transparent={true}
-            scale={3.8}
-            glow={1}
-            noise={0.03}
-            hueShift={0}
-            colorFrequency={1}
-            bloom={1}
-            timeScale={0.5}
-            suspendWhenOffscreen={true}
-          />
-          <div className="absolute inset-0 bg-[#030611]/50" />
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-3xl text-center rounded-2xl border border-[#1a2a55] bg-[#0a1429]/70 backdrop-blur-xl p-6 md:p-8 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
-        >
-          <div className="mb-2 text-xs font-semibold tracking-wide text-[#9bb1e9]">
-            ✦ Pricing ✦
+      {/* Content */}
+      <main className="px-4 py-12 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Choose Your Plan
+            </h1>
+            <p className="text-lg text-[#9bb1e9] mb-8">
+              Start with a 7-day free trial. No credit card required.
+            </p>
+
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4">
+              <Label htmlFor="billing-toggle" className={!isYearly ? "text-white font-semibold" : "text-[#9bb1e9]"}>
+                Monthly
+              </Label>
+              <Switch
+                id="billing-toggle"
+                checked={isYearly}
+                onCheckedChange={setIsYearly}
+              />
+              <Label htmlFor="billing-toggle" className={isYearly ? "text-white font-semibold" : "text-[#9bb1e9]"}>
+                Yearly
+              </Label>
+              {isYearly && (
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                  Save 20%
+                </Badge>
+              )}
+            </div>
           </div>
-          <h1 className="mb-3 text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            The Best Pricing Plans
-          </h1>
-          <p className="mx-auto max-w-2xl text-sm md:text-base text-[#9bb1e9]">
-            Find the perfect plan to streamline your workflow and unlock powerful tools designed to save time and boost productivity.
-          </p>
-        </motion.div>
-      </section>
 
-      {/* Plans */}
-      <section className="px-4 py-10 md:py-14">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {plans.map((plan, i) => {
-            // Feature icon + cleaned label from emoji prefix
-            const renderFeature = (f: string) => {
-              const isGood = f.trim().startsWith("✅");
-              const isBad = f.trim().startsWith("❌");
-              const label = f.replace(/^✅\s*/,"").replace(/^❌\s*/,"");
-              return (
-                <li
-                  key={f}
-                  className="flex items-start gap-2 rounded-md border border-[#1a2a55] bg-[#0b1120]/60 px-2 py-2"
-                >
-                  {isGood ? (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-[#60a5fa]" />
-                  ) : isBad ? (
-                    <XCircle className="mt-0.5 h-4 w-4 text-[#ef4444]" />
-                  ) : (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-[#9bb1e9]" />
-                  )}
-                  <span className="text-sm text-[#c6d4f7]">{label}</span>
-                </li>
-              );
-            };
-
-            return (
+          {/* Plans Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className={`rounded-2xl border bg-gradient-to-b from-[#0e1a38] to-[#0b142b] backdrop-blur-xl shadow-[0_12px_40px_-12px_rgba(59,130,246,0.35)] ${
-                  plan.accent ? "ring-1 ring-[color:var(--ring)]/40" : "border-[#1a2a55]"
-                }`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                <Card className="border-0 bg-transparent shadow-none">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-white text-xl font-extrabold tracking-tight">
-                        {plan.name}
-                      </CardTitle>
-                      {plan.accent && (
-                        <Badge className="rounded-full border border-white/15 bg-white/10 text-[#9bb1e9]">
-                          Popular
-                        </Badge>
-                      )}
+                <Card
+                  className={`relative h-full bg-gradient-to-b from-[#0e1a38] to-[#0b142b] border-[#1a2a55] backdrop-blur-xl ${
+                    plan.popular ? "ring-2 ring-primary shadow-[0_0_30px_rgba(59,130,246,0.3)]" : ""
+                  }`}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-primary text-primary-foreground shadow-lg">
+                        Most Popular
+                      </Badge>
                     </div>
-                    <div className="mt-2">
-                      <div className="flex items-end gap-1">
-                        <div className="text-3xl font-extrabold text-white">{plan.price}</div>
-                        <div className="text-[#9bb1e9]">{plan.cadence}</div>
-                      </div>
-                      <div className="mt-1 text-xs text-[#9bb1e9]">{plan.highlight}</div>
+                  )}
+                  
+                  {plan.trial && isYearly && getSavings(plan) && (
+                    <div className="absolute -top-4 right-4">
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Save ${getSavings(plan)}
+                      </Badge>
                     </div>
+                  )}
+
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="text-white text-2xl mb-2">
+                      {plan.name}
+                    </CardTitle>
+                    <div className="text-4xl font-bold text-white mb-2">
+                      {getPrice(plan)}
+                    </div>
+                    <p className="text-sm text-[#9bb1e9]">{plan.description}</p>
+                    {plan.trial && (
+                      <Badge variant="outline" className="mt-2 border-[#1a2a55] text-[#9bb1e9]">
+                        7-day free trial
+                      </Badge>
+                    )}
                   </CardHeader>
+
                   <CardContent className="space-y-4">
-                    <div className="text-xs uppercase tracking-wide text-[#9bb1e9]">
-                      Included Benefits
-                    </div>
-                    <ul className="space-y-1.5">
-                      {plan.features.map(renderFeature)}
+                    <ul className="space-y-3">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-sm text-[#c6d4f7]">
+                          <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
                     </ul>
-                    <div className="text-xs text-[#8fa2c9]">{plan.bestFor}</div>
+
                     <Button
-                      onClick={plan.cta}
-                      className="w-full rounded-xl py-2.5 font-bold text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] shadow-[0_0_24px_rgba(37,99,235,0.25)]"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3] text-white"
+                      onClick={() => {
+                        if (plan.name === "Enterprise") {
+                          window.location.href = "mailto:sales@lethimdo.com";
+                        } else {
+                          navigate("/plans", { state: { selectedPlan: plan.name, isYearly } });
+                        }
+                      }}
                     >
-                      {plan.ctaLabel}
+                      {plan.cta}
                     </Button>
+
+                    {plan.trial && (
+                      <p className="text-xs text-center text-[#9bb1e9]">
+                        No credit card required for trial
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* CTA Bar */}
-      <section className="px-4 pb-10 md:pb-14">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto max-w-7xl rounded-2xl border border-[#1a2a55] bg-[#0a1429]/70 backdrop-blur-xl p-5 md:p-6 shadow-[0_12px_48px_-16px_rgba(30,64,175,0.45)]"
-        >
-          <div className="flex flex-col gap-3 items-center justify-between text-center md:flex-row">
-            <p className="text-white font-semibold">Your workflow upgrade starts here</p>
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={() => navigate("/auth")}
-                className="rounded-xl text-white bg-gradient-to-r from-[#1e40af] to-[#2563eb] hover:from-[#19368e] hover:to-[#1f4fd3]"
-              >
-                Start Free Trial
-              </Button>
-            </div>
+            ))}
           </div>
-        </motion.div>
-      </section>
 
-      {/* Footer */}
-      <footer className="px-4 pb-10">
-        <div className="mx-auto max-w-7xl rounded-2xl border border-[#142554] bg-[#0b1120]/90 backdrop-blur-xl p-4 md:p-6 text-center text-white">
-          <p className="font-semibold">
-            Powered by{" "}
-            <a
-              href="https://vly.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline decoration-white/30 underline-offset-4 hover:text-white"
-            >
-              vly.ai
-            </a>
-          </p>
-          <p className="mt-2 text-[#9bb1e9] text-sm">
-            Questions?{" "}
-            <a href="mailto:support@lethimdo.com" className="underline hover:text-white">
-              support@lethimdo.com
-            </a>
-          </p>
+          {/* FAQ or additional info */}
+          <div className="mt-16 text-center">
+            <p className="text-[#9bb1e9]">
+              All plans include automatic invoicing and can be cancelled anytime.
+            </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>
   );
 }

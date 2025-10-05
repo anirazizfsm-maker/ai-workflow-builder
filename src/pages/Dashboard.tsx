@@ -14,6 +14,8 @@ import { NotificationPanel } from "@/components/dashboard/NotificationPanel";
 import { TemplateManager } from "@/components/dashboard/TemplateManager";
 import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
 import { OnboardingTooltip } from "@/components/OnboardingTooltip";
+import { StarterTemplates } from "@/components/dashboard/StarterTemplates";
+import { UpgradePlanCard } from "@/components/dashboard/UpgradePlanCard";
 
 // Simple section wrapper
 function Section({ title, children, action }: { title: string; children: React.ReactNode; action?: React.ReactNode }) {
@@ -99,6 +101,17 @@ function ConvexDashboard() {
   const hoursSaved = Math.round((todayCount * 0.25 + activeCount * 0.5) * 10) / 10;
   const dollarsSaved = Math.round(hoursSaved * hourlyRate);
 
+  const handleRunDemoWorkflow = () => {
+    toast.loading("Running demo workflow...", { id: "demo-workflow" });
+    
+    setTimeout(() => {
+      toast.success("Demo workflow completed successfully ✅", {
+        id: "demo-workflow",
+        description: "Sign in to create and run real workflows",
+      });
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen dark bg-[#0b1120] px-4 md:px-8 py-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -116,6 +129,13 @@ function ConvexDashboard() {
           )}
         </div>
       </div>
+
+      {/* Upgrade Plan Card - show for free users */}
+      {isAuthenticated && (
+        <div className="mb-4">
+          <UpgradePlanCard />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard icon={<Clock className="h-5 w-5 text-muted-foreground" />} label="Today's Runs" value={todayCount} accent="blue" />
@@ -150,11 +170,36 @@ function ConvexDashboard() {
         </Section>
       </div>
 
+      {/* Starter Templates Section */}
+      <div className="mt-4">
+        <Section title="Starter Templates">
+          <StarterTemplates />
+        </Section>
+      </div>
+
+      {/* AI Templates Section */}
       <div className="mt-4">
         <Section title="AI Templates">
           <TemplateManager templates={templates} />
         </Section>
       </div>
+
+      {/* Run Demo Workflow for guests */}
+      {!isAuthenticated && (
+        <div className="mt-4">
+          <Card className="bg-background/60 backdrop-blur border">
+            <CardContent className="p-6 text-center">
+              <h3 className="font-semibold mb-2">Try a Demo Workflow</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                See how workflows work without signing in
+              </p>
+              <Button onClick={handleRunDemoWorkflow}>
+                Run Demo Workflow
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
