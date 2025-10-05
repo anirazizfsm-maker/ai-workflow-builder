@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Play, Pause, Trash2 } from "lucide-react";
+import { Play, Pause, Trash2, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { useSubscriptionStatus } from "@/hooks/use-subscription";
@@ -42,14 +42,57 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
     jsonConfig: "{}",
   });
 
+  // Optimistic state for workflows
+  const [optimisticWorkflows, setOptimisticWorkflows] = useState<Workflow[]>([]);
+  const displayWorkflows = [...workflows, ...optimisticWorkflows];
+
+  const getStatusIcon = (status: Workflow["status"]) => {
+    switch (status) {
+      case "active":
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      case "paused":
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "failed":
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  const getStatusVariant = (status: Workflow["status"]) => {
+    switch (status) {
+      case "active":
+        return "default";
+      case "failed":
+        return "destructive";
+      default:
+        return "secondary";
+    }
+  };
+
   const onToggle = async (w: Workflow) => {
     const next = w.status === "active" ? "paused" : "active";
+    
+    // Optimistic update
+    const optimisticIndex = optimisticWorkflows.findIndex(ow => ow._id === w._id);
+    if (optimisticIndex >= 0) {
+      const updated = [...optimisticWorkflows];
+      updated[optimisticIndex] = { ...updated[optimisticIndex], status: next };
+      setOptimisticWorkflows(updated);
+    }
+
     try {
       await updateStatus({ workflowId: w._id, status: next });
       toast.success(`${w.title} ${next === "active" ? "activated" : "paused"} ✅`, {
         description: next === "active" ? "Workflow is now running" : "Workflow has been paused",
       });
     } catch (e: any) {
+      // Revert optimistic update on error
+      if (optimisticIndex >= 0) {
+        const reverted = [...optimisticWorkflows];
+        reverted[optimisticIndex] = { ...reverted[optimisticIndex], status: w.status };
+        setOptimisticWorkflows(reverted);
+      }
       toast.error("Failed to update workflow", {
         description: e?.message || "Please try again",
       });
@@ -57,12 +100,17 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
   };
 
   const onDelete = async (w: Workflow) => {
+    // Optimistic delete
+    setOptimisticWorkflows(prev => prev.filter(ow => ow._id !== w._id));
+
     try {
       await deleteWorkflow({ workflowId: w._id });
       toast.success(`${w.title} deleted ✅`, {
         description: "Workflow has been removed",
       });
     } catch (e: any) {
+      // Revert optimistic delete on error
+      setOptimisticWorkflows(prev => [...prev, w]);
       toast.error("Failed to delete workflow", {
         description: e?.message || "Please try again",
       });
@@ -101,6 +149,18 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
       toast("Title and description are required");
       return;
     }
+
+    // Create optimistic workflow
+    const optimisticId = `temp-${Date.now()}` as Id<"workflows">;
+    const optimisticWorkflow: Workflow = {
+      _id: optimisticId,
+      title: wfForm.title,
+      category: wfForm.category || "general",
+      status: "draft",
+    };
+    setOptimisticWorkflows(prev => [...prev, optimisticWorkflow]);
+    setCreateOpen(false);
+
     try {
       await createWorkflow({
         title: wfForm.title,
@@ -109,11 +169,16 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
         jsonConfig: wfForm.jsonConfig || "{}",
         category: wfForm.category || "general",
       });
+      
+      // Remove optimistic workflow after successful creation
+      setOptimisticWorkflows(prev => prev.filter(w => w._id !== optimisticId));
+      
       toast.success("Workflow created successfully ✅", {
         description: "You can now activate and run your workflow",
       });
-      setCreateOpen(false);
     } catch (e: any) {
+      // Remove optimistic workflow on error
+      setOptimisticWorkflows(prev => prev.filter(w => w._id !== optimisticId));
       toast.error("Failed to create workflow", {
         description: e?.message || "Please try again",
       });
@@ -123,20 +188,29 @@ export function WorkflowList({ workflows }: WorkflowListProps) {
   return (
     <>
       <div className="space-y-3">
-        {workflows.length === 0 && (
+        {displayWorkflows.length === 0 && (
           <p className="text-sm text-muted-foreground">
             {isAuthenticated ? "No workflows yet. Create one to get started." : "Sign in to create and manage workflows."}
           </p>
         )}
-        {workflows.map((w) => (
-          <div key={w._id} className="flex items-center justify-between border rounded-md p-3">
-            <div>
-              <div className="font-medium">{w.title}</div>
-              <div className="text-xs text-muted-foreground">{w.category}</div>
+        {displayWorkflows.map((w) => (
+          <div key={w._id} className="flex items-center justify-between border rounded-md p-3 hover:bg-accent/50 transition-colors">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              {getStatusIcon(w.status)}
+              <div className="flex-1 min-w-0">
+                <div className="font-medium truncate">{w.title}</div>
+                <div className="text-xs text-muted-foreground">{w.category}</div>
+              </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant={w.status === "active" ? "default" : "secondary"}>{w.status}</Badge>
-              <Button size="icon" variant="ghost" onClick={() => onToggle(w)} title={w.status === "active" ? "Pause" : "Activate"}>
+              <Badge variant={getStatusVariant(w.status)}>{w.status}</Badge>
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                onClick={() => onToggle(w)} 
+                title={w.status === "active" ? "Pause" : "Activate"}
+                disabled={w.status === "failed"}
+              >
                 {w.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </Button>
               <Button size="icon" variant="ghost" onClick={() => onDelete(w)} title="Delete">
