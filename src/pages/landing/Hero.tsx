@@ -1,10 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
 import GooeyNav from "@/components/GooeyNav";
 import VariableProximity from "@/components/VariableProximity";
-import LightRays from "@/components/LightRays";
-import "@/components/LightRays.css";
+import Beams from "@/components/Beams";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -108,22 +107,17 @@ export default function Hero() {
         </Sheet>
       </div>
 
-      {/* Background */}
+      {/* Background with Beams */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <LightRays
-          className="absolute inset-0"
-          raysOrigin="top-center"
-          raysColor="#2563eb"
-          raysSpeed={1}
-          lightSpread={1}
-          rayLength={2}
-          pulsating={false}
-          fadeDistance={1.0}
-          saturation={1.0}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0.0}
-          distortion={0.1}
+        <Beams
+          beamWidth={2}
+          beamHeight={15}
+          beamNumber={12}
+          lightColor="#2563eb"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={0}
         />
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-[#030611]/25 via-transparent to-[#030611]/25" />
