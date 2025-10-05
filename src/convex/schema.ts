@@ -112,4 +112,53 @@ export default defineSchema({
     citations: v.array(v.string()),
     confidence: v.number(),
   }).index("by_org", ["orgId"]),
+
+  subscriptions: defineTable({
+    userId: v.id("users"),
+    orgId: v.string(),
+    planId: v.string(),
+    planName: v.string(),
+    status: v.union(
+      v.literal("active"),
+      v.literal("canceled"),
+      v.literal("past_due"),
+      v.literal("trialing")
+    ),
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    cancelAtPeriodEnd: v.boolean(),
+    stripeSubscriptionId: v.optional(v.string()),
+    stripeCustomerId: v.optional(v.string()),
+  }).index("by_user", ["userId"])
+    .index("by_org", ["orgId"])
+    .index("by_status", ["status"])
+    .index("by_stripe_subscription", ["stripeSubscriptionId"]),
+
+  workflowNodes: defineTable({
+    workflowId: v.id("workflows"),
+    nodeId: v.string(),
+    type: v.string(),
+    label: v.string(),
+    positionX: v.number(),
+    positionY: v.number(),
+    config: v.string(),
+  }).index("by_workflow", ["workflowId"]),
+
+  workflowEdges: defineTable({
+    workflowId: v.id("workflows"),
+    edgeId: v.string(),
+    sourceNodeId: v.string(),
+    targetNodeId: v.string(),
+    sourceHandle: v.optional(v.string()),
+    targetHandle: v.optional(v.string()),
+  }).index("by_workflow", ["workflowId"]),
+
+  chatMessages: defineTable({
+    userId: v.id("users"),
+    orgId: v.string(),
+    role: v.union(v.literal("user"), v.literal("assistant"), v.literal("system")),
+    content: v.string(),
+    metadata: v.optional(v.string()),
+  }).index("by_user", ["userId"])
+    .index("by_org", ["orgId"]),
 });
