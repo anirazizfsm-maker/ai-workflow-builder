@@ -1,1 +1,2 @@
-openssl rand -base64 32
+   npx convex run testData:seedAll
+   
