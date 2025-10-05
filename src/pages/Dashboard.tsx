@@ -16,6 +16,7 @@ import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
 import { OnboardingTooltip } from "@/components/OnboardingTooltip";
 import { StarterTemplates } from "@/components/dashboard/StarterTemplates";
 import { UpgradePlanCard } from "@/components/dashboard/UpgradePlanCard";
+import { NotificationSidebar } from "@/components/NotificationSidebar";
 
 // Simple section wrapper
 function Section({ title, children, action }: { title: string; children: React.ReactNode; action?: React.ReactNode }) {
@@ -69,20 +70,23 @@ function ConvexDashboard() {
   const { isAuthenticated } = useAuth();
   const ORG_ID = "demo-org";
 
-  const runs = useQuery(api.workflows.runsPerDay, { orgId: ORG_ID, days: 14 }) ?? [];
-  const notifications = useQuery(api.workflows.getNotifications, { orgId: ORG_ID }) ?? [];
+  const runs = useQuery(api.workflows.runsPerDay, { orgId: ORG_ID, days: 14 });
+  const notifications = useQuery(api.workflows.getNotifications, { orgId: ORG_ID });
   const settings = useQuery(api.workflows.getSettings, { orgId: ORG_ID });
-  const myWorkflows = useQuery(api.workflows.getUserWorkflows, {}) ?? [];
-  const templates = useQuery(api.aiBuilder.listTemplates, {}) ?? [];
+  const myWorkflows = useQuery(api.workflows.getUserWorkflows, {});
+  const templates = useQuery(api.aiBuilder.listTemplates, {});
+
+  // Loading states
+  const isLoadingRuns = runs === undefined;
+  const isLoadingWorkflows = myWorkflows === undefined;
+  const isLoadingTemplates = templates === undefined;
 
   // Onboarding state
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    // Check if this is the user's first login
     const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
     if (isAuthenticated && !hasSeenOnboarding) {
-      // Show onboarding after a short delay
       const timer = setTimeout(() => {
         setShowOnboarding(true);
       }, 1000);
@@ -95,8 +99,8 @@ function ConvexDashboard() {
     localStorage.setItem("hasSeenOnboarding", "true");
   };
 
-  const todayCount = runs.length ? runs[runs.length - 1].count : 0;
-  const activeCount = myWorkflows.filter((w) => w.status === "active").length;
+  const todayCount = runs?.length ? runs[runs.length - 1].count : 0;
+  const activeCount = myWorkflows?.filter((w) => w.status === "active").length ?? 0;
   const hourlyRate = settings?.hourlyRate ?? 25;
   const hoursSaved = Math.round((todayCount * 0.25 + activeCount * 0.5) * 10) / 10;
   const dollarsSaved = Math.round(hoursSaved * hourlyRate);
@@ -113,10 +117,11 @@ function ConvexDashboard() {
   };
 
   return (
-    <div className="min-h-screen dark bg-[#0b1120] px-4 md:px-8 py-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
+    <div className="min-h-screen bg-[#0b1120] dark:bg-[#0b1120] px-4 md:px-8 py-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl font-semibold text-white">Dashboard</h1>
         <div className="flex items-center gap-2">
+          <NotificationSidebar orgId={ORG_ID} />
           {isAuthenticated && (
             <Button variant="outline" onClick={() => navigate("/profile")}>
               Profile
@@ -137,16 +142,46 @@ function ConvexDashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatCard icon={<Clock className="h-5 w-5 text-muted-foreground" />} label="Today's Runs" value={todayCount} accent="blue" />
-        <StatCard icon={<TrendingUp className="h-5 w-5 text-muted-foreground" />} label="Active Workflows" value={activeCount} accent="violet" />
-        <StatCard icon={<Clock className="h-5 w-5 text-muted-foreground" />} label="Hours Saved" value={hoursSaved} accent="green" />
-        <StatCard icon={<DollarSign className="h-5 w-5 text-muted-foreground" />} label="Savings ($)" value={dollarsSaved} accent="green" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard 
+          icon={<Clock className="h-5 w-5 text-muted-foreground" />} 
+          label="Today's Runs" 
+          value={todayCount} 
+          accent="blue"
+          isLoading={isLoadingRuns}
+        />
+        <StatCard 
+          icon={<TrendingUp className="h-5 w-5 text-muted-foreground" />} 
+          label="Active Workflows" 
+          value={activeCount} 
+          accent="violet"
+          isLoading={isLoadingWorkflows}
+        />
+        <StatCard 
+          icon={<Clock className="h-5 w-5 text-muted-foreground" />} 
+          label="Hours Saved" 
+          value={hoursSaved} 
+          accent="green"
+          isLoading={isLoadingRuns}
+        />
+        <StatCard 
+          icon={<DollarSign className="h-5 w-5 text-muted-foreground" />} 
+          label="Savings ($)" 
+          value={dollarsSaved} 
+          accent="green"
+          isLoading={isLoadingRuns}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
         <Section title="Runs (last 14 days)">
-          <AnalyticsChart data={runs} />
+          {isLoadingRuns ? (
+            <div className="h-64 flex items-center justify-center">
+              <div className="animate-pulse text-muted-foreground">Loading chart...</div>
+            </div>
+          ) : (
+            <AnalyticsChart data={runs ?? []} />
+          )}
         </Section>
 
         <Section title="My Workflows" action={
@@ -162,11 +197,11 @@ function ConvexDashboard() {
             />
           </div>
         }>
-          <WorkflowList workflows={myWorkflows} />
+          <WorkflowList workflows={myWorkflows ?? []} />
         </Section>
 
-        <Section title="Notifications" action={<Button size="icon" variant="ghost"><Bell className="h-4 w-4" /></Button>}>
-          <NotificationPanel notifications={notifications} />
+        <Section title="Notifications">
+          <NotificationPanel notifications={notifications ?? []} isLoading={notifications === undefined} />
         </Section>
       </div>
 
@@ -180,7 +215,18 @@ function ConvexDashboard() {
       {/* AI Templates Section */}
       <div className="mt-4">
         <Section title="AI Templates">
-          <TemplateManager templates={templates} />
+          {isLoadingTemplates ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="border rounded-md p-3 animate-pulse">
+                  <div className="h-5 bg-muted rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-muted rounded w-full" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <TemplateManager templates={templates ?? []} />
+          )}
         </Section>
       </div>
 
@@ -189,7 +235,7 @@ function ConvexDashboard() {
         <div className="mt-4">
           <Card className="bg-background/60 backdrop-blur border">
             <CardContent className="p-6 text-center">
-              <h3 className="font-semibold mb-2">Try a Demo Workflow</h3>
+              <h3 className="font-semibold mb-2 text-white">Try a Demo Workflow</h3>
               <p className="text-sm text-muted-foreground mb-4">
                 See how workflows work without signing in
               </p>

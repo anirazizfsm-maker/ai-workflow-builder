@@ -2,19 +2,22 @@ import { useNavigate } from "react-router";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, User, Settings, Shield } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { ArrowLeft, User, Settings, Shield, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export default function Profile() {
   const navigate = useNavigate();
   const { isAuthenticated, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const currentUser = useQuery(api.users.currentUser);
   
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +39,7 @@ export default function Profile() {
     : "U";
 
   return (
-    <div className="min-h-screen dark bg-[#0b1120] relative overflow-hidden">
+    <div className="min-h-screen bg-[#0b1120] dark:bg-[#0b1120] relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0b1120] via-[#1a1f3a] to-[#0b1120] opacity-50" />
       
@@ -189,15 +192,20 @@ export default function Profile() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Theme</p>
-                    <p className="text-sm text-muted-foreground">
-                      Dark mode (default)
-                    </p>
+                  <div className="flex items-center gap-3">
+                    {theme === "dark" ? (
+                      <Moon className="h-5 w-5 text-primary" />
+                    ) : (
+                      <Sun className="h-5 w-5 text-primary" />
+                    )}
+                    <div>
+                      <p className="font-medium">Theme</p>
+                      <p className="text-sm text-muted-foreground">
+                        {theme === "dark" ? "Dark mode" : "Light mode"}
+                      </p>
+                    </div>
                   </div>
-                  <Button variant="outline" size="sm" disabled>
-                    Dark
-                  </Button>
+                  <Switch checked={theme === "dark"} onCheckedChange={toggleTheme} />
                 </div>
               </CardContent>
             </Card>

@@ -144,7 +144,30 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
     font-weight: 400;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+  
+  /* Light mode overrides */
+  :root:not(.dark) {
+    --background: oklch(0.98 0 0);
+    --foreground: oklch(0.15 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.15 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.15 0 0);
+    --primary: oklch(0.45 0.18 250);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary: oklch(0.96 0 0);
+    --secondary-foreground: oklch(0.15 0 0);
+    --muted: oklch(0.96 0 0);
+    --muted-foreground: oklch(0.45 0 0);
+    --accent: oklch(0.96 0 0);
+    --accent-foreground: oklch(0.15 0 0);
+    --border: oklch(0.9 0 0);
+    --input: oklch(0.9 0 0);
+    --ring: oklch(0.45 0.18 250);
+  }
+
   .font-sans {
     font-family: 'Inter', system-ui, sans-serif;
   }
@@ -155,14 +178,12 @@
     font-family: Georgia, Georgia, serif;
   }
 
-  /* Headings use the same unified font */
   h1, h2, h3 {
     font-family: 'Inter', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: 0;
   }
 
-  /* Buttons also use the unified font */
   button,
   [role="button"] {
     font-family: 'Inter', system-ui, sans-serif;
